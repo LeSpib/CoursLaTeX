@@ -1,0 +1,383 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Chapitre Programmation
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{La programmation avec \LaTeX}
+
+Les éléments présentés ci-après permettent de modifier ou d'affiner le comportement de \LaTeX, d'automatiser certaines opérations et d'obtenir des fonctionnalités plus complexes. Il faut cependant garder en tête que les erreurs que peuvent déclencher ces fonctionnalités s'avèrent parfois un peu plus difficiles à analyser que les autres.
+
+\section{La scission du code} \incise{259--260}{20--23}{56--57}
+\label{scission}
+Un fichier \dextension{tex} peut intégrer à tout moment le contenu d'autres fichiers \dextension{tex}. Ceci rend plus lisible le code de chaque fichier \LaTeX\ par découpage en fichiers de taille réduite\footnote{L'utilisation des paquets s'inscrit totalement dans cette démarche. Ne pas faire cela aurait donné des préambules terriblement longs !}. Ainsi dans le document source de ce cours, l'ensemble des données tracées dans la figure \ref{3oat} sont placées dans un fichier \dextension{tex} séparé. La commande associée s'appelle \macro{input\{{\it fichier}\}} où le nom du \emph{fichier} est donné sans l'extension \dextension{tex}.
+
+La  commande \macro{include\{{\it fichier}\}}, plus orientée sur la rédaction de longs documents, a le même effet que la  commande précédente à ceci près :
+\begin{itemize}
+\item elle insère un saut de page si le fichier contenu ne le fait pas déjà (par exemple en commençant un nouveau chapitre) ;
+\item elle peut être désactivée par la  commande \macro{includeonly\{{\it fichiers}\}}. Cette dernière liste les \emph{fichiers} qui seront insérés, les noms des fichiers étant séparés par des virgules, sans indication des \dextension{tex}. Les autres fichiers indiqués par des \macro{include} seront refusés. Ceci permet de contrôler en un unique endroit l'insertion ou pas de différents sous-documents. \\
+\end{itemize}
+
+L'intérêt de \macro{include} est de pouvoir compiler et visualiser différents morceaux choisis de son document sans pour autant compiler la totalité. Ceci fait gagner du temps pour la constitution de documents longs.
+
+
+
+
+
+\section{La définition de nouvelles commandes} \label{definition} \incise{241--261}{855--903}{127--152}
+
+\subsection{Principes}
+
+Les commandes personnelles permettent de simplifier l'obtention de résultats complexes et d'uniformiser certaines actions, garantissant une bonne unité de traitement ou de présentation. Ces nouvelles commandes peuvent être définies à l'aide de la commande suivante :
+\begin{codesimple}{Nouvelle commande}{defcommande}
+\newcommand{\§textit£nom¤}[§textit£nombre de paramètres¤]{§textit£définition¤}
+\end{codesimple}
+
+Le \emph{nom} de commande est composé de lettres non accentuées et doit être toujours précédé du \macro{} indiqué ci-dessus. Si le nom est déjà utilisé, \LaTeX\ génère l'erreur \og {\it LaTeX Error: Command already defined.} \fg. Dans ces cas-là, sous réserve que la commande d'origine ne serve pas à d'autres besoins, il faut utiliser la commande \macro{renewcommand} qui a la même syntaxe que \macro{newcommand}. 
+
+La \emph{définition} est une suite de commandes \LaTeX. Lors de l'écriture de cette définition, les différents paramètres sont appelés en utilisant la notation \og \macron{\#x} \fg, où \macron{x} est le numéro du paramètre. Il peut y avoir jusqu'à neuf paramètres pour une commande.
+
+Il est d'usage de placer les définitions et redéfinitions de commandes dans le préambule pour faciliter la relecture des documents mais elles peuvent être également placées dans le corps pour permettre de modifier le comportement de \LaTeX\ en cours de document.
+
+\subsubsection{Exemple sans paramètre}
+
+Avec ce système, il est possible de définir ses propres \og constantes \fg avec des commandes sans paramètres. Ci-dessous, la première définit  la  commande \macro{InBT} pour laquelle la définition est un simple texte, texte qu'elle va donc écrire. La seconde, \macro{ba}, donne un nom de commande plus court pour appeler la contre-oblique. 
+
+\begin{codedoublevrai}
+Dans l'\InBT, pas de symbole \ba.
+\end{codedoublevrai}
+
+\begin{codedoublefaux}{Définitions de commande sans argument}{defzeroarg}
+\newcommand{\InBT}{inégalité de Bienaymé-Tchebyschev}
+\newcommand{\ba}{\textbackslash}
+Dans l'\InBT, pas de symbole \ba.
+\end{codedoublefaux}
+
+\subsubsection{Exemple avec paramètres}
+
+Pour ce document, il a été défini la commande \macro{macro} avec un argument unique qui permet d'afficher en texte \og machine à écrire \fg le nom de commande précédé du symbole de la contre-oblique. En voici la définition : 
+
+\begin{codedoublevrai}
+Voici un test de ma nouvelle commande : \macro{macrocommande}.
+\end{codedoublevrai}
+
+\begin{codedoublefaux}{Définition de commande à un argument}{defunarg}
+\newcommand{\macro}[1]{\texttt{\textbackslash #1}}
+Voici un test de ma nouvelle commande : \macro{macrocommande}.
+\end{codedoublefaux}
+
+La commande ci-après permet de générer quatre nuances d'une même couleur, les trois paramètres étant le nom de la couleur, le système de couleur et la composition de la couleur dans ce système. Chaque couleur ainsi créée a un nom finissant par un chiffre compris entre 0 et 3.
+
+\begin{codedoublevrai}
+En une commande, quatre nuances sont définies : \textcolor{orange30}{$\blacksquare$}, 
+\textcolor{orange31}{$\blacksquare$}, \textcolor{orange32}{$\blacksquare$} et
+\textcolor{orange33}{$\blacksquare$}.
+\end{codedoublevrai}
+
+\begin{codedoublefaux}{Définition de commande à plusieurs arguments}{defmultiarg}
+\newcommand{\definenuances}[3]{
+\definecolor{#10}{#2}{#3} 
+\colorlet{#11}{#10!75} \colorlet{#12}{#10!50} \colorlet{#13}{#10!25}}
+\definenuances{orange1}{cmyk}{0.00,0.64,1.00,0.00}
+% Puis plus loin dans le corps du document, les couleurs sont utilisables.
+En une commande, quatre nuances sont définies : \textcolor{orange10}{$\blacksquare$}, 
+\textcolor{orange11}{$\blacksquare$}, \textcolor{orange12}{$\blacksquare$} et
+\textcolor{orange13}{$\blacksquare$}.
+\end{codedoublefaux}
+
+Dans ce cas précis, \macron{\#10} signifie \og l'argument \no 1 suivi du texte \macron{0} \fg, l'argument ne pouvant avoir un numéro supérieur à neuf.
+
+\subsection{L'espacement}
+
+L'espace après une commande sans argument est absorbée par défaut par la commande, ce qui peut donner un texte erroné comme le montre l'exemple suivant où la commande \macro{LaTeX} se retrouve accolée au \og peut \fg qui la suit.
+
+Ce point peut se corriger en indiquant derrière la commande \macron{\{\}} pour indiquer un argument vide. Pour simplifier cette gestion de l'espacement, le paquet \paquet{xspace} met à disposition la commande \macro{xspace} traitant correctement cette espace après un nom de commande. 
+
+\begin{codedoublevrai}
+\LaTeX peut surprendre. Tout comme \LaTeX{} peut ne pas surprendre. De fait, s'il est 
+bien utilisé, \MonLaTeX ne surprend plus.
+\end{codedoublevrai}
+
+\begin{codedoublefaux}{Exemples d'utilisation de \macro{xspace}}{exemplexspace}
+\newcommand{\MonLaTeX}{\LaTeX\xspace}
+\LaTeX peut surprendre. Tout comme \LaTeX{} peut ne pas surprendre. De fait, s'il est 
+bien utilisé, \MonLaTeX ne surprend plus.
+\end{codedoublefaux}
+
+
+\subsection{Les mathématiques}
+
+Les nouvelles commandes traitant des mathématiques posent souvent une question de définition. Faut-il les appeler en les plaçant dans un environnement mathématique (\macron{\$\macro{somme}\$}) ou faut-il les appeler directement (\macro{somme}), leur définition incluant le passage en mode mathématique ? La commande \macro{ensuremath} simplifie ce point en traitant automatiquement l'éventuelle bascule en mode mathématique de son argument.
+
+\begin{codedoublevrai}
+Appeler \somme, $\somme$ ou bien encore \[\somme\] donne des résultats similaires
+(à la présentation du dernier près). 
+\end{codedoublevrai}
+
+\begin{codedoublefaux}{Définition de commande mathématique protégée}{macromath}
+\newcommand{\somme}{\ensuremath{\sum_{k=0}^{n} x_k}}
+Appeler \somme, $\somme$ ou bien encore \[\somme\] donne des résultats similaires 
+(à la présentation du dernier près). 
+\end{codedoublefaux}
+
+\subsection{Les compteurs}
+
+\LaTeX{} manipule, entre autres, des compteurs. Ceux-ci gèrent par exemple le numéro de page, la numérotation des chapitres. Il est possible de définir d'autres compteurs. Un compteur porte un \emph{nom} (et n'est jamais précédé d'un \macro{}). 
+
+\begin{codesimple}{Gestion de compteurs}{compteur}
+\newcounter{§textit£nom¤}
+\setcounter{§textit£nom¤}{§textit£valeur entière¤}
+\addtocounter{§textit£nom¤}{§textit£valeur entière¤}
+\end{codesimple}
+
+La commande \macro{setcounter} définit un nouveau compteur, \macro{setcounter} lui attribue la \emph{valeur entière} tandis que \macro{addtocounter} lui ajoute la \emph{valeur entière}. Pour afficher un compteur, il faut faire précéder le nom du compteur du préfixe \macro{the}. Ainsi le compteur gérant les numéros de page s'appelle \macron{page}\footnote{\'{E}tonnant, non ? Et que dire alors des compteurs \macron{chapter}, \macron{section}, \macron{table}, \macron{figure}...}. Sa valeur est restituée par \macro{thepage}, en l'occurrence \thepage.
+
+Voici un exemple d'utilisation : la création d'exemples numérotés automatiquement.  
+
+\begin{codedoublevrai}
+\exemple Un test \par
+\exemple Un autre test  
+\end{codedoublevrai}
+
+\begin{codedoublefaux}{Exemple d'utilisation d'un compteur}{macrocompteur}
+% Dans le préambule du document
+\newcounter{nbex}
+\setcounter{nbex}{0}
+\newcommand{\exemple}{\addtocounter{nbex}{1}\textbf{Exemple \thenbex\ --- }}
+% Dans le corps du document
+\exemple Un test \par
+\exemple Un autre test 
+\end{codedoublefaux}
+
+
+\subsection{Les dimensions}
+
+De façon parallèle aux compteurs, les quelques commandes suivantes permettent de gérer des longueurs avec deux différences importantes :
+\begin{itemize}
+\item le nom de chaque dimension commence bien ici par un \macro{} ;
+\item chaque \emph{dimension} est exprimée avec son unité, parmi celles vues en page~\pageref{unite}.
+\end{itemize}
+
+\begin{codesimple}{Gestion de dimensions}{dimension}
+\newlength{\§textit£nom¤}
+\setlength{\§textit£nom¤}{§textit£dimension¤}
+\addtolength{\§textit£nom¤}{§textit£dimension¤}
+\end{codesimple}
+
+Un exemple de recours à ces  commandes est donné en \ref{page} ainsi qu'en page \ref{fancyhdr}.
+
+\subsection{Les boucles}
+
+Le paquet \paquet{multido} fournit une commande qui répète des actions en faisant si besoin varier un paramètre, autrement dit une boucle \og for \fg\footnote{Il existe à ce sujet un \og while \fg, non présenté ici, plus naturel en code \TeX.} pour \LaTeX. Elle a pour syntaxe :
+
+\begin{codesimple}{Boucle}{boucle}
+\multido{§textit£indice¤=§textit£valeur initiale¤+§textit£incrément¤}{§textit£nombre¤}{§textit£actions¤}
+\end{codesimple}
+
+Les \emph{actions} sont répétées \emph{nombre} fois. \`{A} chaque répétition, l'\emph{indice} qui commence à la \emph{valeur initiale} augmente de la valeur de l'\emph{incrément} et il est utilisable. Voici deux exemples d'application de cette commande. Le premier fait écrire quatre fois \macro{LaTeX}\macro{dotfill} et une dernière fois \macro{LaTeX}. Le second affiche des boîtes de couleur\footnote{La syntaxe indiquée ici pour \macro{colorbox} est une variante qui mélange déclaration de la couleur et utilisation de la couleur.} dont la valeur teinte bleue varie en fonction de l'indice de la boucle, la valeur de l'indice étant affichée en blanc.
+
+\begin{codedouble}{Exemples de boucle}{boucleexemple}
+\multido{\Ia=1+1}{4}{\LaTeX\dotfill}\LaTeX \\ \\
+\multido{\Ib=105+15}{11}{\colorbox[RGB]{0,0,\Ib}{\textcolor{white}{\textbf{\Ib}}} }
+\end{codedouble}
+
+Un exemple est également donné page~\pageref{famillecourbe}.
+
+\subsection{Les conditions}
+
+Le paquet \paquet{ifthen} permet de générer des comportements conditionnels par la mise à disposition de la commande suivante :
+
+\begin{codesimple}{Condition}{condition}
+\ifthenelse{§textit£condition¤}{§textit£commandes si condition vraie¤}{§textit£commandes sinon¤}
+\end{codesimple}
+
+La \textit{condition} est exprimable par plusieurs commandes : par exemple,\macro{value\{\}\{\}} teste l'égalité de deux valeurs; \macro{isodd\{\}} teste la parité d'un nombre. Ici est présenté un exemple qui utilise également le paquet \paquet{multido}:
+
+\begin{codedouble}{Exemple de test conditionnel}{testconditionnel}
+Ce chapitre, numérotée \thechapter, est \ifthenelse{\isodd{\thechapter}}{impair, 
+non ?}{paire, n'est-ce-pas ?} \\
+\multido{\Ib=0+3}{15}{\ifthenelse{\equal{\Ib}{33}}{[Dites trente-trois] }{\Ib \ }}
+\end{codedouble}
+
+
+\subsection{Pour aller plus loin}
+
+Quelques paquets permettent de pousser plus avant les développements possibles avec \LaTeX\ :
+\begin{itemize}
+\item \paquet{calc} permet d'effectuer des calculs simples ;
+\item \paquet{ifpdf} permet de gérer des conditions basées sur le type de compilation retenue par l'utilisateur ;
+\item \paquet{xkeyval} permet de gérer des options dans les commandes sous forme d'une suite de terme \og \macron{option}=\macron{valeur} \fg comme cela s'observe page \pageref{psboites}. Il est à réserver aux développeurs motivés ;
+\item \paquet{comment} propose l'environnement \macron{comment} qui encadre des zones où \LaTeX{} considère tout le texte comme un unique commentaire.
+\end{itemize}
+
+
+\section{La modification des réglages de \LaTeX} \incise{485--549}{Tout}{255--278}
+\subsection{Les libellés de division} \index[con]{division}
+
+Les noms des divisions comme \og Chapitre \fg ou \og Table des matières \fg sont en fait contenus dans des commandes (ici avec les valeurs une fois \paquet{babel} chargé avec l'option \macron{frenchb}) :
+\begin{table}[H]
+\centering
+\begin{tablecouleur}
+\begin{tabular}{m{3cm}<{\centering}m{3cm}<{\centering}}
+\rowcolor{bleu20}
+\color{white}\bf Variable	& \color{white}\bf Contenu par défaut		\\ 
+\macro{appendixname} 		& Annexe 									\\ 
+\macro{bibname} 			& Bibliographie 							\\ 
+\macro{chaptername} 		& Chapitre 									\\ 
+\macro{contentsname} 		& Table des matières 						\\ 
+\macro{indexname} 			& Index 									\\ 
+\macro{listfigurename} 		& Table des figures 						\\ 
+\macro{listtablename} 		& Liste des tableaux						\\ 
+\end{tabular}
+\end{tablecouleur}
+\caption{Quelques noms de variables} \label{variabletexte}
+\end{table}
+
+En redéfinissant ces dernières, il devient possible de personnaliser sa présentation. La \emph{redéfinition} se fait avec la commande \macro{renewcommand}. Une première manière de procéder revient à mettre cette commande juste après le \macro{begin\{document\}}. Une seconde manière permet de garder la redéfinition en préambule en utilisant une commande un peu plus avancée.
+
+\begin{codesimple}{Redéfinition du titre de la table des matières}{redeftoc}
+\addto\captionsfrench{\renewcommand{\contentsname}{Sommaire}}   % Méthode 2
+\begin{document}
+\renewcommand{\contentsname}{Sommaire}   % Méthode 1
+\end{codesimple}
+
+
+\subsection{Les dimensions de la page} \index[con]{page}\index[con]{page!dimensions} \label{page}
+
+Pour définir une page, \LaTeX\ utilise plusieurs variables représentant des dimensions. Parmi celles-ci se trouvent par exemple la hauteur de la page, la largeur des marges, la largeur du texte principal, la hauteur de l'en-tête. 
+
+Le paquet \paquet{layout} permet d'afficher schématiquement l'ensemble des dimensions d'une page en mettant à disposition la commande \macro{layout}. La page suivante utilise un paquet similaire, \paquet{layouts}, un peu plus étendu dans ses fonctionnalités.
+
+\begin{figure}[!t]
+\centering
+\currentpage
+\drawpage
+\pagevalues
+\caption{Une page et ses dimensions}
+\end{figure}
+\newpage
+
+En tant que variables, les dimensions d'une page peuvent être librement redéfinies par l'utilisateur à tout endroit dans le document. Pour ce document de cours, les décalages verticaux et horizontaux étaient à l'origine diminués de 30 points et la hauteur comme la largeur du texte étaient augmentés de 60 points (pour garder l'aspect centré du texte)\footnote{On pourrait aussi définir directement la taille plutôt que de la modifier par rapport à l'existant.} en utilisant la  commande \macro{addtolength} :
+
+\begin{codesimple}{Modification de page par commande}{pagemacro}
+\addtolength{\hoffset}{-30pt}
+\addtolength{\textwidth}{60pt} 
+\addtolength{\voffset}{-30pt} 
+\addtolength{\textheight}{60pt}
+\end{codesimple}
+
+
+Les modifications manuelles devraient cependant rester l'exception. Pour faire des modifications mieux encadrées, le paquet \paquet{geometry} constitue un excellent outil de travail : sur la base de quelques réglages, il étalonne les autres dimensions de la page. Ce qui suit illustre le cas de ce document. Il est demandé d'avoir une largeur de zone de texte de 15~cm et une hauteur de zone de texte de 23~cm. Le paquet \paquet{geometry} traite cette demande en modifiant toutes les variables de la page de façon à obtenir une présentation équilibrée. 
+
+\begin{codesimple}{Modification de page pour ce document}{geometry}
+\usepackage[body={15cm,23cm}]{geometry}
+\end{codesimple}
+
+
+\subsection{La personnalisation des en-têtes et pieds de page} \label{fancyhdr}\index[con]{en-tête}\index[con]{pied de page}
+
+Le paquet \paquet{fancyhdr} (pour \og fancy header \fg) permet d'affiner très largement la présentation des en-têtes et pieds de page. Il propose en effet de découper les en-têtes et les pieds de page en trois zones : droite (\macron{R}), centre (\macron{C}) et gauche (\macron{L})\footnote{Cette distinction peut aller plus en présentant séparément page impaire (\macron{O} pour \emph{odd}) et page paire (\macron{E} pour \emph{even}) si l'option générale \macron{twoside} a été choisie pour le document.}. Pour illustrer les principes de ce paquet sont présentés ici les choix effectués pour la présentation de ce document. Dans un premier temps, le paquet est chargé et il est demandé l'application du style paramétrable mis à disposition : \macron{fancy}.
+
+\begin{codesimple}{Appels pour l'application du style \macron{fancy}}{stylefancy}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\end{codesimple}
+
+L'en-tête fait apparaître ici des éléments liés au titre des chapitres ou des sections. Ceci demande quelques  commandes spécifiques pour le stockage d'une part et la restitution d'autre part des éléments de titre.
+
+En terme de stockage, lorsqu'il trouve une  commande \macro{chapter\{\}} ou \macro{section\{\}}, \LaTeX\ utilise respectivement les  commandes \macro{chaptermark} et \macro{sectionmark} pour en retenir le contenu à destination des en-têtes et pieds de page. Ces deux  commandes peuvent stocker de deux façons différentes l'information selon qu'elles utilisent la  commande \macro{markboth\{\}\{\}} ou \macro{markright\{\}}.  \macro{markboth\{\}\{\}} stocke dans un premier groupe son premier argument et dans un second groupe son second argument. \macro{markright\{\}} stocke uniquement dans le second groupe. Tant que, sur une page, aucun stockage n'est fait, les deux groupes contiennent par défaut les valeurs associées à la page précédente. Ils sont totalement remplacés par la première valeur stockée au premier appel sur une page.
+
+En terme de restitution dans nos en-têtes et pieds de page, la  commande \macro{leftmark} récupère pour une page donnée le \emph{dernier} élément mis dans le premier groupe. La  commande \macro{rightmark}, elle, récupère pour une page donnée le \emph{premier} élément mis dans le second groupe.
+
+Pour ce document, il faut stocker le nom du chapitre quand un chapitre est rencontré et le numéro de la section (obtenu avec la  commande \macron{thesection}\footnote{De même, \macro{thechapter} affiche le numéro du chapitre et \macron{thepage} le numéro de page.}) suivi de son nom quand une section est croisée. Les commandes de stockage vont être les suivantes :
+
+\begin{codesimple}{Redéfinition des textes d'en-tête pour chapitre et section}{texteentete}
+\renewcommand{\chaptermark}[1]{\markright{#1}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+\end{codesimple}
+
+
+La présentation de l'en-tête peut être maintenant travaillée. Tout d'abord, \macro{fancyhf\{\}} annule toutes les présentations existantes. La ligne suivante donne la définition du contenu de l'en-tête à droite (R) : en gras, le numéro de page obtenu avec \macro{thepage}. La dernière ligne définit le contenu de l'en-tête à gauche (L) : en l'occurrence, \macro{rightmark} qui va restituer, du fait des définitions de stockage et sa propre définition, l'information du premier chapitre ou la première section apparaissant sur la page et à défaut la même valeur que la page précédente. 
+Pour information, si on avait souhaité intervenir les pieds de page, nous aurions utilisé la  commande \macro{fancyfoot} avec le même principe. 
+
+\begin{codesimple}{Contenu et présentation de l'en-tête}{contenuentete}
+\fancyhf{}
+\fancyhead[R]{\bfseries\thepage}
+\fancyhead[L]{\bfseries\rightmark}
+\end{codesimple}
+
+
+Les lignes suivantes modifient directement l'épaisseur des filets associés à l'en-tête  et au pied de page, ce dernier étant effacé en lui donnant une épaisseur nulle. La dernière ligne corrige une légère anomalie de dimension que signale \LaTeX\ sinon.
+
+\begin{codesimple}{Gestion des filets et de l'espace de l'en-tête}{filetentete}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0pt}
+\addtolenght{\headheight}{2pt}
+\end{codesimple}
+
+
+La toute dernière ligne de cet exemple définit un style \og \macron{plain} \fg qui est vide, au cas où l'utilisateur souhaiterait pour une page particulière un en-tête vide et sans filet.
+
+\begin{codesimple}{Définition d'un en-tête vide}{entetevide}
+\fancypagestyle{plain}{\fancyhead{} \renewcommand{\headrulewidth}{0pt}}
+\end{codesimple}
+
+
+\subsection{La personnalisation de l'index} \index[con]{index}
+\label{persoindex}
+
+\subsubsection{Un index sur plusieurs colonnes}
+\label{multicol}
+Par défaut, l'index n'est pas un chapitre à part entière, il n'est pas mentionné dans la table des matières et il s'affiche sur une unique colonne qui le fait occuper rapidement beaucoup de pages. Voici un code (parmi d'autres) modifiant ces points en redéfinissant l'environnement \macron{theindex}. Pour ce qui est de la gestion sur plusieurs colonnes, ici trois, il est fait usage du paquet \paquet{multicol} mettant à disposition l'environnement \macron{multicols}.
+
+\begin{codesimple}{Redéfinition de l'index}{redefindex}
+\renewenvironment{theindex}{%
+  \chapter{\indexname}%
+  \begin{multicols}{3}%
+  \setlength\parindent{0pt} %   
+  \newcommand\item{\par\hangindent=40pt}}%
+{\end{multicols}}
+\end{codesimple}
+
+
+Comme vu en page \pageref{variabletexte}, le nom de l'index est indiqué ici comme titre de chapitre\footnote{Dans le cas d'index multiples, cette ligne est à modifier car le nom de l'index n'est plus stocké dans cette variable. Le code nécessaire est placé dans le code source de ce document.}. L'affichage en trois colonnes est ensuite activé. Enfin, deux réglages sont effectués pour répondre aux règles de présentation de l'index. Ce dernier se base en effet en partie sur la commande \macron{item} pour énumérer les différents principaux de l'index. Nous redéfinissons d'abord l'espace marquant l'indentation de début de paragraphe en le fixant à une valeur nulle (nous n'avons plus ici de paragraphes de texte). Puis nous redéfinissons la  commande \macron{item} comme une commande faisant commencer ou finir un paragraphe (\macron{par}), le paragraphe qu'elle introduit ayant une indentation forcée de 40~pt dès sa deuxième ligne.
+
+\subsubsection{Un index avec un style personnalisé}
+
+Comme précisé en page \pageref{styleindex}, avec le programme \programme{makeindex}, il est possible de recourir à des styles de présentation de l'index\footnote{Voir \liensimple{http://monbloginformatique.blogspot.fr/2010/03/latex-creer-un-joli-index.html} pour un autre exemple \cite{atan}.}, à l'image de ce qui est fait dans les bibliographies. Cette présentation se définit dans un fichier \dextension{ist} (à placer dans le même répertoire que le fichier \dextension{tex}). Ce fichier s'avère être un fichier texte contenant quelques mots clé pour lesquels il est indiqué le texte \LaTeX\ qu'il faudra placer si l'élément du style associé au mot clé apparaît. Ce fichier doit respecter certaines règles d'écriture :
+\begin{itemize}
+\item \macro{n} correspond au retour à la ligne ;
+\item \macro{\ba} remplace systématiquement \macro{} lorsqu'une commande \LaTeX{} doit être saisie.
+\end{itemize}
+
+Dans l'exemple qui suit, nous modifions les définitions par défaut de trois mots clés, ceux qui concernent les lettrines.
+
+\begin{codesimple}{Lettrines simples pour un index}{lettrineindex}
+headings_flag 1
+heading_prefix "{\\bfseries "
+heading_suffix "}\\nopagebreak \n"
+\end{codesimple}
+
+
+La première ligne indique que nous souhaitons des lettrines (0 sinon), la deuxième ligne que nous souhaitons l'insertion du code \macron{\{}\macro{bfseries} avant la lettrine (donc une mise en gras de la lettrine) et la dernière ligne que nous souhaitons l'insertion après la lettrine de la fin de la zone en gras (\macron{\}}) ainsi qu'une interdiction de saut de page à cet endroit avec \macro{nopagebreak}. Ainsi, la lettrine ne peut se retrouver seule en bas de page : elle sera renvoyée à la page suivante. 
+
+
+\subsection{La gestion forcée des flottants} \index[con]{flottant}
+
+La gestion des flottants pour des documents assez courts peut paraître parfois quelque peu fantaisiste : une figure est le plus souvent supposée liée au texte qui l'entoure. Le paquet \paquet{floatrow}, parmi les éléments qu'il apporte dans la gestion des flottants, ajoute un nouveau type de  disposition : \macron{H}. Cette disposition impose l'affichage de la figure (ou d'un tableau) à l'endroit exact où elle apparaît dans le code. Il suffit donc d'utiliser l'instruction :
+
+\begin{codesimple}{Positionnement forcé d'une figure}{positionabs}
+\begin{figure}[H] 
+% figure
+\end{figure} 
+\end{codesimple}
+
+\subsection{Pour aller plus loin}
+
+Les différents ouvrages sur \LaTeX\ explicitent toujours de façon détaillée ces réglages, tout particulièrement les ouvrages de Bernard \textsc{Desgraupes}\cite{desg} et de Vincent \textsc{Lozano}\cite{loza}.
+Parmi les paquets permettant des personnalisations, il convient de citer :
+\begin{itemize}
+\item \paquet{titlesec}, qui permet de modifier largement la présentation des différentes divisions du document : numérotation, espacements, format du texte ;
+\item \paquet{fncychap}, qui propose des présentations variées des chapitres ;
+\item \paquet{floatrow} et \paquet{caption} qui permettent de définir intégralement ses propres flottants, le second paquet gérant la partie mise en forme des légendes ;
+\item \paquet{enumitem}, qui propose des méthodes pour modifier les énumérations. 
+\end{itemize}
+Enfin, le site de Vincent \textsc{Zoonekynd} propose quelques codes pour des présentations alternatives des chapitres et sections : \liensimple{http://zoonek.free.fr/LaTeX/}.

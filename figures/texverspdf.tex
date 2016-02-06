@@ -1,0 +1,57 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Figure : tex -> pdf
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Ce code demande des définitions (fleche, flechetiret..) défini 
+% dans fonctionscours.sty (partie "Code TIKZ pour des figures")
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+% Principaux objets
+\tzfichier(0,5)(tex)
+\tzfichier(5,5)(dvi)
+\tzfichier(5,3)(log)
+\tzfichier(5,1)(aux)
+\tzfichier(10,5)(ps)
+\tzfichier(10,1)(pdf)
+\tzprogramme[](2.5,5)(latex)
+\tzprogramme[](7.5,5)(dvips)
+\tzprogramme[](10,3)(ps2pdf)
+\tzprogrammelong[color=orange3](0,2.8)(pdflatex)(\programme{pdflatex} ou \programme{xelatex} ou \programme{lualatex}) % 2.8 pour alignement.
+
+% Lieux pour éviter des confusions de flêches.
+\node[gauche] (pdflatex1) at (pdflatex.south){};
+\node[droite] (pdflatex2) at (pdflatex.south){};
+\node[dessus]   (log1) at (log.west){};
+\node[dessous]  (log2) at (log.west){};
+\node[dessus]   (aux1) at (aux.west){};
+\node[dessous]  (aux2) at (aux.west){};
+\node[dessus]   (aux3) at (aux.east){};
+\node[dessous]  (aux4) at (aux.east){};
+
+% Flêches de tex vers pdf
+\draw[fleche,>-] (tex.east) -- (latex.west);
+\draw[fleche] (latex.east) -- (dvi.west);
+\draw[fleche,>-] (dvi.east) -- (dvips.west);
+\draw[fleche] (dvips.east) -- (ps.west);
+\draw[fleche,>-] (ps.south) -- (ps2pdf.north);
+\draw[fleche] (ps2pdf.south) -- (pdf.north);
+
+% Flêches de tex vers log/aux et flêche retour 
+\draw[fleche] (latex.east) -| (3.9,4) |- (log1);
+\draw[fleche] (latex.east) -| (3.9,4) |- (aux1);
+\draw[fleche,>->] (aux3) -| (6.1,0.5) |- (5,-0.2) -| (latex.south);
+
+% Flêches de tex vers pdflatex puis pdf
+\draw[flechetiret,>-] (tex.south) -- (pdflatex.north);
+\draw[flechetiret] (pdflatex1) |- (6,-1) -| (pdf.south);
+
+% Flêches de pdflatex vers log/aux et flêche retour
+\draw[flechetiret] (pdflatex.east) -- (log2);
+\draw[flechetiret] (pdflatex.east) -| (3.5,2) |- (aux2);
+\draw[flechetiret,>->] (aux4) -| (6.5,0.5) |- (3,-0.6) -| (pdflatex2);
+
+\end{tikzpicture}
+\caption{Du fichier \dextension{tex} au fichier \dextension{pdf}}
+\end{figure}

@@ -1,0 +1,199 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%
+%%%%%  Préambule du document
+%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Reste à faire
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Eléments certains :
+%   Page titre à revoir
+%   Présentation générale : faire une variante sobre et une variante bien moins sobre
+%   Analyser les "\macro" trop longs et saut de ligne : le mbox
+%   Utiliser biblatex
+%   Détailler Beamer, longtable
+%   Poursuivre tikz
+%   Lister des grandes options de pstricks
+
+% Maintenance :
+%   Valider les liens web annuellement
+%   Refaire Annexe A avec Installation de l'année en cours
+%   Ajouter des erreurs au fur et à mesure
+
+% Pistes :
+%   Ajouter LyX ? Présenter LuaLaTeX ? 
+%   Présenter Pythontex ? Présenter knitr (évolution de Sweave) ?
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%    Chaînes de compilation
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Ce document est fourni avec les fichiers suivants :
+%    - [chapitres]     : sous-répertoire contenant les fichiers tex des chapitres (17 fichiers) ;
+%    - [figures]       : sous-répertoire contenant les figures (2 fichiers) ;
+%    - [fontes]        : sous-répertoire contenant les fontes (4 fichiers) ;
+%    - [images]        : sous-répertoire contenant les images (23 fichiers) ;
+%    - [pagedegarde]   : sous-répertoire contenant les fichiers associés à pagedegarde (10 fichiers) ;
+%    - bibliocours.bib : bibliographie associée à ce document ;
+%    - cours.pdf       : le document final ;
+%    - histogra.sty    : paquet présenté dans le cours ;
+%    - lifecon.sty     : paquet présenté dans le cours ;
+%    - pagedegarde.sty : paquet présenté dans le cours ;
+%    - picins.sty      : paquet présenté dans le cours et parfois non installé ;
+%    - plain-fr.bst    : format de bibliographie francisé ;
+%    - styleindex.ist  : style des index ;
+
+%%% Avec XeLaTeX + makeindex -> Attention à l'ordre des mots accentués en index.
+% Ainsi \index{délimiteur} doit être mis à \index{delimiteur@délimiteur} 
+% (ce qui est fait ici mais doit donc être contrôlé si l'usage persiste.
+
+% xelatex -synctex=1 -interaction=nonstopmode %.tex|bibtex %|makeindex -s styleindex.ist %.idx|makeindex -s styleindex.ist -o %.pnd %.pdx|makeindex -s styleindex.ist -o %.cnd %.cdx|xelatex -synctex=1 -interaction=nonstopmode %.tex|"C:/Program Files/Adobe/Reader 11.0/Reader/AcroRd32.exe" %.pdf
+
+%%% Avec XeLaTeX + texindy
+
+% xelatex -synctex=1 -interaction=nonstopmode %.tex|bibtex %|texindy -L french %.idx|texindy -L french -o %.pnd %.pdx|texindy -L french -o %.cnd %.cdx|xelatex -synctex=1 -interaction=nonstopmode %.tex|"C:/Program Files (x86)/Adobe/Reader 10.0/Reader/AcroRd32.exe" %.pdf
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Finies les blagues : du code !
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[10pt,a4paper,oneside,french]{book}
+
+\usepackage[body={15cm,23cm}]{geometry}
+\usepackage[graph2,ps2,table2,index,symbs,maths,param]{styleyt}
+\usepackage{fonctionscours}
+\entetecours % Pour le format des en-têtes
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Informations générales
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\author{Yannick \textsc{Tanguy}}
+\titre{P'tit cours de \LaTeX}
+\version{2015-010}
+\date{}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%
+%%%%%  Le document
+%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\makeindex
+\begin{document}
+\dominitoc                             % Déclenchement pour les mini-tables
+\frontmatter                           % Numérotation spécifique des pages
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Page titre
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{titlepage}
+\begin{tikzpicture}[remember picture, overlay]
+    \node at (current page.south west)
+        {%
+        \begin{tikzpicture}[remember picture, overlay]
+            \node[inner sep=0cm] at (11,15) {\includegraphics[height=35cm]{images/engrenage2.jpg}}; 
+            \fill[bleu5](0,4.4) rectangle (10.7,5.4);
+            \fill[bleu5](20.3,4.4) rectangle (21,5.4);
+            \node at (15.5,4.5) {\resizebox{9cm}{!}{\fontfamily{lmr}\selectfont\Huge\LaTeX}};  
+            \node at (15.5,2.1) {\resizebox{5cm}{!}{\bfseries LE P'TIT COURS}}; 
+            \node at (15.5,1.2) {\resizebox{2.5cm}{!}{\bfseries Y. Tanguy}}; 
+        \end{tikzpicture}
+        };
+\end{tikzpicture}
+\end{titlepage}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Citation
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\citationseule{Encre n. : vil composé de tanin, de noir de fumée, de gomme arabique et d'eau, principalement utilisé pour faciliter la contagion de la bêtise et promouvoir le crime intellectuel.}{Ambrose}{Bierce}{The Devil's Dictionary}{1911}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Introduction
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\include{chapitres/cours-introduction}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Tables des matières
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\tableofcontents                       % Affichage de la table des matières
+\listoftables
+\listoffigures
+\cleardoublepage                       % Permet de bien gérer la numérotation à placer 
+                                       % en face du \listof dans la table des matières. 
+\addcontentsline{toc}{chapter}{Liste d'exemples de code}
+\listof{code}{Liste d'exemples de code}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Coeur du document
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\mainmatter                            % Numérotation spécifique des pages (chiffres arabes depuis 1) 
+\part{Notions fondamentales}
+\include{chapitres/cours-histoire}
+\include{chapitres/cours-fonctionnement}
+
+\part{Notions courantes}
+\include{chapitres/cours-preambuleclasse}
+\include{chapitres/cours-texte}
+\include{chapitres/cours-structures}
+\include{chapitres/cours-mathematiques}
+\include{chapitres/cours-flottants}
+
+\part{Notions avancées}
+\include{chapitres/cours-programmation}
+\include{chapitres/cours-graphiques}
+\include{chapitres/cours-polices}
+\include{chapitres/cours-extension}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Annexes
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\part{Annexes}
+\appendix                              % Passage aux notations "annexe"
+\include{chapitres/cours-installation}
+\include{chapitres/cours-liens}
+\include{chapitres/cours-cv}
+\include{chapitres/cours-pagedegarde}
+\include{chapitres/cours-erreurs}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Index
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\printindex[paq]                                     
+\printindex[con]              
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Bibliographie
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\nocite{*}                             % Demande d'écriture de toutes les entrées du fichier ".bib"
+\bibliographystyle{plain-fr}           % Utilisation d'un style francisé : plain-fr (http://www.lsv.ens-cachan.fr/~markey/bibla.php)
+\bibliography{bibliocours}             % Appel du fichier de références
+
+
+\end{document}

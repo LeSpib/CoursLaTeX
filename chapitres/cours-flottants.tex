@@ -1,0 +1,466 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Chapitre Flottants
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Les flottants : tableaux et figures}
+
+Un \terme{flottant} représente un objet que \LaTeX\ place en respectant au mieux des règles de présentation de page, quitte à reporter l'affichage de l'objet sur une autre page, typiquement lorsque trop d'objets figurent sur la même page. La place de l'objet peut donc varier au fur et à mesure de l'évolution du document.
+
+Il existe deux types de flottants classiques : les tableaux et les figures. D'autres peuvent être créés, tels les \og codes \fg présents dans ce document.
+
+
+\section{Les tableaux}\index[con]{tableau} \label{tableau} \incise{103--144}{243--288}{63--72}
+
+Les tableaux sont des objets typographiquement complexes : sur la plupart des logiciels de traitement de texte, ils demandent beaucoup de réglages dès que les exigences en terme de présentation sont élevées. \LaTeX\ ne fait pas exception à cette règle. Il faut en général décrire toute la structure des tableaux mais il existe quelques solutions pour gagner en concision.
+
+
+\subsection{Les règles de base}
+
+Les tableaux s'obtiennent en général en utilisant l'environnement \macron{tabular}. Cet environnement nécessite un paramètre spécifique : le \og format-colonne \fg\footnote{Terminologie maison.}, autrement dit la présentation de chaque colonne. Le format de chaque colonne est représenté par une lettre dont la valeur indique la présentation :
+\begin{itemize}
+\item \macron{l} pour un alignement à gauche ; 
+\item \macron{c} pour un centrage ;
+\item \macron{r} pour un alignement à droite. 
+\end{itemize}
+
+Dans le cas ci-après, la présentation centre la première colonne et aligne à gauche les trois autres colonnes avec \macron{clll}.
+
+Une fois le format-colonne étable, le contenu du tableau lui-même se présente en tenant compte des  deux règles suivantes, tout à fait similaires à celles vues dans les matrices en page~\pageref{matrice} :
+\begin{itemize}
+\item pour passer d'une cellule à une autre sur une ligne du tableau, il faut utiliser le caractère \macron{\&} ;
+\item pour passer d'une ligne à une autre, il faut utiliser \macro{\ba}.
+\end{itemize}
+
+\begin{codedouble}{Tableau simple}{tableausimple}
+Du texte.
+\begin{tabular}{clll}
+Mois            & Effectif     & Moyenne      & \'{E}cart-type  \\ 
+Octobre         & 735          & 4,49\%       & 0,41\%          \\
+Novembre        & 756          & 4,36\%       & 0,37\%          \\
+Décembre        & 812          & 4,22\%       & 0,22\%          \\ 
+\end{tabular}
+Et encore du texte.
+\end{codedouble}
+
+Pour rappel, \LaTeX{} considère que les espaces multiples sont équivalents à un espace unique. Ceci permet de présenter au besoin un peu plus clairement les tableaux dans le code source de son document, comme dans cet exemple.
+
+Par ailleurs, cet exemple montre qu'un tableau, s'il est placé directement dans le cours du texte, s'insère comme un bloc centré verticalement par rapport à la ligne de texte.
+
+\subsection{Le passage en flottant}
+\label{flottants}
+Cette présentation peut être améliorée en définissant le tableau comme un objet flottant avec l'environnement \macron{table}.
+
+Il reste cependant possible d'indiquer à \LaTeX\ où placer \emph{de préférence} sur une page le flottant grâce à quelques indications placées entre crochets juste après \macro{begin\{table\}}, leur ordre indiquant l'ordre de priorité dans la présentation. Les indications possibles sont :
+\begin{itemize}
+\item \macron{h} : ici, autrement dit juste après le texte précédant le tableau dans le fichier \dextension{tex} ;
+\item \macron{t} : en haut de page ;
+\item \macron{b} : en bas de page ;
+\item \macron{p} : sur une page séparée ;
+\item \macron{\string!} : force un peu le respect de la règle indiquée. \\
+\end{itemize}
+
+Ainsi, dans l'exemple ci-après, il est demandé d'afficher le tableau à l'endroit où il est présent dans le code et, si cela n'est pas possible, en haut de page.
+
+Ce passage en flottant permet par ailleurs de créer de l'espace autour de ce tableau et d'ajouter une légende avec la  commande \macro{caption\{{\it légende}\}}. La légende sera numérotée et pourra être reprise dans une liste de tableaux générée par la commande \macro{listoftables}, proche voisine de \macro{tableofcontents}, tout comme le numéro pourra être repris dans les mécaniques de références vues en page \pageref{référence}.
+
+\begin{codedoublevrai}
+Voici le tableau~1.1 : 
+
+\bigskip
+\centering
+\begin{tabular}{cccc}
+Mois            & Effectif     & Moyenne      & \'{E}cart-type  \\ 
+Octobre         & 735          & 4,49\%       & 0,41\%          \\
+Novembre        & 756          & 4,36\%       & 0,37\%          \\
+Décembre        & 812          & 4,22\%       & 0,22\%          \\ 
+\end{tabular}
+
+\vspace{\baselineskip}
+\textsc{Table 1.1} -- Taux de réussite
+\end{codedoublevrai}
+
+\begin{codedoublefaux}{Tableau flottant}{tableauflottant}
+Voici le tableau~\ref{tablo} :
+\begin{table}[!ht]
+\centering
+\begin{tabular}{cccc}
+Mois            & Effectif     & Moyenne      & \'{E}cart-type  \\
+Octobre         & 735          & 4,49\%       & 0,41\%          \\
+Novembre        & 756          & 4,36\%       & 0,37\%          \\
+Décembre        & 812          & 4,22\%       & 0,22\%          \\ 
+\end{tabular}
+\caption{Taux de réussite}  \label{tablo}
+\end{table}
+\end{codedoublefaux}
+
+Pour accompagner le passage en flottant, le tableau a été centré avec l'utilisation de la commande \macro{centering}. Sans cela, le tableau paraîtrait décentré par rapport au texte de la légende.
+
+\subsection{Les filets}
+
+Un tableau se présente souvent avec des filets, traits séparant lignes et colonnes. Ils s'obtiennent respectivement par la commande \macro{hline} et par l'ajout dans le format-colonne du symbole \og \macron{|} \fg. Avec cette méthode, les filets peuvent être doublés en doublant la commande.
+
+\begin{codedoublevrai}
+\centering
+\begin{tabular}{|c||c|c|c|}
+\hline 
+Mois            & Effectif     & Moyenne      & \'{E}cart-type  \\ \hline \hline
+Octobre         & 735          & 4,49\%       & 0,41\%          \\ \hline
+Novembre        & 756          & 4,36\%       & 0,37\%          \\ \hline
+Décembre        & 812          & 4,22\%       & 0,22\%          \\ \hline
+\end{tabular}
+
+\vspace{\baselineskip}
+\textsc{Table 1.1} -- Taux de réussite
+\end{codedoublevrai}
+
+\begin{codedoublefaux}{Tableau avec filets}{tableaufilets}
+\begin{table}[!ht]
+\centering
+\begin{tabular}{|c||c|c|c|}
+\hline 
+Mois            & Effectif     & Moyenne      & \'{E}cart-type  \\ \hline \hline
+Octobre         & 735          & 4,49\%       & 0,41\%          \\ \hline
+Novembre        & 756          & 4,36\%       & 0,37\%          \\ \hline
+Décembre        & 812          & 4,22\%       & 0,22\%          \\ \hline
+\end{tabular}
+\caption{Taux de réussite}
+\end{table}
+\end{codedoublefaux}
+
+
+La commande \macro{cline} permet d'obtenir des filets partiels. Ainsi, \macro{cline\{1-2\}} indique ici qu'un filet horizontal va de la colonne 1 à la colonne 2. Cette fonction sera particulièrement utile lors de la fusion de lignes, vue ci-après.
+
+Le paquet \paquet{hhline} offre ici une alternative. La commande qu'il définit permet de déterminer de quelle manière le filet est tracé au niveau de chaque cellule. Le contenu de la commande est une suite de caractère, un par cellule, selon la codification suivante :
+\begin{itemize}
+\item \macron{-} donne un filet simple ; 
+\item \macron{=} donne un filet double ; 
+\item \macron{\~{}} n'affiche pas le filet. 
+\end{itemize}
+
+
+\subsection{La fusion de cellules}
+
+Des cellules de la même ligne peuvent être fusionnées grâce à la commande :
+\begin{center}
+\macro{multicolumn\{{\it nb de colonnes}\}\{{\it présentation}\}\{{\it contenu}\}}
+\end{center}
+où \emph{présentation} correspond aux valeurs \macron{r}, \macron{l} et \macron{c} avec ou sans les barres verticales \macron{|}.
+
+De même, des cellules de la même colonne peuvent être fusionnées par la commande fournie par le paquet \paquet{multirow} :
+\begin{center}
+\macro{multirow\{{\it nb de lignes}\}\{{\it largeur}\}\{{\it contenu}\}}
+\end{center}
+
+Ici, \emph{largeur} correspond à la largeur des cellules fusionnées en colonne. Cette dimension peut être déterminée par \LaTeX\ en remplaçant \macron{\{{\it largeur}\}} par \macron{*}. Dans l'exemple du tableau \ref{tableaufusion}, il peut être indiqué \macron{\{{1cm}\}} ou \macron{*} pour un effet presque similaire.
+
+Cette  commande introduit cependant une anomalie car \macro{hline} ne traite pas la fusion de cellule : le filet fait systématiquement toute la largeur du tableau. Il faut donc retenir \macro{cline\{2-4\}}.
+
+\begin{codedoublevrai}
+\centering
+\begin{tabular}{|c||c|c|c|}
+\hline 
+\multirow{2}*{Mois} & \multicolumn{3}{c|}{Statistiques}    \\ \cline{2-4}
+                    & Effectif  & Moyenne   & \'{E}cart-type  \\ \hline \hline
+Octobre             & 735       & 4,49\%    & 0,41\%          \\ \hline
+Novembre            & 756       & 4,36\%    & 0,37\%          \\ \hline
+Décembre            & 812       & 4,22\%    & 0,22\%          \\ \hline
+\end{tabular}
+\par\vspace{0.8\baselineskip} \textsc{Table 1.1} -- Taux de réussite
+\end{codedoublevrai}
+
+\begin{codedoublefaux}{Tableau avec fusion de cellules}{tableaufusion}
+\begin{table}[!ht]
+\centering
+\begin{tabular}{|c||c|c|c|}
+\hline 
+\multirow{2}*{Mois} & \multicolumn{3}{c|}{Statistiques}    \\ \cline{2-4}
+                    & Effectif  & Moyenne   & \'{E}cart-type  \\ \hline \hline
+Octobre             & 735       & 4,49\%    & 0,41\%          \\ \hline
+Novembre            & 756       & 4,36\%    & 0,37\%          \\ \hline
+Décembre            & 812       & 4,22\%    & 0,22\%          \\ \hline
+\end{tabular}
+\caption{Taux de réussite}
+\end{table}
+\end{codedoublefaux}
+
+\subsection{L'enrichissement du format-colonne}
+
+Le paquet \paquet{array} permet d'approfondir la définition du format-colonne du tableau. Il devient possible de définir la largeur de chaque colonne avec la nouvelle balise \macron{m\{{\it dimension}\}}. 
+
+De plus, il est possible d'introduire dans ce format-colonne des  commandes à appliquer à chacune des cellules de chaque colonne par le biais des commandes \macron{>\{{\it commandes}\}} et \macron{<\{{\it commandes}\}}. La première place des commandes avant chaque cellule de la colonne, la seconde après chaque cellule de la colonne. Dans l'exemple qui suit, le recours à ces commandes permet d'obtenir une écriture penchée dans la première colonne et un centrage dans les trois autres colonnes, le centrage ne pouvant pas être obtenu par le \macron{c} remplacé ici par \macron{m\{\}}.
+
+\begin{codedoublevrai}
+\centering
+\begin{tabular}{|>{\slshape}c||m{2cm}<{\centering}|m{2cm}<{\centering}|
+m{2cm}<{\centering}|}
+\hline 
+Mois            & Effectif     & Moyenne   & \'{E}cart-type  \\ \hline \hline
+Octobre         & 735          & 4,49\%    & 0,41\%          \\ \hline
+Novembre        & 756          & 4,36\%    & 0,37\%          \\ \hline
+Décembre        & 812          & 4,22\%    & 0,22\%          \\ \hline
+\end{tabular}
+\par\vspace{0.8\baselineskip} \textsc{Table 1.1} -- Taux de réussite
+\end{codedoublevrai}
+
+\begin{codedoublefaux}{Tableau avec égalisation des largeurs de colonne}{tableauegalise}
+\begin{table}[!ht]
+\centering
+\begin{tabular}{|>{\slshape}c||m{2cm}<{\centering}|m{2cm}<{\centering}|
+m{2cm}<{\centering}|}
+\hline 
+Mois            & Effectif     & Moyenne   & \'{E}cart-type  \\ \hline \hline
+Octobre         & 735          & 4,49\%    & 0,41\%          \\ \hline
+Novembre        & 756          & 4,36\%    & 0,37\%          \\ \hline
+Décembre        & 812          & 4,22\%    & 0,22\%          \\ \hline
+\end{tabular}
+\caption{Taux de réussite}
+\end{table}
+\end{codedoublefaux}
+
+
+\subsection{Un peu de couleur} \label{tableaucouleur} \index[con]{couleur}
+
+Le paquet \paquet{colortbl}\footnote{Ce paquet est activé de préférence avec la commande \macro{usepackage[table]\{xcolor\}}. En effet, ce chargement récupère \paquet{colortbl} mais aussi la commande \macro{rowcolors} vue par la suite.} met à disposition trois commandes permettant de colorer le fond des cellules d'un tableau :
+\begin{itemize}
+\item \macro{columncolor\{{\it couleur}\}}, dans le format-colonne, applique la \emph{couleur} à la colonne.
+\item \macro{rowcolor\{{\it couleur}\}}, dans le tableau, applique la \emph{couleur} à la ligne où elle se situe.
+\item \macro{cellcolor\{{\it couleur}\}}, dans la cellule concernée, applique  la \emph{couleur}.
+\end{itemize}
+
+\begin{codedoublevrai}
+\centering
+\begin{tabular}{|>{\columncolor{bleu8}\slshape}c||m{2cm}<{\centering}|
+m{2cm}<{\centering}|m{2cm}<{\centering}|}
+\hline \rowcolor{bleu7}  
+Mois       & Effectif  & Moyenne                   & \'{E}cart-type  \\ \hline \hline
+Octobre    & 735       & \cellcolor{orange8}4,49\% & 0,41\%          \\ \hline
+Novembre   & 756       & 4,36\%                    & 0,37\%          \\ \hline
+Décembre   & 812       & 4,22\%                    & 0,22\%          \\ \hline
+\end{tabular}
+\par\vspace{0.8\baselineskip} \textsc{Table 1.1} -- Taux de réussite
+\end{codedoublevrai}
+
+\begin{codedoublefaux}{Tableau avec cellules colorées}{tabcouleur}
+\begin{table}[!ht]
+\centering
+\begin{tabular}{|>{\columncolor{bleu8}\slshape}c||m{2cm}<{\centering}|
+m{2cm}<{\centering}|m{2cm}<{\centering}|}
+\hline \rowcolor{bleu7}  
+Mois       & Effectif  & Moyenne                   & \'{E}cart-type  \\ \hline \hline
+Octobre    & 735       & \cellcolor{orange8}4,49\% & 0,41\%          \\ \hline
+Novembre   & 756       & 4,36\%                    & 0,37\%          \\ \hline
+Décembre   & 812       & 4,22\%                    & 0,22\%          \\ \hline
+\end{tabular}
+\caption{Taux de réussite}
+\end{table}
+\end{codedoublefaux}
+
+
+\`{A} ces effets sur le fond des cellules, peuvent s'ajouter deux autres bascules :
+\begin{itemize}
+\item \macro{rowcolors\{{\it ligne}\}\{{\it couleur1}\}\{{\it couleur2}\}} qui se place avant le tableau et qui fait alterner la couleur de fond de chaque ligne entre \emph{couleur1} (ligne impaire) et \emph{couleur2} (ligne paire) à partir de la ligne de numéro \emph{ligne} ;
+\item \macro{arrayrulecolor\{{\it couleur}\}} change la couleur des filets.
+\end{itemize}
+
+\begin{codedoublevrai}
+\centering
+\arrayrulecolor{bleu5}
+\rowcolors{2}{bleu9}{white}
+\begin{tabular}{|>{\slshape}c||m{2cm}<{\centering}|m{2cm}<{\centering}|
+m{2cm}<{\centering}|}
+\hline \rowcolor{bleu8} 
+Mois       & Effectif  & Moyenne                   & \'{E}cart-type  \\ \hline \hline
+Octobre    & 735       & \cellcolor{orange8}4,49\% & 0,41\%          \\ \hline
+Novembre   & 756       & 4,36\%                    & 0,37\%          \\ \hline
+Décembre   & 812       & 4,22\%                    & 0,22\%          \\ \hline
+\end{tabular}
+\arrayrulecolor{black}
+\par\vspace{0.8\baselineskip} \textsc{Table 1.1} -- Taux de réussite
+\end{codedoublevrai}
+
+\begin{codedoublefaux}{Tableau avec cellules et filets colorées}{tabcouleurfilet}
+\begin{table}[!ht]
+\centering
+\arrayrulecolor{bleu5}
+\rowcolors{2}{bleu9}{white}
+\begin{tabular}{|>{\slshape}c||m{2cm}<{\centering}|m{2cm}<{\centering}|
+m{2cm}<{\centering}|}
+\hline \rowcolor{bleu8} 
+Mois       & Effectif  & Moyenne                   & \'{E}cart-type  \\ \hline \hline
+Octobre    & 735       & \cellcolor{orange8}4,49\% & 0,41\%          \\ \hline
+Novembre   & 756       & 4,36\%                    & 0,37\%          \\ \hline
+Décembre   & 812       & 4,22\%                    & 0,22\%          \\ \hline
+\end{tabular}
+\caption{Taux de réussite}
+\arrayrulecolor{black}
+\end{table}
+\end{codedoublefaux}
+
+
+\subsection{Une saisie simplifiée}
+\label{macroexcel}
+Si la présentation d'un tableau reste souvent délicate, la saisie des éléments séparant cellules et lignes (\macron{\&} et \macro{\ba}) peut être simplifiée. En général, les logiciels pensés pour travailler du code \LaTeX\ proposent des éditeurs de tableaux simples générant le code une fois des cellules saisies. Ici, nous illustrons une autre solution utilisant \programme{Excel} : le recours à la macro \programme{Excel} \programme{Excel2LaTeX}\footnote{Elle est téléchargeable à l'adresse \liensimple{http://www.ctan.org/tex-archive/support/excel2latex}.} qui convertit un tableau quelconque en un tableau \LaTeX. 
+
+Le code de cette commande est librement accessible et modifiable. Est fourni avec ce cours un exemple de modification du code permettant de gérer plus finement certains aspects : encadrement des cellules, traitements de certains caractères spéciaux. Le résultat, un code pas forcément digeste du fait de l'important nombre de commandes utilisant fortement les possibilités de \macro{multicolumn}, donne un résultat présenté ci-après.
+
+\begin{codedoublevrai}
+\centering
+\begin{tabular}{|c|m{2cm}|m{2cm}|m{2cm}|}
+\hhline{----}
+\multicolumn{1}{|E}{\textbf{Mois}} &
+\multicolumn{1}{|E}{\textbf{Effectif}} &
+\multicolumn{1}{|E}{\textbf{Moyenne}} &
+\multicolumn{1}{|E|}{\textbf{\'{E}cart-type}} 
+\\
+\hhline{----}
+\multicolumn{1}{|B}{Octobre} &
+\multicolumn{1}{|B}{735} &
+\multicolumn{1}{|B}{4,49\%} &
+\multicolumn{1}{|B|}{0,41\%} 
+\\
+\hhline{----}
+\multicolumn{1}{|B}{Novembre} &
+\multicolumn{1}{|B}{756} &
+\multicolumn{1}{|B}{4,36\%} &
+\multicolumn{1}{|B|}{0,37\%} 
+\\
+\hhline{----}
+\multicolumn{1}{|B}{Décembre} &
+\multicolumn{1}{|B}{812} &
+\multicolumn{1}{|B}{4,22\%} &
+\multicolumn{1}{|B|}{0,22\%} 
+\\
+\hhline{----}
+\end{tabular}
+\par\vspace{0.8\baselineskip} \textsc{Table 1.1} -- Taux de réussite
+\end{codedoublevrai}
+
+\begin{codedoublefaux}{Tableau issu d'une commande Excel dédiée}{tableauexcel}
+\begin{table}[!ht]
+\centering
+\begin{tabular}{|c|m{2cm}|m{2cm}|m{2cm}|}
+\hhline{----}
+\multicolumn{1}{|E}{\textbf{Mois}} &
+\multicolumn{1}{|E}{\textbf{Effectif}} &
+\multicolumn{1}{|E}{\textbf{Moyenne}} &
+\multicolumn{1}{|E|}{\textbf{\'{E}cart-type}} 
+\\
+\hhline{----}
+\multicolumn{1}{|B}{Octobre} &
+% Et le code continue ainsi cellule après cellule jusqu'à clôture du tableau.
+\end{codedoublefaux}
+
+
+\subsection{Pour aller plus loin}
+
+Dans le cas où les tableaux demandent plusieurs pages pour être affichés, le recours au paquet \paquet{longtable} est recommandé. Ce dernier demande une double compilation pour présenter proprement les tableaux.
+
+Les filets peuvent également être modifiés, en particulier par le paquet \paquet{arydshln}.
+
+\section{Les images} \label{images} \index[con]{image} \index[con]{figure} \incise{393--453}{607--660}{123--135,315--325}
+
+L'insertion d'images s'obtient avec le paquet \paquet{graphicx}. Ce paquet présente l'option \macron{draft} qui permet d'afficher le document sans y intégrer les images. Elles sont remplacées alors par des cadres indiquant l'espace qu'elles vont occuper.
+
+\subsection{Le format et la localisation des images}
+
+Selon le type de compilation retenue (voir page \pageref{compilation}), nous devons convertir nos images en format \dextension{eps} (chaîne \programme{ps2pdf}) ou en format \dextension{jpg} (chaîne \programme{pdflatex}) pour pouvoir les insérer\footnote{En effet, le passage systématique de nos documents en format postscript impose la seule reconnaissance de ce format d'image. Voir annexe \ref{conversionimage}.}. 
+
+De plus, les images ne sont pas forcément dans le répertoire où se trouve le fichier \dextension{tex}. Dans ce cas, il faut préciser le chemin pour les trouver en partant du dossier où est le fichier \dextension{tex}. Indiquer comme nom de répertoire \macron{..} indique que \LaTeX\ doit passer au dossier parent. Ainsi le chemin \macron{../Test/Image.jpg} fait passer dans le dossier parent puis le dossier \macron{Test} pour y trouver l'image \macron{Image.jpg}.
+
+\subsection{L'insertion des images}
+
+Pour insérer les images, le paquet \paquet{graphicx} met à disposition la commande \macro{includegraphics}. 
+
+\begin{codesimple}{Insertion d'images}{imageinsertion}
+\includegraphics[§oc£¤options§fc]{§oc£¤adresseimage§fc}
+\end{codesimple}
+
+Les \emph{options} courantes sont :
+\begin{itemize}
+\item \macron{height} pour indiquer la hauteur de l'image dans une unité de mesure acceptée ;
+\item \macron{width} pour indiquer de façon similaire la largeur de l'image ;
+\item \macron{angle} pour indiquer l'angle de la rotation à appliquer à l'image (sans unité).
+\item \macron{scale} pour indiquer un facteur d'échelle à l'image (sans unité).
+\end{itemize}
+Les exemples qui suivent sont présentés avec des options gérant la taille de l'image à l'affichage. Il est à noter que les images utilisées pour notre l'exemple ont été placées dans un sous-répertoire nommé \macron{images}. 
+
+\begin{codedouble}{Insertion d'une image dans du texte}{imageuntexte}
+Voici une image qui arrive à l'improviste...
+\includegraphics[width=2cm]{images/lettres.jpg}
+et qui nous donne une présentation de texte quelque peu perturbée. 
+\end{codedouble}
+
+\subsection{Le passage en flottant}
+
+De la même manière que les tableaux avec l'environnement \macron{table}, les figures peuvent être gérées comme des flottants avec l'environnement \macron{figure}. Ceci permet d'obtenir la liste des figures avec \macron{listoffigures}. En voici un exemple.
+
+\begin{codedoublevrai}
+\centering 
+\includegraphics[width=9cm]{images/lettres.jpg} 
+\par\vspace{0.8\baselineskip} \textsc{Figure 1.1} -- \'{E}nigme
+\end{codedoublevrai}
+
+\begin{codedoublefaux}{Insertion d'une image}{imageun}
+\begin{figure}[!ht] 
+\centering 
+\includegraphics[width=9cm]{images/lettres.jpg} 
+\caption{\'{E}nigme}
+\end{figure}
+\end{codedoublefaux}
+
+
+L'image suivante voit sa hauteur définie et subit une rotation. Spécifier la hauteur et la largeur de l'image conduit à une déformation de cette dernière pour qu'elle tienne dans les dimensions indiquées.
+
+\begin{codedoublevrai}
+\centering 
+\includegraphics[height=2.5cm,angle=30]{images/lettres.jpg}
+\includegraphics[height=2.5cm,angle=-30]{images/lettres.jpg}
+\par\vspace{0.8\baselineskip} \textsc{Figure 1.1} -- Seconde image
+\end{codedoublevrai}
+
+\begin{codedoublefaux}{Insertion d'une image avec rotation}{imagedeux}
+\begin{figure}[!ht] 
+\centering 
+\includegraphics[height=2.5cm,angle=30]{images/lettres.jpg} 
+\includegraphics[height=2.5cm,angle=-30]{images/lettres.jpg}
+\caption{Seconde image}
+\end{figure}
+\end{codedoublefaux}
+
+\subsection{Commandes complémentaires}
+
+Le paquet \paquet{graphicx} propose quelques commandes complémentaires assez utiles pour repousser quelques limitations courantes de \LaTeX. Ces commandes ont pour point commun de traiter des boîtes et leur \emph{contenu}, comme vu en page~\pageref{boitestexte}.
+
+\begin{codesimple}{Boîtes avec \pseudopaquet{graphicx}}{imageboites}
+\reflectbox{§oc£¤contenu§fc}
+\scalebox{§oc£¤ratio§fc}{§oc£¤contenu§fc}
+\resizebox{§oc£¤hauteur§fc}{§oc£¤largeur§fc}{§oc£¤contenu§fc}
+\rotatebox{§oc£¤angle§fc}{§oc£¤contenu§fc}
+\end{codesimple}
+
+Dans le cas de \macro{resizebox}, un redimensionnement proportionnel est possible en remplaçant la dimension à garder proportionnelle par un \macron{\string!}. Pour le reste, les exemples ci-dessous illustrent les fonctions de ces boîtes. 
+
+\begin{codedouble}{Exemple de déformations de texte}{imageexempleboites}
+Il est parfois \reflectbox{renversant} comme \scalebox{-1}{perturbant} de découvrir
+\resizebox{3cm}{7pt}{l'étendue} de certaines fonctionnalités vraiment aux 
+\rotatebox{-30}{bords} des \scalebox{0.3}{limites}, \resizebox{5cm}{!}{n'est-ce-pas ?}
+\end{codedouble}
+
+\subsection{Pour aller plus loin}\index[con]{image}
+
+Le paquet \paquet{picins} permet de disposer des images à côté du texte, comme c'est le cas avec la photographie présente en page \pageref{photoknuth}. Pour simplifier sa présentation, il met à disposition la  commande suivante\footnote{La  commande s'avère un peu plus étoffée que cela, comme le précise la documentation de \paquet{picins}.} :
+
+\begin{codesimple}{Commande d'insertion d'une image}{parpic}
+\parpic[§textit£encadrement¤}]{\includegraphics{§textit£adresseimage¤}}
+\end{codesimple}
+
+Le paramètre \emph{encadrement} donne la position par rapport au texte (\macron{l} ou \macron{r} selon que l'image soit positionnée à gauche ou à droite) ainsi que le format de l'éventuel cadre autour de l'image. Les possibilités sont les suivantes :
+\begin{itemize}
+\item \macron{d} pour \emph{dashed}, un cadre de tirets ; 
+\item \macron{f} pour \emph{frame}, un cadre simple ;
+\item \macron{o} pour \emph{oval}, un cadre à coins arrondis ;
+\item \macron{s} pour \emph{shadow}, un cadre avec ombre ;
+\item \macron{x} pour \emph{box}, un cadre \og fil de fer \fg. \\
+\end{itemize}
+
+Ce paquet permet de générer une \emph{légende} à l'image de \macro{caption\{{\it légende}\}} vue précédemment avec la commande \macro{piccaption\{{\it légende}\}}. Cette commande est à placer juste avant l'image.

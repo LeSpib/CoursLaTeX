@@ -1,0 +1,267 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Chapitre Structure
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Les structures du document} \label{chapstruct} \index[con]{structure}
+\minitoc
+\bigskip  \bigskip % Deux grands espacements verticaux
+	
+Structurer et présenter un texte avec \LaTeX\ n'est pas de prime abord intuitif : selon le besoin, la méthode diffère. Générer une bibliographie ou constituer un index demande l'utilisation de commandes ou de paquets dédiés. Il faut alors souvent placer des commandes spécifiques à plusieurs endroits dans le document \dextension{tex}. Dans certains cas, pour des restitutions élaborées, il faut avoir recours à des programmes différents de \LaTeX\ (voir page \pageref{secindex}). 
+
+Dans la mesure du possible, et à titre d'exemple, ces structures sont utilisées dans ce polycopié, quitte à le surcharger quelque peu.% à l'image de la mini-table des matières ci-dessus.
+
+\section{Les divisions} \index[con]{division} \incise{32--34,487--501}{24--47}{40--41}
+
+Selon la classe de document choisie, des divisions de textes sont disponibles ou pas. Dans les classes usuelles, seule \macron{article} ne reconnait pas la division chapitre. Les noms de division pour les classes de base sont hiérarchiquement :
+
+\begin{table}[!ht]
+\begin{tablecouleur}
+\begin{tabular}{ccc}
+\rowcolor{bleu20}
+\color{white}\bf Division		& \color{white}\bf Commande  	& \color{white}\bf Niveau 	\\ 
+Partie							& \macro{part\{\}} 				& -1						\\ 
+Chapitre						& \macro{chapter\{\}}    		& 0							\\ 
+Section							& \macro{section\{\}} 			& 1							\\ 
+Sous-section					& \macro{subsection\{\}} 		& 2							\\ 
+Sous-sous-section				& \macro{subsubsection\{\}} 	& 3							\\ 
+Paragraphe						& \macro{paragraph\{\}} 		& 4							\\ 
+Sous-paragraphe					& \macro{subparagraph\{\}} 		& 5							\\ 
+\end{tabular}
+\end{tablecouleur}
+\caption{Divisions d'un document}\label{divisions}
+\end{table}
+
+Ces divisions structurent fortement le document : elles changent la présentation des titres, créent des numérotations, génèrent des espacements spécifiques, appliquent des sauts de page. 
+
+Ces commandes se tapent toutes ainsi : \macro{{\it division}[{\it titre alternatif}]\{{\it titre}\}}. Le \emph{titre alternatif} est optionnel : il remplace le \emph{titre} dans la seule table des matières, permettant ainsi d'y afficher des titres plus courts. 
+
+\subsection{Les divisions non numérotées}
+
+Lors de la création d'annexes au document, il est recommandé d'utiliser la bascule \macro{appendix} qui transforme les numéros de chapitres qui suivent en lettres, en repartant de la lettre A. 
+
+Pour ne pas afficher de numérotations dans les divisions comme les chapitres ou sections (typiquement, pour un avant-propos, des remerciements, une préface), il faut utiliser les versions \og étoilées \fg des commandes de division comme \macro{chapter*\{\}} ou \macro{section*\{\}}. Elles empêchent la numérotation des éléments concernés en gardant leur impact sur la hiérarchie du document.
+
+Il existe par ailleurs des commandes permettant de séparer un document de classe \macron{book} en trois parties, modifiant la numérotation des pages et des chapitres : 
+\begin{itemize} 
+\item \macro{frontmatter} pour la partie d'introduction du document avec des numéros de pages en chiffres romains et des chapitres non numérotés ;
+\item \macro{mainmatter} pour la partie centrale avec des numéros de page en chiffre arabe et des chapitres numérotés ;
+\item \macro{backmatter} qui passe à nouveau en chapitres non numérotés pour la fin du document.
+\end{itemize}
+
+\section{La table des matières} \index[con]{table des matières} \incise{181--188}{47--68}{45--46,273--276}
+
+La table des matières s'obtient avec la commande \macro{tableofcontents}, placée à l'endroit où elle est souhaitée dans le document.
+
+Cette commande a pour particularité de ne générer une table des matières à jour qu'après deux compilations. Ceci s'explique par la mécanique de compilation de \LaTeX\ vue en section \ref{compilation} : \LaTeX\ doit récupérer des informations de la compilation précédente, en l'occurrence le fichier \dextension{toc} qui contient le code \LaTeX\ présentant le contenu de la table des matières. Ce fichier sera pris en compte lors de la seconde compilation. 
+
+
+\subsection{La profondeur de la table des matières}
+
+La profondeur de cette table est modifiable avec la commande suivante en préambule :
+
+\begin{codesimple}{Modification de la profondeur de la table des matières}{profondeurtablematiere}
+\setcounter{tocdepth}{§oc£¤niveau§fc}
+\end{codesimple}
+
+Ce \textit{niveau} correspond à celui indiqué dans le tableau \ref{divisions}.
+
+
+\subsection{L'ajout en table des matières} \index[con]{table des matières!correction}\label{tocajout}
+
+L'usage des versions étoilées des divisions peut poser problème car la division n'apparaît alors plus dans la table des matières ! Pour corriger cela, comme cela a été fait pour l'avant-propos de ce document, une commande permet de forcer des ajouts d'éléments dans la table des matières :
+
+\begin{codesimple}{Ajout d'une entrée à la table des matières}{ajouttablematiere}
+\addcontentsline{toc}{§oc£¤division§fc}{§oc£¤titre§fc}
+\end{codesimple}
+
+Cette commande se place juste après la commande déclarant la division. La \emph{division} correspond alors au niveau hiérarchique  souhaité pour notre ajout dans la table, le plus souvent \macron{chapter} ou \macron{section}. Un exemple est présenté avec le code \ref{lignebiblio}.
+
+Cette commande peut en particulier permettre de traiter des éléments manquants par défaut : les index, les bibliographies et la table des matières elle-même. Dans ces derniers cas, toutefois, le paquet \paquet{tocbibind}, par son seul chargement, permet de corriger ce point.
+
+\subsection{Les mini-tables des matières} \index[con]{table des matières!par subdivision}
+
+Afin de faciliter la lecture de document long, il peut parfois être intéressant de mettre à la disposition du lecteur une mini-table des matières, ce que propose le paquet \paquet{minitoc}. L'appel de ce paquet dans le préambule demande une option pour spécifier le langage retenu :
+\begin{codesimple}{Appel de \pseudopaquet{minitoc} en français}{minitocfrancais}
+\usepackage[french]{minitoc}
+\end{codesimple}
+
+Juste après \macro{begin\{document\}} se place \macro{dominitoc}. Cette commande demande la récupération dans des fichiers des divisions constituant les mini-tables des matières. Il ne reste alors plus qu'à placer \macro{minitoc}\footnote{Dans le cas d'un article, les sections remplaçant les chapitres, la commande \macro{dosecttoc} remplace \macro{dominitoc} et la commande \macro{secttoc} remplace \macro{minitoc}.} à l'endroit choisi pour afficher une mini-table\footnote{Il peut arriver que des mini-tables des matières apparaissent décalées d'un ou plusieurs chapitres, le paquet \paquet{minitoc} pouvant être perturbé par des chapitres \og étoilées \fg. Dans ce cas, la  commande \macro{mtcaddchapter} (et \macro{mtcaddsection}) peut compenser un décalage d'un chapitre.}.
+
+\subsection{Pour aller plus loin}
+
+La table des matières, la liste des tableaux (voir page~\pageref{flottants}) et la liste des figures (voir page~\pageref{images}) peuvent être revues en terme de présentation avec le paquet \paquet{tocloft}. 
+
+Ce paquet permet également de créer ses propres tables de contenu telle une table des théorèmes, une table des exemples... Dans ce document de cours, la table des exemples de code a été obtenue avec des fonctionnalités du paquet \paquet{floatrow} car elle traite de contenus flottants (voir page~\pageref{flottants}).
+
+
+\section{Les références} \index[con]{référence} \label{référence} \incise{40--42,228--235}{68--80}{55--56}
+
+\subsection{Les commandes usuelles}
+
+Pour faire référence à d'autres parties du document, trois commandes sont disponibles. La première, \macro{label\{{\it étiquette}\}}, se place à l'endroit où se trouve le passage à identifier. Ceci permet à \LaTeX\ de constituer une nouvelle entrée appelée \emph{étiquette} dans sa liste interne de références. À chaque entrée est associée la page où elle se trouve et son numéro de division (ou de table, figure ou formule si elle est placée dans de tels éléments). Cette commande n'affiche donc rien.
+
+Les deux autres commandes, \macro{ref\{{\it étiquette}\}} et \macro{pageref\{{\it étiquette}\}}, servent à afficher respectivement le numéro de la division (ou table, figure ou formule) et la page de la référence de l'étiquette indiquée. Une double compilation est nécessaire, sous peine d'observer un \textbf{\string?\string?} ainsi qu'une erreur non bloquante dans le fichier \dextension{log}.
+
+Un exemple apparaît en page \pageref{monexemple}... mais aussi ici. 
+
+\subsection{Pour aller plus loin}
+
+Certains paquets permettent d'obtenir des systèmes de référence plus poussés. En voici deux :
+\begin{itemize}
+\item \paquet{varioref}, qui donne un système de référence plus naturelle avec l'utilisation d'expressions telle que \og page suivante \fg ;
+\item \paquet{smartref}, qui permet d'accéder à plus d'informations lorsqu'une référence est faite, tel le numéro du chapitre seul (si on référence par exemple une sous-section) ou le nom du chapitre, de la section et ainsi de suite.
+\end{itemize}
+
+\section{L'index} \index[con]{index} \label{secindex} \incise{189--201}{659--694}{177--185}
+
+Un index, tel celui présent en page~\pageref{index}, s'obtient à l'aide de quatre commandes :
+\begin{itemize}
+\item la première est l'appel du paquet de gestion de l'index \paquet{makeidx}, dans le préambule.
+\item la deuxième commande, \macro{makeindex}, se place juste avant \macro{begin\{document\}}. Elle indique à \LaTeX\ de regrouper en un seul fichier tous les éléments à indexer. Ce fichier portera l'extension \dextension{idx}.
+\item la troisième commande sert justement à désigner les éléments à indexer ainsi que les pages concernées. Sa version la plus simple est \macro{index\{{\it mot apparaissant dans l'index}\}}.
+\item enfin, la dernière commande, \macro{printindex}, permet d'indiquer dans le corps de document où sera disposé l'index.  
+\end{itemize}
+
+\begin{codesimple}{Disposition des commandes d'index}{macroindex}
+\usepackage{makeidx}
+\makeindex
+\begin{document}
+M. Torquemada\index{Torquemada}, inquisiteur, a été mis à l'index.
+\printindex
+C'est vraiment pas de chance pour M. Torquemada\index{Torquemada}.
+\end{document}
+\end{codesimple}
+
+
+\subsection{Le programme externe \programme{makeindex}}
+
+En cas de compilation, \LaTeX\ n'affichera par défaut rien dans l'index. En effet, \LaTeX\ attend un élément bien précis pour générer l'index : les références triées selon un ordre alphabétique et regroupées entre elles. Ainsi, une référence citée sur trois pages différentes ne doit pas donner trois entrées d'index mais une entrée unique avec les trois numéros de page associés. 
+
+Cette liste organisée s'obtient en utilisant le programme \programme{makeindex}\footnote{Une autre possibilité revient à utiliser le programme \programme{texindy} qui gère efficacement le tri des lettres accentuées mais qui demande une installation plus complète que celle fournie par défaut avec USB\TeX.}.
+
+La première compilation crée le fichier \dextension{idx} portant le même nom que le fichier \dextension{tex}. Le programme \programme{makeindex} doit traiter ce fichier\footnote{Dans le cadre de ce cours, cela revient à sélectionner le programme \programme{makeindex} dans \programme{Texmaker} et l'exécuter. Dans le cas de \programme{texindy}, cela revient à lancer une ligne de commande \og \macron{texindy -F french \textit{fichier}} \fg.}.
+
+Est alors créé un fichier \dextension{ind} qui contient l'ensemble trié des éléments à indexer. Une nouvelle compilation avec \LaTeX\ permet enfin d'intégrer ce fichier attendu par \LaTeX\ au document principal : l'index apparaît.
+
+
+\subsection{Quelques compléments sur l'indexation}
+
+La commande \macro{index\{\}} permet d'obtenir des entrées d'index assez détaillées. Voici les principales syntaxes disponibles --- l'index de ce document offrant à chaque fois une illustration des effets générés --- et combinables à merci :
+
+\begin{itemize}
+\item \macro{index\{{\it entrée}!{\it sous-entrée}\}} permet de créer une \textit{entrée} présentant une \textit{sous-entrée}. L'exem\-ple est donnée par \og compilation \fg présentant une sous-entrée \og erreurs \fg. Une sous-sous-entrée peut être associée à la sous-entrée : il suffit d'ajouter un \og ! \fg suivi de la sous-sous-entrée à la commande précédente. 
+\item \macro{index\{{\it entrée}|(\}} suivie plus loin de \macro{index\{{\it entrée}|)\}} permet de donner une plage de pages associée à l'\textit{entrée} au lieu de donner une liste de pages. L'exemple en est \og structures \fg.
+\item \macro{index\{{\it entrée fictive}@{\it entrée}\}} permet de classer une \textit{entrée} de l'index comme si elle devait occuper la place de l'\textit{entrée fictive}. C'est le cas par exemple de l'entrée \TeX\ qui, comme elle correspond en fait à une  commande commençant par \macro{}, est placée par défaut en début d'index\footnote{Les symboles sont classés avant les lettres dans l'ordre de l'index.}. Par le biais de cette  commande, cette entrée est reclassée comme si elle valait le mot \og tex \fg.   
+\end{itemize}
+
+\subsection{Pour aller plus loin} \label{styleindex}
+
+L'index peut être doté d'un style dédié. Ceci demande d'utiliser un fichier de style \dextension{ist} et de modifier la commande d'appel. Certaines configurations peuvent également être obtenues par le biais d'un code \LaTeX{}. Ces différents cas sont présentés sur deux exemples à partir de la page~\pageref{persoindex}.
+
+La mécanique d'indexation présentée ici permet également de constituer des éléments comme un glossaire, une liste d'acronyme. Ceci implique l'utilisation de \paquet{glossaries}.
+
+Enfin, il est possible de générer plusieurs index dans un même document avec le paquet \paquet{index}, comme le fait ce document.
+
+Ces différents utilisations avancées demandent de modifier les appels effectués par \programme{Texmaker}. Par exemple, la compilation du glossaire demande d'exécuter une commande plus fine :
+
+\begin{codesimple}{Appel générique de makeindex}{appelmakeindex}
+makeindex -s §textit£fichier¤.ist -t §textit£fichier¤.glg -o §textit£fichier¤.gls §textit£fichier¤.glo}
+\end{codesimple}
+
+Dans cet appel de \programme{makeindex}, le fichier suivant le \macron{-s} est le fichier de style, celui suivant le \macron{-o} est le nom du fichier résultat et celui suivant le \macron{-t} est celui contenant le journal du traitement effectué.
+
+
+\section{La bibliographie} \index[con]{bibliographie} \incise{201--227}{695--770,771--826}{167--175}
+
+La composition d'une bibliographie constitue un élément important dans la création d'un document technique. Bien tenue, la bibliographie indique en général un souci de qualité de la part de son auteur. De ce point de vue, \LaTeX\ facilite largement cette tâche en la standardisant, nous évitant ainsi de nombreuses erreurs de présentation.
+
+
+\subsection{Le fichier bibliographique}
+ 
+Les données bibliographiques sont à regrouper sous une forme particulière dans un fichier à part. Ce principe a pour origine l'utilisation de \LaTeX\ pour traiter avec de véritables bases de données bibliographiques. L'extension de ce fichier sera \dextension{bib}. Dans l'exemple qui suit est présenté le référencement minimum pour un livre (avec ici, en italique, un exemple).
+
+\begin{codesimple}{Définition minimale d'un livre pour \BibTeX}{refbook}
+@BOOK{§textit£identifiant¤,
+  author = {§textit£Knuth, Donald E.¤},
+  title = {§textit£The \TeX book¤},
+  year = {§textit£1986¤},
+  publisher = {§textit£Addison-Wesley¤}}
+\end{codesimple}
+
+L'\emph{identifiant} est un mot unique associé à l'ouvrage : il permet de faire appel à la référence documentaire de l'ouvrage dans la bibliographie. 
+
+Pour l'écriture du nom de l'auteur, la convention est d'écrire d'abord le nom, une virgule puis les prénoms. En cas d'auteurs multiples, ils s'écrivent les uns à suite des autres en étant séparés par un \macron{and}. Enfin, pour éviter que \BibTeX ne fasse une erreur sur un nom de société ou d'organisme (en croyant lire un prénom suivi d'un nom), il est préférable de mettre entre accolades ce type de nom.
+
+\begin{codesimple}{Cas d'auteurs multiples pour \BibTeX}{exempleauteurs}
+author = {Tic,A. and Tac,B. and Tic-Tic Tock,C.D. and {Tonck Corp.}},
+\end{codesimple}
+
+\subsection{Le code \LaTeX}
+
+Dans le fichier \dextension{tex}, à l'endroit où devra être disposée la bibliographie, se placent les trois lignes suivantes :
+
+\begin{codesimple}{Commandes pour la bibliographie}{lignebiblio}
+\bibliographystyle{§textit£style¤}
+\bibliography{§textit£fichier¤}
+\addcontentsline{toc}{chapter}{Bibliographie}
+\end{codesimple}
+
+La première commande donne le \emph{style} de présentation de la bibliographie; ce style peut être par exemple \macron{plain}, \macron{alpha}, \macron{apalike}, \macron{abbrv}\footnote{Dans le cadre du document de cours est utilisé un   style nommé \macron{plain-fr} qui convertit en français le style \macron{plain}. Ce style fait partie d'un ensemble nommé \og fr-bib \fg. N'étant pas dans l'installation du cours, son fichier \vue{plain-fr.bst} doit être placé dans le même répertoire que le fichier \dextension{tex}.}. La deuxième commande indique le nom du \emph{fichier} \dextension{bib} qui contient nos références bibliographiques; l'extension \dextension{bib} ne doit pas être indiquée. La dernière commande, facultative, complète la table des matières selon la méthode vue en page~\pageref{tocajout}. 
+
+
+\subsection{Le contenu final}
+
+Ces deux étapes effectuées, il faut inclure dans le texte des liens vers les références bibliographiques comme cela est fait en fin de cette partie afin que \LaTeX\ les affiche bien dans la bibliographie. Pour effectuer cette référence, il faut utiliser la commande \macro{cite\{{\it identifiant}\}} où l'identifiant est celui figurant dans le fichier \dextension{bib}.
+
+La commande \macro{nocite\{*\}} permet d'afficher toutes les références du fichier \dextension{bib}.
+
+
+\subsection{\BibTeX}
+
+Afin de générer la bibliographie définitive, il faut compiler le fichier \dextension{tex} avec un autre programme\footnote{Le cours ne donne ici qu'un parmi quelques autres.} : \BibTeX. Ce dernier présente et trie les différentes références nécessaires tirées du fichier \dextension{bib}. Les éléments sont regroupés dans un fichier \dextension{bbl} qui sera pris en compte à la compilation suivante par \LaTeX.
+
+Lors d'un changement de style de bibliographie, il est recommandé de supprimer le fichier \dextension{bbl} car ce dernier peut générer des erreurs entre styles bibliographiques.
+
+\subsection{Pour aller plus loin}
+
+Pour les bibliographies, un paquet se distingue de plus en plus des autres : \paquet{biblatex}. Ce dernier présente un ensemble de fonctionnalités\footnote{En français, la page de Bertrand \textsc{Masson} \cite{mass} \liensimple{http://bertrandmasson.free.fr/index.php?article27/}, tout comme la page de Franck \textsc{Pastor} \cite{past} \liensimple{http://www.cuk.ch/articles/7109} donnent une bonne vision du sujet.} répondant à de très nombreux besoins :
+\begin{itemize}
+\item suppression des fichiers de style. Le style et les tris sont en effet directement définis dans les options de la commande d'appel du paquet ;
+\item possibilité de gérer le style des citations d'ouvrage de la bibliographie dans le texte ;
+\item possibilité de générer des bibliographies par chapitre ou section ;
+\item possibilité de générer des bibliographies sectionnées par style d'ouvrage.
+\end{itemize}
+
+
+\section{Les en-têtes et pieds de page} \incise{78--81,508--512}{219--236}{43--44,261--266}
+
+\subsection{Les  commandes usuelles}
+
+Quelques présentations courantes de ces zones sont proposées par défaut par \LaTeX. Ces présentations sont appelées par la commande \macro{pagestyle\{{\it style}\}} où le \emph{style} peut être : \macron{empty}, \macron{plain}, \macron{headings} ou \macron{myheadings}.
+
+Le style des pages est normalement commun à toutes les pages du document. Pour donner un style différent à une page spécifique, il existe la commande \macro{thispagestyle\{{\it style}\}}, à placer dans le code de la page concernée.
+
+\subsection{Pour aller plus loin}
+
+L'utilisation du paquet \paquet{fancyhdr} permet d'aller beaucoup plus loin dans le paramétrage des en-têtes et pieds de page, comme le montre l'exemple en \ref{fancyhdr}, page \pageref{fancyhdr}.
+
+
+\section{Le titre} \index[con]{titre} \incise{42--43}{---}{41--42}
+
+\subsection{Les  commandes usuelles}
+
+La commande \macro{maketitle} se place à l'endroit où se situera le titre ou la page titre. Cette commande va en fait rechercher quelques éléments placés dans le préambule du document : 
+\begin{itemize}
+\item \macro{title\{{\it le titre}\}};
+\item \macro{author\{{\it l'auteur}\}};
+\item \macro{date\{{\it la date}\}}. Si cette commande n'est pas utilisée, \LaTeX\ affichera par défaut la date du jour de la compilation. Pour ne pas l'afficher, il suffit d'indiquer \macro{date\{\}}.
+\item \macro{thanks\{{\it note}\}} qui s'utilise en lieu et place de \macro{footnote\{{\it note}\}} dans les trois commandes précédentes.
+\end{itemize}
+
+\subsection{Pour aller plus loin}
+
+L'environnement \macron{titlepage} permet également de gérer une page de titre personnalisée : cet environnement permet en effet de ne pas numéroter la page en cours (la numérotation commencera bien à 1 à la page suivante) et d'en retrancher les éventuels en-têtes et pieds de page. Le contenu est donc ici à créer. Ainsi, le paquet \paquet{pagedegarde} présenté en annexe~\ref{pagedegarde}, page~\pageref{pagedegarde} utilise cet environnement.
+
+Par ailleurs, des exemples de page (avec le code \LaTeX{} associé) regroupés par Peter \textsc{Wilson} peuvent être étudiés à l'adresse suivante : \liensimple{http://www.ctan.org/pkg/titlepages}.
+
+De même, un document de Yuri \textsc{Robbers} et Annemarie \textsc{Skjold} présente une méthode complète pour obtenir une couverture de livre (la première page et la dernière donc) à l'adresse suivante : \liensimple{http://tug.org/pracjourn/2007-1/robbers/robbers.pdf}.

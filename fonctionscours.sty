@@ -1,0 +1,439 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{fonctionscours}[2013/08/07 v1.0 LaTeX package (Style pour le cours de LaTeX)]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Déclaration des options   
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Aucune ici
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Exécution des options    
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Aucune ici
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Chargement des paquets    
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Affichage des réglages de format de page
+\RequirePackage{layouts}     
+\RequirePackage{layout}
+\RequirePackage{lifecon}               % Commutations actuarielles 
+\RequirePackage{picins}
+\RequirePackage{ifthen}
+\RequirePackage{multido}
+\RequirePackage{textcomp}
+\RequirePackage[normalem]{ulem}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Déclaration de couleurs   
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Couleurs en mode RGB (valeur entre 0 et 255) au lieu du rgb du cours.
+\definecolor{bleu5}{RGB}{10,96,195}
+\definecolor{orange5}{RGB}{255,153,0} 
+
+\colorlet{bleu9}{bleu5!5!white}
+\colorlet{orange9}{orange5!10!white}
+\colorlet{orange3}{orange5!50!black!80!red}
+
+\colorlet{bleu1}{bleu5!20!black}
+\colorlet{bleu2}{bleu5!40!black}
+\colorlet{bleu3}{bleu5!60!black}
+\colorlet{bleu4}{bleu5!80!black}
+\colorlet{bleu6}{bleu5!75!bleu9}
+\colorlet{bleu7}{bleu5!50!bleu9}
+\colorlet{bleu8}{bleu5!25!bleu9}
+
+\colorlet{orange1}{orange3!60!black}
+\colorlet{orange2}{orange3!80!black}
+\colorlet{orange4}{orange5!50!orange3}
+\colorlet{orange6}{orange5!75!orange9}
+\colorlet{orange7}{orange5!50!orange9}
+\colorlet{orange8}{orange5!25!orange9}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Déclaration de fonctions  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Raccourcis
+\newcommand{\ba}{\textbackslash}
+\newcommand{\BibTeX}{B\textsc{ib}\TeX\xspace}
+
+% Présentations courantes
+\newcommand{\vue}[1]{\textcolor{bleu5}{\NoAutoSpaceBeforeFDP\textsf{#1}}} {%\NoAutoSpacing #1}}}
+\newcommand{\terme}[1]{\textbf{#1}\index[con]{#1}}
+\newcommand{\programme}[1]{\textsf{#1}\index[paq]{#1@\textsf{#1}\xspace}}
+\newcommand{\macro}[1]{\mbox{\textcolor{bleu5}{\texttt{\textbackslash #1}}}}
+\newcommand{\macron}[1]{\mbox{\textcolor{bleu5}{\texttt{#1}}}}
+\newcommand{\dextension}[1]{\textcolor{bleu5}{{\fontsize{5}{5}\selectfont $\circ$}\textsf{#1}}\index[con]{fichier!#1@\textcolor{bleu5}{{\fontsize{5}{5}\selectfont $\circ$}\textsf{#1}}}}
+
+% Gestion des liens
+\newcommand{\lienformat}[1]{\textcolor{orange3}{\textsf{#1}}}
+\newcommand{\liensimple}[1]{\textsf{<\href{#1}{\lienformat{\nolinkurl{#1}}}>}}
+\newcommand{\liendouble}[2]{\textsf{\href{#1}{#2}}}
+\newcommand{\lienbiblio}[2]{\href{#1}{#2}}
+
+% Ajouts pour faire des tableaux avec des formats bidouillés avec la macro Excel
+\newcolumntype{A}{l}   
+\newcolumntype{B}{c}
+\newcolumntype{C}{r}
+\newcolumntype{D}{ >{\columncolor{bleu7} \sffamily}l}
+\newcolumntype{E}{ >{\columncolor{bleu7} \sffamily}c}
+\newcolumntype{F}{ >{\columncolor{bleu7} \sffamily}r}
+
+% Fonction "incise" pour citer les pages intéressantes des ouvrages.
+\usepackage{pifont}
+%\newcommand{\incise}[3]{\begin{flushright}\footnotesize{\ding{252}\sffamily\cite{desg}#1 \cite{gomi}#2 \cite{roll}#3 \rmfamily}\end{flushright}}
+\newcommand{\incise}[3]{\marginpar{\vspace{-2.3ex}\footnotesize{\ding{252}\sffamily Réfs\\\cite{desg}#1\\\cite{gomi}#2 \\\cite{roll}#3}}}
+
+\newcommand{\incisebis}[3]{\footnotesize{\ding{252}\sffamily\cite{desg}#1 \cite{gomi}#2 \cite{roll}#3 \rmfamily}}
+
+% Fonction "alerte" pour repérer les zones à faire évoluer.
+\newcommand{\alerte}[1]{\textbf{\textsf{\textcolor{orange5}{\noindent\ding{54} #1 \ding{54}}}}}
+
+
+%%%% Figures récurrentes en PStricks %%%%
+
+% Une fonction pour faire de dessin de fichier (définition façon TeX).
+\def\fichier[#1](#2,#3){
+\rput[bl](#2,#3){\psline[linewidth=0.03cm](0.4,0.15)(1.6,0.15)(1.6,1.65)(1.4,1.85)(0.4,1.85)(0.4,0.15)
+\psline[linewidth=0.03cm](1.6,1.65)(1.4,1.65)(1.4,1.85)
+\rput(1,1){\dextension{#1}}}}
+
+% Deux fonctions pour tracer le graphique des couleurs (définition façon TeX).
+\def\illustrecouleur[#1](#2,#3){
+\rput(#2,#3){\psframe[fillcolor=#1,fillstyle=solid](0,0)(0.4,0.4)
+\psframe*[linecolor=#1](0.5,0)(0.9,0.4)
+\rput[Bl](1,0.05){\textcolor{#1}{Abc} \textsf{#1}}}}
+
+\def\affichecouleur#1{%
+\illustrecouleur[#1](\couleurx,\couleury)%
+\psaddtolength{\couleury}{-0.5cm}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Paquets et liens 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%% Gestion de l'affichage, du référencement et des liens des paquets %%%%
+% Fonctions générales
+\newcommand{\pseudopaquet}[1]{\textcolor{orange4}{\textsf{#1}}\xspace}
+\newcommand{\paquetformat}[2][]{\href{#1}{\textcolor{orange4}{\textsf{#2}}}\index[paq]{#2@\paquetquelchemin{#2}\href{#1}{\textcolor{orange4}{\textsf{#2}}}}\xspace} % On appelle \paquetquelchemin sinon le lien dans l'index se fait vers le dernier paquet cité dans le texte !
+\newcommand{\paquetchemin}{}
+\newcommand{\paquetlien}[3]{\ifthenelse{\equal{#1}{#2}}{\renewcommand{\paquetchemin}{#3}}{}}
+
+% Fonctions pour chaque cas.
+\newcommand{\paquet}[1]{%
+\paquetquelchemin{#1}%
+\paquetformat[\paquetchemin]{#1}}
+
+\newcommand{\paquetquelchemin}[1]{%
+\renewcommand{\paquetchemin}{http://www.ctan.org/pkg/#1}%  Par défaut, on va sur le CTAN
+\paquetlien{#1}{amssymb}{http://www.ctan.org/tex-archive/fonts/amsfonts/doc/}%
+\paquetlien{#1}{beamer}{http://www.ctan.org/tex-archive/macros/latex/contrib/beamer}%
+\paquetlien{#1}{bookman}{http://www.ctan.org/pkg/psnfss}%
+\paquetlien{#1}{chancery}{http://www.ctan.org/pkg/psnfss}%
+\paquetlien{#1}{comment}{http://www.ctan.org/tex-archive/macros/latex/contrib/comment}%
+\paquetlien{#1}{histogra}{http://www.lespib.infini.fr/latex/paquets/}%
+\paquetlien{#1}{lettre}{http://www.ctan.org/tex-archive/macros/latex/contrib/lettre}%
+\paquetlien{#1}{lifecon}{http://maths.dur.ac.uk/stats/courses/AMII/lifecon.sty}%
+\paquetlien{#1}{lmodern}{http://www.ctan.org/pkg/lm}%
+\paquetlien{#1}{newcent}{http://www.ctan.org/pkg/psnfss}%
+\paquetlien{#1}{pagedegarde}{http://www.lespib.infini.fr/latex/paquets/}%
+\paquetlien{#1}{palatino}{http://www.ctan.org/pkg/psnfss}%
+\paquetlien{#1}{scrartcl}{http://www.ctan.org/pkg/koma-script}%
+\paquetlien{#1}{scr­book}{http://www.ctan.org/pkg/koma-script}%
+\paquetlien{#1}{scrlt­tr2}{http://www.ctan.org/pkg/koma-script}%
+\paquetlien{#1}{scr­reprt}{http://www.ctan.org/pkg/koma-script}%
+\paquetlien{#1}{Sweave}{http://pbil.univ-lyon1.fr/R_svn/pdf/tdr78.pdf}%
+\paquetlien{#1}{tikz}{http://www.ctan.org/pkg/pgf}%
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Index  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newindex{paq}{pdx}{pnd}{Index des paquets et programmes}
+\newindex{con}{cdx}{cnd}{Index des concepts}
+
+% Modification pour bien afficher l'index dans la table des matières
+\makeatletter  % Code demandant l'utilisation du caractère actif @
+\renewenvironment{theindex}{%
+\edef\indexname{\the\@nameuse{idxtitle@\@indextype}} % code trouvé dans la doc du paquet index.
+\chapter{\indexname}\label{index}
+% Rien à dire ?
+\begin{multicols}{3}%
+ \setlength\parindent{0pt}%
+ \renewcommand{\item}{\par\hangindent=40pt}}%
+{\end{multicols}}
+\makeatother % Fin du code avec caractère actif @
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Couleurs
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Fonctions TIKZ %%%
+
+% Exemple de nuancier
+\newcommand{\democouleur}[1]{%
+\noindent\begin{tikzpicture}[baseline=0.3ex]%
+%\draw{use as bounding box] (0,0) rectangle (2.0,0.4);
+\draw [blanc] (0,0) rectangle (0.45,0.45);
+\filldraw [#1] (0,0) rectangle (0.4,0.4);
+\draw (0,0) rectangle (0.4,0.4);
+\filldraw [#1] (0.5,0) rectangle (2.0,0.4);
+\node [inner sep=0pt,outer sep=0pt] at (1.25,0.18) {Abc \textcolor{blanc}{Abc}};
+\node [inner sep=0pt,outer sep=0pt,anchor=west, text depth=0pt] at (2.1,0.18) {\textcolor{#1}{Abc} \textsf{#1}};
+\end{tikzpicture}}
+
+\newcommand{\democouleurdroit}[1]{\noindent\democouleur{#1}\\}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Page de garde        
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage[confiun,hyperref,versoseul,euria]{pagedegarde}
+
+\dategarde{22 février 1963}
+\auteurgarde{Jean}{Dieudonné}
+\titregarde{Tentative de définition systématique d'une nomenclature exhaustive des mémoires d'actuariat à travers les âges}
+\juryiagarde{Nicolas}{Bourbaki}
+\juryagarde{Carl Friedrich}{Gauss}
+\jurybgarde{David}{Hilbert}
+\directeurgarde{Pierre-Simon}{de Laplace}
+\invitegarde{Jean Baptiste Joseph}{Fourier}
+
+% Pour gérer la remise à zéro des pages du fait de pagedegarde.
+\newcounter{pagetempo}
+
+\hypersetup{urlcolor=orange3,linkcolor=orange3,citecolor=orange3,breaklinks}
+\urlstyle{sf} %  Changement du style par défaut des URL.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Présentation de codes            
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{fancyvrb}
+
+% Deux fonctions : "ouvrir commentaire" et "fermer commentaire"
+\newcommand{\oc}{\unskip\rmfamily\itshape\ignorespaces}
+\newcommand{\fc}{\unskip\upshape\ttfamily}
+
+% Des fonctions pour enregistrer temporairement des textes dans les fonctions qui suivent.
+\newcommand{\titrefigure}{}
+\newcommand{\labelfigure}{}
+
+% Un séparateur graphique (filets de points bleus)
+\newcommand{\separateur}{\\ {\color{bleu8} \dotfill} \\ \vspace{1ex}}
+
+% Un flottant "Code" (avec floatrow et caption)
+\DeclareNewFloatType{code}{placement=H,fileext=cod,within=chapter,name=Code}
+
+% Un code s'occupant d'affichage de figures
+\newcommand{\codefigure}[3]{
+\begin{code}
+\centering
+\fcolorbox{bleu8}{bleu9}{
+\begin{minipage}[]{13cm}
+\footnotesize \color{bleu5} \vspace{0.6\baselineskip}
+{\tt\raggedright  #1\\ \color{bleu8} \dotfill\\ \vspace{\baselineskip}}
+\color{black}
+{\normalsize\centerline{\fcolorbox{bleu8}{bleu9}{#2}}}\vspace{\baselineskip} 
+\end{minipage}}
+\caption{#3}
+\end{code}}
+
+% Un code de figure et son résultat encadré
+\newenvironment{codedoublefig}[2]{%
+\VerbatimEnvironment%
+\renewcommand{\titrefigure}{#1}%
+\renewcommand{\labelfigure}{#2}%
+\begin{VerbatimOut}{\jobname.exa}%
+}{%
+\end{VerbatimOut}%
+\begin{code}%
+\centering
+\fcolorbox{bleu8}{bleu9}{
+\begin{minipage}[]{13cm}
+\footnotesize \color{bleu5} \vspace{0.5\baselineskip}
+\VerbatimInput{\jobname.exa}%
+\vspace{-0.6\baselineskip}
+\color{bleu8} \dotfill\par%
+\fontfamily{lmr}\centering\normalsize\color{black}\vspace{0.6\baselineskip}
+\fcolorbox{bleu8}{bleu9}{\input{\jobname.exa}}
+\vspace{0.5\baselineskip}
+\end{minipage}}
+\caption{\titrefigure} \label{\labelfigure}
+\end{code}
+}
+
+% Un code et son résultat
+\newenvironment{codedouble}[2]{%
+\VerbatimEnvironment%
+\renewcommand{\titrefigure}{#1}%
+\renewcommand{\labelfigure}{#2}%
+\begin{VerbatimOut}{\jobname.exa}%
+}{%
+\end{VerbatimOut}%
+\begin{code}%
+%\centering
+\fcolorbox{bleu24}{bleu24}{
+\begin{minipage}[]{13cm}
+\footnotesize \color{bleu5} \vspace{0.5\baselineskip}
+\VerbatimInput{\jobname.exa}%
+\vspace{-0.6\baselineskip}
+\color{bleu8} \dotfill\par%
+\fontfamily{lmr}%\centering
+\normalsize\color{black}\vspace{0.6\baselineskip}
+\input{\jobname.exa}
+\vspace{0.5\baselineskip}
+\end{minipage}}
+\caption{\titrefigure} \label{\labelfigure}
+\end{code}
+}
+
+% Un code et son résultat. Ici le code affiché est correct mais la restitution se base sur un autre code (cas des tableaux essentiellement).
+\newenvironment{codedoublevrai}{%
+\VerbatimEnvironment%
+\begin{VerbatimOut}{\jobname\jobname.exa}%
+}{%
+\end{VerbatimOut}%
+}
+% Un code 
+\newenvironment{codedoublefaux}[2]{%
+\VerbatimEnvironment%
+\renewcommand{\titrefigure}{#1}%
+\renewcommand{\labelfigure}{#2}%
+\begin{VerbatimOut}{\jobname.exa}%
+}{%
+\end{VerbatimOut}%
+\begin{code}%
+%\centering
+\fcolorbox{bleu24}{bleu24}{
+\begin{minipage}[]{13cm}
+\footnotesize \color{bleu5} \vspace{0.5\baselineskip}
+\VerbatimInput{\jobname.exa}%
+\vspace{-0.6\baselineskip}
+\color{bleu8} \dotfill\par%
+\fontfamily{lmr}%\centering
+\normalsize\color{black}\vspace{0.6\baselineskip}
+\input{\jobname\jobname.exa}
+\vspace{0.5\baselineskip}
+\end{minipage}}
+\caption{\titrefigure} \label{\labelfigure}
+\end{code}
+}
+
+% Un code sans son résultat
+\newenvironment{codesimple}[2]{%
+\VerbatimEnvironment%
+\renewcommand{\titrefigure}{#1}%
+\renewcommand{\labelfigure}{#2}%
+\begin{VerbatimOut}{\jobname.exa}%
+}{%
+\end{VerbatimOut}%
+\begin{code}%
+\centering
+\fcolorbox{bleu24}{bleu24}{ %bleu8,bleu9
+\begin{minipage}[]{13cm}
+\footnotesize \color{bleu5} \vspace{0.5\baselineskip}
+\VerbatimInput[commandchars=§£¤]{\jobname.exa}%
+\vspace{-0.6\baselineskip}
+\vspace{0.5\baselineskip}
+\end{minipage}}
+\caption{\titrefigure} \label{\labelfigure}
+\end{code}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Code TIKZ pour des figures          
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Code pour figure "tex vers pdf".
+\usetikzlibrary{shapes,arrows}
+\usetikzlibrary{shadows}
+
+\def\tzfichier(#1,#2)(#3){
+\node (#3) at (#1,#2) [rectangle,draw,minimum height = 1.7cm,minimum width=1.2cm,color=white,outer sep=0.1cm] {\dextension{#3}};
+\draw[xshift=#1cm,yshift=#2cm,line width=0.03cm] plot coordinates{(-0.6,-0.85)(0.6,-0.85)(0.6,0.65)(0.4,0.85)(-0.6,0.85)}--cycle;
+\draw[xshift=#1cm,yshift=#2cm,line width=0.03cm] plot coordinates{(0.6,0.65)(0.4,0.65)(0.4,0.85)};}
+
+\def\tzprogramme[#1](#2,#3)(#4){
+\node (#4) at (#2,#3) [rounded corners=0.15cm,draw,line width=0.03cm, minimum width=2cm, minimum height=0.6cm,#1] {\programme{#4}};}
+
+\def\tzprogrammelong[#1](#2,#3)(#4)(#5){
+\node (#4) at (#2,#3) [rounded corners=0.15cm,draw,line width=0.03cm, text width=2cm, align=center, minimum height=0.6cm,#1] {#5};}
+
+\tikzstyle{trait}=[rounded corners=2mm,line width=0.02cm] 
+\tikzstyle{fleche}=[trait,->,>=stealth] 
+\tikzstyle{flechetiret}=[fleche,dashed,color=orange3] 
+
+\tikzstyle{dessous}=[coordinate, yshift=-0.2cm] 
+\tikzstyle{dessus}=[coordinate, yshift=0.2cm] 
+\tikzstyle{gauche}=[coordinate, xshift=-0.2cm] 
+\tikzstyle{droite}=[coordinate, xshift=0.2cm] 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Table de caractères
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcounter{clig}
+\newcounter{ccol}
+\newcounter{cligmax}
+\newcounter{ccolmax}
+\newcounter{csym}
+
+\newcommand{\symboles}[4][0]{%
+\setcounter{clig}{0}%
+\setcounter{ccol}{0}%
+\setcounter{cligmax}{#3}%
+\setcounter{ccolmax}{#4}%
+\whiledo{\value{clig}<\value{cligmax}}{%
+ \setcounter{ccol}{0}%
+ \whiledo{\value{ccol}<\value{ccolmax}}{%
+  \setcounter{csym}{\value{clig}*\value{ccolmax}+\value{ccol}+#1}%
+  \affsymb{#2}{\thecsym}%
+  \stepcounter{ccol}}%
+ \stepcounter{clig}%
+ \ifthenelse{\value{clig}<\value{cligmax}}{\\}{}}%
+}%
+  
+\newcommand{\affsymb}[2]{%
+\fcolorbox{blanc}{bleu24}{%
+\parbox[][16pt][b]{1.05em}{%
+\centering%
+{#1\ding{#2}}\\%
+\tiny#2}} }%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Règle de la table des matières            
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Modification de la largeur des étiquettes de page dans la table des matières.
+% http://tex.stackexchange.com/questions/49887/overfull-hbox-warning-for-toc-entries-when-using-memoir-documentclass
+\makeatletter
+\renewcommand{\@pnumwidth}{2em} % \@pnumwidth = 1.55em, largeur de la boîte d'étiquette
+\renewcommand{\@tocrmarg}{3em} % \@tocrmarg = 2.55em, marge droite du texte
+\makeatother
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Exemples du cours            
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\MonLaTeX}{\LaTeX\xspace}
+\newcommand{\InB}{inégalité de Bienaymé-Tchebyschev}
+\newcommand{\InBT}{inégalité de Bienaymé-Tchebyschev\xspace}
+\newcommand{\somme}{\ensuremath{\sum_{k=0}^{n} x_k}}
+
+\newcounter{nbex}
+\setcounter{nbex}{0}
+\newcommand{\exemple}{\addtocounter{nbex}{1}\textbf{Exemple \thenbex\ --- }}

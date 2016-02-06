@@ -1,0 +1,91 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Chapitre Préambule et classe
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Préambule et classe du document}
+\mtcaddchapter
+
+\label{classe}
+\section{Un préambule minimal} \incise{31--36}{17--20}{39--41}
+
+Le préambule varie selon la chaîne de compilation qui a été choisie.
+
+\subsection{Cas avec \LaTeX\ et pdf\LaTeX}
+
+Un document en français devrait toujours contenir au moins les commandes suivantes :
+
+\begin{codesimple}{Un code minimal pour \LaTeX}{codeminimum}
+\documentclass[§oc£¤options§fc]{§oc£¤classe§fc}
+\usepackage[frenchb]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[latin1]{inputenc}
+\usepackage{lmodern}  
+\begin{document} 
+
+\end{document}
+\end{codesimple}
+
+Le chargement des paquets \paquet{fontenc} et \paquet{inputenc} font appel à la notion d'encodage. Nous nous contenterons d'indiquer que l'appel du paquet \paquet{fontenc} avec l'option \vue{T1} permet à \LaTeX\ d'afficher des lettres accentuées, non chargées par défaut. L'appel du paquet \paquet{inputenc} indique à \LaTeX\ l'encodage de notre texte, que ce soit \macron{latin1}, \macron{utf8} ou \macron{applemac}.
+
+\subsection{Cas avec \XeLaTeXtitre et \LuaLaTeXtitre} \label{xelualatex}
+
+Par rapport au cas précédent, plusieurs modifications sont nécessaires : 
+\begin{itemize}
+\item modifier dans l'éditeur de fichier \dextension{tex} le paramétrage du programme\footnote{Pour \programme{Texmaker}. Il faut aller dans le menu \vue{Options} puis \vue{Configurer Texmaker}. Dans la ligne \vue{LaTeX}, il faut remplacer le terme \macron{latex} par \macron{xelatex} ou\macron{lualatex}.} servant à compiler les fichiers \dextension{tex}. Il est à noter que, par défaut, \XeLaTeX\ génère directement des fichiers \dextension{pdf} à la manière de \programme{pdflatex} ;
+\item mettre son fichier en encodage UTF8 afin qu'il soit compilable ;
+\item retrancher les paquets et fonctionnalités incompatibles. Ainsi, \paquet{inputenc} et \paquet{fontenc} ne doivent pas être utilisés avec \XeLaTeX\ et \LuaLaTeX: ils sont à remplacer par \paquet{fontspec} qui gère les polices de caractères. \\
+\end{itemize}
+
+Le préambule d'un document devrait donc contenir au minimum les lignes suivantes : 
+
+\begin{codesimple}{Un code minimal pour \XeLaTeX\ et \LuaLaTeX}{codeminimumxelatex}
+\documentclass[§oc£¤options§fc]{§oc£¤classe§fc}
+\usepackage[frenchb]{babel}
+\usepackage{fontspec}
+\defaultfontfeatures{Ligatures=TeX}
+
+\begin{document} 
+
+\end{document}
+\end{codesimple}
+
+La commande \macro{defaultfontfeatures} et l'option précisée ci-dessus permettent un réglage minimal conservant les ligatures classiques de \LaTeX. Ainsi, \macron{-{}-{}-} sera bien converti en ---. 
+
+Quelques précisions sur l'usage de \XeLaTeX sont données en page \pageref{xelatex}.
+
+\section{La classe du document}
+
+\subsection{Les grands classiques}
+
+Il reste dans les cas ci-dessus à choisir la \emph{classe} et les \emph{options}. La \textbf{classe du document} impacte la plus grande part de la présentation et de la structure du document. Ainsi, un livre et une lettre ne demandent pas les mêmes règles de présentation. La classe se choisit principalement parmi les suivantes : \macron{article}, \macron{book}, \macron{report} et \macron{letter}. 
+
+Sans options, \LaTeX\ va retenir une présentation par défaut de la classe. La composition peut être modifiée en indiquant ses options, séparées par des virgules. Les options principales de la composition sont :
+\begin{itemize}
+\item le \terme{corps}, taille standard des caractères : \macron{10pt}, \macron{11pt} ou \macron{12pt}. Sous \LaTeX, toutes les tailles des caractères sont définies relativement à cette taille standard. La changer là fait ainsi s'adapter toute la présentation du document.
+\item la composition des pages en recto ou recto-verso : \macron{oneside}, \macron{twoside} ;
+\item le format A4, A5 : \macron{a4paper}, \macron{a5paper} ;
+\item le format paysage : \macron{landscape} ;
+\item la présence d'une ou deux colonnes par page : \macron{onecolumn} et \macron{twocolumn} ; 
+\item la position des équations : centrée par défaut, à gauche avec \macron{fleqn} ; 
+\item la position de la numérotation des équations : à droite par défaut, à gauche avec \macron{leqno}. 
+\item le mode brouillon avec \macron{draft} : les images ne sont pas affichées et les débordements de ligne indiqués. Voir page \pageref{cesure}. \\
+\end{itemize}
+
+Les options placées dans la classe du document ont la particularité d'être reprises dans les appels des différents paquets chargés à la suite de cette première commande. Ainsi, l'option \macron{draft}, pour le paquet \paquet{hyperref}, désactive l'ensemble des liens hypertextes.
+
+\subsection{Pour aller plus loin}
+
+Les classes citées ci-avant ne sont qu'une petite partie des classes existantes, tout au mieux un ensemble de base. D'autres classes existent pour répondre à de nombreux autres besoins. En voici quelques unes :
+\begin{itemize}
+\item les classes \emph{KOMA-script}\footnote{Bertrand \textsc{Masson} \cite{mass} décrit en français les avantages de ces classes sur les classes traditionnelles sur son ancien site : \liensimple{http://bertrandmasson.free.fr/index.php?categorie5/latex-koma-script}} --- \paquet{scrartcl}, \paquet{scr­book}, \paquet{scr­reprt} et \paquet{scrlt­tr2} --- qui retranscrivent dans des formats plus européens les classes mentionnées plus haut ;
+\item \paquet{lettre} permettant de rédiger une lettre en français ;
+\item \paquet{memoir} qui permet de rédiger des mémoires de fin d'études et qui, entre autres, permet d'accéder à d'autres tailles de caractères par défaut ;
+\item \paquet{moderncv} permettant de rédiger un CV, présentée en annexe \ref{moderncv} ;
+\item \paquet{beamer} permettant de faire une présentation.\footnote{Ce point devrait être traité dans ce document à l'avenir. Divers sites présentent cependant cette classe. Par exemple \liensimple{http://mcclinews.free.fr/latex/introbeamer.php} qui catalogue en prime une grande variété de thèmes pour \paquet{beamer}.}
+\end{itemize}
+
+\section{Les autres paquets usuels}
+
+Le paquet \paquet{babel} avec l'option \macron{frenchb}, fait des réglages associés à la typographie et la langue française, \LaTeX\ étant nativement anglophone. Entre autres, les énumérations se font avec des tirets, non des points ; les grandes parties du document portent des noms français et, par exemple, \og chapter \fg{} devient \og chapitre \fg{}, \og Table of contents \fg{} devient \og Table des matières \fg{}. Le paquet \paquet{babel} donne également accès à quelques commandes complémentaires présentées en table \ref{tablecaracteresbabel}.
+
+Le paquet \paquet{lmodern} modifie légèrement la police de caractère utilisée (par le chargement d'une version bien plus récente) à l'affichage du document \dextension{pdf}. Elle est beaucoup plus lisible et régulière à l'écran. 

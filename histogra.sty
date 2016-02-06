@@ -1,0 +1,143 @@
+% Copyright     Yannick Tanguy
+%               E-mail ytanguy@infini.fr
+%
+% Note          Premission is granted to modify this file under
+%               the condition that it is saved using another
+%               file and package name.
+%
+% Version       1.0
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{histogra}%
+             [2004/04/13 v1.1
+                 LaTeX package (Histograms with PsTricks)]
+
+% Evolution à apporter : 
+%   - les paramètres de dessin des histogrammes (épaisseur et autres variables)
+%   - les axes : simplifier l'appel et en faire une fonction séparée type \axex \axey
+%        \psline{->}(-0.1,0)(9.3,0)
+%        \uput[0](9.4,0){Âge}
+%        \multido{\Ra=0.18+0.6,\Ia=25+5}{15}{\psline(\Ra,-0.1)(\Ra,0) \uput[270](\Ra,-0.1){\Ia}}
+%   - les axes ? Calculer les échelles automatiquement ? 
+%        oblige à passer par un calcul du min et du max pour régler l'échelle.
+
+\usepackage{keyval}
+\usepackage{calc}
+
+\newlength{\histd} \newlength{\histg} \newlength{\histb} \newlength{\histh}
+\newlength{\largehist} \newlength{\interhist} \newlength{\epaishist}
+\newcounter{hcompte}
+\newlength{\longx} \newlength{\longy}
+\newlength{\maxhisto} \newlength{\valhisto}
+
+\newcommand{\hcolorI}{bleu}
+\newcommand{\hcolorII}{bleu}
+\newcommand{\hcolorIII}{bleu}
+
+\def\essai{\@ifnextchar[\@essai{\@essai[]}}
+\def\@essai[#1]#2{
+  \setkeys{histogr}{#1}
+	\pssetlength{\maxhisto}{0}
+  \histomax#2.
+  %\psframe(0,0)(1,\maxhisto)
+  \histoc#2.
+  }
+
+\def\histomax(#1)#2{
+	\pssetlength{\valhisto}{0}
+  \histosom#1,.
+	\relax\ifnum \valhisto>\maxhisto 	\pssetlength{\maxhisto}{\valhisto} \fi  
+	\relax\ifx#2.\def\next{\fini..}\else\def\next{\histomax#2}\fi
+	\next
+	}
+
+\def\histosom#1,#2{
+	\psaddtolength{\valhisto}{#1}
+	\relax\ifx#2.\def\next{\fini..}\else\def\next{\histosom#2}\fi
+  \next
+	}
+
+\def\axex(#1,#2){
+  \psline{->}(-0.1\psxunit,0)(#1,0)
+	\pssetlength{\longx}{#1}	
+	\psaddtolength{\longx}{0.1\psxunit}
+  \uput[0](\longx,0){#2}
+  \multido{\Ra=0.18+0.6,\Ia=25+5}{15}{
+    \psline(\Ra,-0.1)(\Ra,0)
+    \uput[270](\Ra,-0.1){\Ia}}  
+  }
+  
+\def\axey(#1,#2){
+  \psline{->}(0,-0.1\psyunit)(0,#1)
+	\pssetlength{\longy}{#1}	
+	\psaddtolength{\longy}{0.3\psxunit}
+  \rput(0,\longy){#2}
+  \multido{\Ra=1.01125+1.01125,\Ia=20+20}{5}{
+    \psline(-0.1,\Ra)(0.1,\Ra)
+    \uput[180]{0}(-0.1,\Ra){\Ia}}
+  }
+ 
+% La fonction d'appel anticipé
+\def\sethisto#1{\setkeys{histogr}{#1}}
+
+\define@key{histogr}{inter}{\pssetlength{\interhist}{#1}}
+\define@key{histogr}{large}{\pssetlength{\largehist}{#1}}
+\define@key{histogr}{epais}{\pssetlength{\epaishist}{#1}}
+\define@key{histogr}{hcol1}{\renewcommand{\hcolorI}{#1}}
+\define@key{histogr}{hcol2}{\renewcommand{\hcolorII}{#1}}
+\define@key{histogr}{hcol3}{\renewcommand{\hcolorIII}{#1}}
+
+\def\histoc(#1)#2{
+  \psset{dimen=middle,fillstyle=solid,linewidth=\epaishist}
+	\pssetlength{\histg}{\histd}
+	\psaddtolength{\histd}{\largehist}
+  \setcounter{hcompte}{1}  	
+	\pssetlength{\histb}{0\psyunit}
+	\pssetlength{\histh}{0\psyunit}
+  \tracec#1,.
+	\relax\ifx#2.\def\next{\fini..}\else\def\next{\histoc#2}\fi
+	\psaddtolength{\histd}{\interhist}
+	\next
+	}
+
+\def\tracec#1,#2{
+	\addtolength{\histh}{#1\psyunit*\ratio{5\psyunit}{\maxhisto}}
+  \colhisto{\thehcompte}
+	\psframe(\histg,\histb)(\histd,\histh)
+	\relax\ifx#2.\def\next{\fini..}\else\def\next{\tracec#2}\fi
+  \addtolength{\histb}{#1\psyunit*\ratio{5\psyunit}{\maxhisto}}
+	\addtocounter{hcompte}{1}
+  \next
+	}
+
+\def\histol{\@ifnextchar[\@histol{\@histol[]}}
+\def\@histol[#1](#2)#3{
+  \setkeys{histogr}{#1}
+  \psset{dimen=middle,fillstyle=solid,linewidth=\epaishist}
+	\pssetlength{\histg}{\histd}
+	\psaddtolength{\histd}{\largehist}
+  \setcounter{hcompte}{1}  	
+  \tracel#2,.
+	\relax\ifx#3.\def\next{\fini..}\else\def\next{\histol[#1]#3}\fi
+	\psaddtolength{\histd}{\interhist}
+	\next
+	}
+
+\def\tracel#1,#2{
+	\setlength{\histh}{#1\psyunit}
+  \colhisto{\thehcompte}
+	\psframe(\histg,0)(\histd,\histh)
+	\relax\ifx#2.\def\next{\fini..}\else\def\next{\tracel#2}\fi
+	\psaddtolength{\histd}{\largehist}
+	\psaddtolength{\histg}{\largehist}
+	\addtocounter{hcompte}{1}
+  \next
+	}
+
+\def\colhisto#1{
+	\relax\ifnum #1=1 \psset{fillcolor=\hcolorI} \fi
+	\relax\ifnum #1=2 \psset{fillcolor=\hcolorII} \fi
+	\relax\ifnum #1=3 \psset{fillcolor=\hcolorIII} \fi
+  }
+
+\def\fini..{}

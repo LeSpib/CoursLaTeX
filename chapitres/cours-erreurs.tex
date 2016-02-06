@@ -1,0 +1,72 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Chapitre Erreurs
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Avant de réduire votre ordinateur en poussière} \index[con]{erreur} \label{erreur}
+
+\section{Quelques réflexes de survie}
+
+\subsection{Réflexes pour amateurs}
+
+\LaTeX\ indique normalement le numéro de ligne où se situe l'anomalie qui l'empêche de compiler le document. Toutefois, ce numéro de ligne peut parfois être faux ! La recherche des erreurs peut alors se faire en déplaçant dans le document la commande \macro{end\{document\}} puis compiler. Ceci permet de déterminer, après quelques essais, quelle partie du code ou quelle ligne de code crée l'anomalie de compilation.
+
+Certaines erreurs peuvent également survenir à retardement car elles peuvent être transmises aux fichiers réutilisés par \LaTeX\ lors des compilations suivantes comme \dextension{aux}, \dextension{ind}... Ce cas est souvent délicat à analyser. Aussi, si une erreur se produit sans raison apparente, la suppression des fichiers générés par la compilation peut parfois aider à résoudre le problème\footnote{Il s'agit souvent de la dernière opération de correction d'une erreur... qui, si elle échoue, conduit à donner des coups de tête au premier mur qui passe.}. 
+
+\subsection{Réflexes pour passionnés}
+
+\LaTeX\ dispose de primitives lui permettant de décrire de façon beaucoup plus détaillée les travaux qu'il exécute :
+\begin{itemize}
+\item \macro{tracingcommands=1} (ou 2) affiche le détail des commandes utilisées, le chiffre précisant la profondeur de l'analyse effectuée ; 
+\item \macro{tracingall} affiche beaucoup plus d'informations que la première commande en restituant dans le fichier journal le contenu des pages, les définitions et redéfinitions que \LaTeX\ opère.  
+\end{itemize}
+
+Ces analyses demandent une connaissance de \LaTeX\ assez avancée. Les lecteurs intéressés pourront lire à profit la très complète annexe B de \cite{gomi}\footnote{Disponible en ligne : \liensimple{http://latex-project.org/guides/lc2fr-apb.pdf}.}.
+
+\section{Le bestiaire monstrueux}
+
+La liste qui suit présente quelques erreurs fréquemment rencontrées lors du cours. Cette liste n'est en aucun cas exhaustive : pour analyser d'autres erreurs, l'annexe B de \cite{gomi} citée à la section précédente devrait pouvoir apporter un complément d'information appréciable.
+
+\subsubsection{Bad math environment delimiter}
+
+Le cas survient lorsqu'un environnement mathématique a été ouvert avec la balise fermante, par exemple en écrivant \macro{]} au lieu de \macro{[}.
+
+\subsubsection{Display math should end with \$\$}
+
+La fermeture d'un environnement mathématique hors ligne n'a pas été faite avec la bonne commande, par exemple en mettant un \macron{\$} au lieu d'un \macro{]} après avoir mis un \macro{[}. Il est à noter que le \macron{\$\$}, pourtant suggéré ici par \LaTeX, doit être évité.
+
+\subsubsection{Extra \}, or forgotten \$}
+
+Le cas survient lorsqu'un environnement mathématique a été ouvert sans être refermé.
+
+\subsubsection{File ended while scanning use of...}
+
+Cette erreur indique qu'une accolade ouvrante n'a jamais été suivie de l'accolade fermante (\LaTeX\ allant la chercher jusqu'à la fin du fichier). Cette erreur est suivie du nom de la commande pour laquelle il manque l'accolade fermante.
+
+\subsubsection{Missing \$ inserted}
+
+Les commandes présentant des mathématiques requièrent un environnement mathématique. Ceci apparaît le plus souvent en présence de caractères dédiés comme \macron{\_}, \macron{\^{}}, de lettres grecques comme \macro{alpha} ou de commandes mathématiques comme \macro{sum}, ceci sans que le mode mathématique ait été appelé (avec par exemple \macron{\$} ou \macro{[}). 
+
+
+\subsubsection{No room for a new...} 
+
+Le chargement de nombreux paquets peut saturer la mémoire allouée (des registres) à \LaTeX\footnote{Voir  \liensimple{http://www.tex.ac.uk/cgi-bin/texfaq2html?label=noroom}.}. Pour contourner cette difficulté, il peut être fait usage des commandes suivantes en début de préambule, le \macron{28} étant un paramètre libre :
+
+\begin{codesimple}{Augmentation de capacité pour \LaTeX}{capacitelatex}
+\usepackage{etex}
+\reserveinserts{28}
+\end{codesimple}
+
+
+\subsubsection{Too many \}'s} 
+
+Fréquente en cas de formules mathématiques, cette erreur a pour source un caractère \macron{\}} en trop ou un caractère \macron{\{} manquant.
+
+
+\subsubsection{Undefined control sequence} 
+
+Normalement suivie de la commande coupable, vous vous trouvez ici face à une commande dont \LaTeX\ n'a pas la définition. Trois possibilités : 
+\begin{itemize}
+\item vous n'avez pas chargé le paquet définissant cette commande ;
+\item vous n'avez pas défini cette commande dans le préambule ;
+\item vous ne savez pas utiliser vos doigts\footnote{Vous connaissant, ce cas s'avère être le plus probable.}.
+\end{itemize}

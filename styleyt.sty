@@ -1,0 +1,385 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%
+%%%%%  Style de document "à la YT"
+%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{styleyt}[2013/08/07 v1.0 LaTeX package (Style pour documents de Yannick Tanguy)]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Déclaration des options  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Gestion des options par défaut. La plupart sont chargées
+
+\DeclareOption{defaut}{
+  \newcommand{\appelindex}{}
+  \newcommand{\appelgraph}{}
+  \newcommand{\appelps}{}
+  \newcommand{\appeltable}{}
+  \newcommand{\appelmaths}{}
+  \newcommand{\appelparam}{}  
+  \newcommand{\appelsymbs}{}  
+  \newcommand{\appelgloss}{}  
+}
+
+\DeclareOption{symbs}{
+  \renewcommand{\appelsymbs}{
+    \RequirePackage{eurosym}                 % Symbole euro
+    \RequirePackage{latexsym}                % Symboles courants
+    \RequirePackage{metalogo}                % Logos des formats de TeX 
+  }
+}
+
+\DeclareOption{param}{
+  \renewcommand{\appelparam}{
+    \RequirePackage{sectsty}                 % Formats des divisions 
+    \RequirePackage{tocbibind}               % Table des matières propre 
+    \RequirePackage[french]{minitoc}         % Mini-tables des matières 
+    \RequirePackage{lastpage}                % Numéro de dernière page     % Après Minitoc  
+  }
+}
+
+\DeclareOption{index}{
+  \renewcommand{\appelindex}{
+    \RequirePackage{index}                   % Index (mieux que makeidx)
+    \RequirePackage{multicol}                % Plusieurs colonnes
+  }
+}
+
+\DeclareOption{graph1}{ % Images seules
+  \renewcommand{\appelgraph}{
+    \RequirePackage{graphicx}                % Images
+  }
+}
+
+\DeclareOption{graph2}{ % Images et code graphique
+  \renewcommand{\appelgraph}{
+    \RequirePackage{graphicx}                % Images
+    \RequirePackage{tikz}                    % Code tikz
+  }
+}
+
+\DeclareOption{ps1}{ % Images et code graphique
+  \renewcommand{\appelps}{
+    \RequirePackage{pstricks}                % Images
+  }
+}
+
+\DeclareOption{ps2}{ % Images et code graphique
+  \renewcommand{\appelps}{
+    \RequirePackage{pstricks}                % Images
+    \RequirePackage{pst-plot}                % Images
+  }
+}
+
+\DeclareOption{table1}{ % Images et code graphique
+  \renewcommand{\appeltable}{ 
+    \RequirePackage{multirow}                % Fusion de cellules
+    \RequirePackage[labelfont={sc}]{caption} % Gestion des légendes
+    \RequirePackage{floatrow}                % Flottants 
+  }
+}
+
+\DeclareOption{table2}{ % Images et code graphique
+  \renewcommand{\appeltable}{
+    \RequirePackage{multirow}                % Fusion de cellules
+    \RequirePackage{array}                   % Autres fonctions 
+    \RequirePackage[labelfont={sc}]{caption} % Gestion des légendes 
+    \RequirePackage{floatrow}                % Flottants
+    \RequirePackage{hhline}                  % Filets plus fins
+    \RequirePackage{arydshln}                % Filets pointillés
+  }
+}
+
+\DeclareOption{maths}{ % Images et code graphique
+  \renewcommand{\appelmaths}{
+    \RequirePackage{mathtools,amssymb}       % Maths usuelles
+    \RequirePackage{stmaryrd}                % Quelques symboles de plus
+  }
+}
+
+\DeclareOption{gloss1}{ % Images et code graphique
+  \renewcommand{\appelgloss}{
+    \RequirePackage[toc,nopostdot]{glossaries}% Glossaires
+  }
+}
+
+\DeclareOption{gloss2}{ % Images et code graphique
+  \renewcommand{\appelgloss}{
+    \RequirePackage[toc,nopostdot]{glossaries}% Glossaires
+    \RequirePackage{glossary-mcols}           % Glossaires colonnes
+  }
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Exécution des options   
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\ExecuteOptions{defaut}
+\ProcessOptions \relax
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Chargement des paquets
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{fontspec}
+\RequirePackage{xunicode}
+\defaultfontfeatures{Ligatures=TeX}
+
+\setmainfont[Path=fontes/,
+             BoldFont   = GandhiSerif-Bold.otf ,
+             ItalicFont = GandhiSerif-Italic.otf ,
+             BoldItalicFont = GandhiSerif-BoldItalic.otf]{GandhiSerif-Regular.otf}
+
+% Les paquets systématiques
+\RequirePackage[frenchb]{babel}                      % En français
+\RequirePackage{pifont}                             % Pi-font
+\RequirePackage{xspace}                             % Espacement après variables
+\RequirePackage[table,svgnames,dvipsnames]{xcolor}  % La couleur
+\appelsymbs                                         % Paquets de symboles
+\appelgraph                                         % Paquets graphiques
+\appelps
+\appeltable                                         % Paquets tableaux
+\appelindex                                         % Paquets d'index
+\appelmaths                                         % Paquets de maths
+\appelparam                                         % Paquets de paramétrage
+\appelgloss                                         % Paquets de glosssaires
+
+\RequirePackage{fancyhdr}          % En-têtes personnalisés
+
+% Gestion de l'hypertexte
+%\RequirePackage[unicode=true,colorlinks=true,urlcolor=bleu20,linkcolor=bleu,citecolor=bleu10]{hyperref} % Gestion des glossaires
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Déclaration de fonctions
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\fontecnr}{\fontfamily{lmr}\selectfont}
+
+\newcommand{\entetevide}{
+    \pagestyle{empty}
+    }
+
+\newcommand{\enteteyt}{
+    \pagestyle{fancy}
+    \fancyhf{}
+    \fancyfoot[C]{\bfseries\thepage}
+    \fancyhead[L]{\bfseries\nouppercase{\rightmark}}
+    \renewcommand{\headrulewidth}{0.5pt}
+    \renewcommand{\footrulewidth}{0pt}
+    \addtolength{\headheight}{2pt}
+
+    \fancypagestyle{plain}{
+  	  \renewcommand{\headrulewidth}{0pt}
+      \renewcommand{\footrulewidth}{0pt}
+	  }
+	}
+
+\newcommand{\entetecours}{
+  \pagestyle{fancy}
+  %\renewcommand{\chaptermark}[1]{\markright{#1}}
+  %\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+  \fancyhf{}
+  \fancyhead[R]{\bfseries\thepage}
+  \fancyhead[L]{\bfseries\nouppercase{\rightmark}} % Sur la base de F. Pastor.
+  %\fancyhead[LE,RO]{\bfseries\thepage} % Commandes si on avait un twoside.
+  %\fancyhead[LO]{\bfseries\rightmark}
+  %\fancyhead[RE]{\bfseries\leftmark}
+  \renewcommand{\headrulewidth}{0.5pt}
+  \renewcommand{\footrulewidth}{0pt}
+  \addtolength{\headheight}{2pt}
+  \fancypagestyle{plain}{\fancyhead{} \renewcommand{\headrulewidth}{0pt}}
+  }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Equivalences pour hyperref 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\XeLaTeXtitre}{\texorpdfstring{\XeLaTeX}{XeLaTeX}\xspace}
+\newcommand{\XeTeXtitre}{\texorpdfstring{\XeTeX}{XeTeX}\xspace}
+\newcommand{\LuaLaTeXtitre}{\texorpdfstring{\LuaLaTeX}{LuaLaTeX}\xspace}
+\newcommand{\LuaTeXtitre}{\texorpdfstring{\LuaTeX}{LuaTeX}\xspace}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Variables du document    
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\letitre}{}
+\newcommand{\titre}[1]{\renewcommand{\letitre}{#1\xspace}\title{#1}}
+
+\newcommand{\numeroversion}{V0}
+\newcommand{\version}[1]{\renewcommand{\numeroversion}{V#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Déclaration de couleurs    
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  
+\definecolor{bleu}{cmyk}{1.00,0.65,0.00,0.15}
+\definecolor{blanc}{cmyk}{0.00,0.00,0.00,0.00}
+\definecolor{noir}{cmyk}{0.00,0.00,0.00,1.00}
+\definecolor{gris}{cmyk}{0.00,0.00,0.00,0.15}
+
+\newcommand{\definenuances}[3]{
+\definecolor{#10}{#2}{#3}
+\colorlet{#11}{#10!80}
+\colorlet{#12}{#10!55}
+\colorlet{#13}{#10!30}
+}
+
+\definenuances{jaune1}{cmyk}{0.00,0.28,1.00,0.30}
+\definenuances{jaune2}{cmyk}{0.00,0.32,1.00,0.09}
+\definenuances{jaune3}{cmyk}{0.00,0.30,1.00,0.00}
+\definenuances{jaune4}{cmyk}{0.00,0.16,1.00,0.00}
+\definenuances{jaune5}{cmyk}{0.00,0.07,0.66,0.00}
+
+\definenuances{orange1}{cmyk}{0.00,0.52,1.00,0.64}
+\definenuances{orange2}{cmyk}{0.00,0.56,1.00,0.43}
+\definenuances{orange3}{cmyk}{0.00,0.64,1.00,0.00}
+\definenuances{orange4}{cmyk}{0.00,0.48,0.95,0.00}
+\definenuances{orange5}{cmyk}{0.00,0.35,0.90,0.00}
+
+\definenuances{rouge1}{cmyk}{0.00,1.00,0.61,0.43}
+\definenuances{rouge2}{cmyk}{0.00,1.00,0.43,0.19}
+\definenuances{rouge3}{cmyk}{0.00,1.00,0.38,0.03}
+\definenuances{rouge4}{cmyk}{0.00,0.91,0.76,0.00}
+\definenuances{rouge5}{cmyk}{0.00,0.75,0.90,0.00}
+
+\definenuances{rose1}{cmyk}{0.57,0.98,0.00,0.46}
+\definenuances{rose2}{cmyk}{0.63,1.00,0.00,0.03}
+\definenuances{rose3}{cmyk}{0.40,1.00,0.00,0.02}
+\definenuances{rose4}{cmyk}{0.01,0.83,0.00,0.00}
+\definenuances{rose5}{cmyk}{0.00,0.55,0.08,0.00}
+
+\definenuances{mauve1}{cmyk}{0.96,1.00,0.00,0.10}
+\definenuances{mauve2}{cmyk}{0.89,1.00,0.00,0.00}
+\definenuances{mauve3}{cmyk}{0.77,0.68,0.00,0.00}
+\definenuances{mauve4}{cmyk}{0.62,0.60,0.00,0.00}
+\definenuances{mauve5}{cmyk}{0.54,0.49,0.00,0.00}
+
+\definenuances{bleu1}{cmyk}{1.00,0.58,0.00,0.21}
+\definenuances{bleu2}{cmyk}{1.00,0.57,0.00,0.02}
+\definecolor{bleu24}{RGB}{230,245,255}
+\definecolor{bleu25}{RGB}{245,250,255}
+\definenuances{bleu3}{cmyk}{1.00,0.34,0.00,0.02}
+\colorlet{bleu34}{bleu30!10}
+\colorlet{bleu35}{bleu30!5}
+\definenuances{bleu4}{cmyk}{0.90,0.11,0.00,0.00}
+\definenuances{bleu5}{cmyk}{0.59,0.00,0.06,0.00}
+
+\definenuances{bleuc1}{cmyk}{1.00,0.25,0.00,0.50}
+\definenuances{bleuc2}{cmyk}{1.00,0.00,0.12,0.43}
+\definenuances{bleuc3}{cmyk}{1.00,0.00,0.31,0.07}
+\definenuances{bleuc4}{cmyk}{0.83,0.00,0.21,0.00}
+\definenuances{bleuc5}{cmyk}{0.43,0.00,0.10,0.00}
+
+\definenuances{vertf1}{cmyk}{1.00,0.00,0.54,0.69}
+\definenuances{vertf2}{cmyk}{1.00,0.00,0.67,0.29}
+\definenuances{vertf3}{cmyk}{1.00,0.00,0.86,0.03}
+\definenuances{vertf4}{cmyk}{0.60,0.00,0.55,0.00}
+\definenuances{vertf5}{cmyk}{0.47,0.00,0.32,0.00}
+
+\definenuances{vert1}{cmyk}{0.43,0.00,1.00,0.56}
+\definenuances{vert2}{cmyk}{0.56,0.00,1.00,0.27}
+\definenuances{vert3}{cmyk}{0.59,0.00,1.00,0.07}
+\definenuances{vert4}{cmyk}{0.41,0.00,0.78,0.00}
+\definenuances{vert5}{cmyk}{0.32,0.00,0.59,0.00}
+
+\definenuances{vertc1}{cmyk}{0.00,0.03,1.00,0.64}
+\definenuances{vertc2}{cmyk}{0.18,0.00,1.00,0.31}
+\definenuances{vertc3}{cmyk}{0.22,0.00,1.00,0.08}
+\definenuances{vertc4}{cmyk}{0.20,0.00,0.85,0.00}
+\definenuances{vertc5}{cmyk}{0.09,0.00,0.58,0.00}
+
+\definenuances{gris1}{cmyk}{0.00,0.00,0.00,0.80}
+\definenuances{gris2}{cmyk}{0.00,0.00,0.00,0.60}
+\definenuances{gris3}{cmyk}{0.00,0.00,0.00,0.45}
+\definenuances{gris4}{cmyk}{0.00,0.00,0.00,0.30}
+\definenuances{gris5}{cmyk}{0.00,0.00,0.00,0.15}
+
+\definenuances{bleua}{cmyk}{1,0.65,0,0.15}
+\definecolor{bleucouv}{RGB}{198,222,253}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Changements de nom dans le doc   
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\addto\captionsfrench{\renewcommand{\contentsname}{Sommaire}}
+\addto\captionsfrench{\renewcommand{\listfigurename}{Liste des figures}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Tables
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newenvironment{tablecouleur}{%
+\centering%
+\begin{footnotesize}%
+\renewcommand{\arraystretch}{1.2}%
+\rowcolors{2}{bleu24}{bleu25}%
+}{%
+\end{footnotesize}%
+%\end{center}%
+\renewcommand{\arraystretch}{1}%
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Citations
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\citationseule}[5]{
+% #1 la citation
+% #2 le prénom
+% #3 le nom
+% #4 l'ouvrage incluant la citation
+% #5 l'année de publication de l'ouvrage
+\thispagestyle{empty}
+\vspace*{\stretch{1}}
+\begin{flushright}
+\og #1 \fg{}
+\\[0.5cm]
+#2 \textsc{#3}, \emph{#4} (#5)
+\end{flushright}
+\vspace*{\stretch{1}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Page titre
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Gestion de l'image
+\newcommand{\imagecouverture}[4]{\newcommand{\imagetitre}{\node[inner sep=0cm,#4] at (#3) {\includegraphics[height=#2]{images/#1}};}}
+
+%%% Gestion des autres objets présents sur la page
+\newcommand{\couverture}[4]{
+\begin{titlepage}
+\begin{tikzpicture}[remember picture, overlay]
+    \node at (current page.south west)
+        {%
+        \begin{tikzpicture}[remember picture, overlay]
+            \imagetitre
+            %\fill[blanc](0,2.8284) rectangle (21,11.3154); % Partie blanche de la feuille
+            %\fill[gris](0,0) rectangle (21,2.8284);     % Partie grise
+            %\fill[bleu](1.4142,19.8006) -- (1.4142,28.2858) -- (9.8994,28.2858) -- (9.8994,21.2148) -- (8.4852,19.8006) -- cycle;          % Encart bleu
+            %\node[above right] at (2.1213,25.5) {\textcolor{blanc}{\resizebox{!}{1.2cm}{\Huge\sf #1}}};                         
+            \fill[bleu](1.5,18.8) rectangle (19.5,27.7);
+
+            %\node at (10.5,24.9) {\textcolor{blanc}{\resizebox{!}{5cm}{\Huge #1}}};  
+            %\node at (10.5,27.2) {\textcolor{blanc}{\resizebox{!}{1cm}{\Huge\bf #1}}};   
+            \node at (10.5,22.75) {\textcolor{blanc}{\resizebox{!}{4cm}{\Huge #2}}};  
+
+            \fill[blanc](0,0) rectangle (21,4.3); 
+            \fill[bleu](1.5,1.5) rectangle (19.5,7.1);
+            %\fill[blanc](0,3.3) rectangle (21,9.9); 
+
+            \node at (10.5,4.7) {\textcolor{blanc}{\huge\bf #3}}; 
+            \node at (10.5,3.7) {\textcolor{blanc}{\huge\bf #4}}; 
+        \end{tikzpicture}
+        };
+\end{tikzpicture}
+\end{titlepage}
+}

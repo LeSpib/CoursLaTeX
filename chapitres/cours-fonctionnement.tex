@@ -1,0 +1,214 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Chapitre Fonctionnement
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Le fonctionnement de \TeX}
+\mtcaddchapter
+
+Décrire le fonctionnement précis et exact de \TeX, le programme derrière le format \LaTeX, demanderait un ouvrage complet. En l'occurrence, cet ouvrage existe et s'appelle le \TeX book\cite{knut} : il a été rédigé par \textsc{Knuth} lui-même... un expert que nous ne chercherons pas à dépasser sur son sujet ! Nous nous limitons donc ici à une description partielle et partiale de la structure d'un document \LaTeX, de sa composition et des conséquences de ces règles sur la façon de rédiger du code \LaTeX\footnote{Pour simplifier, \TeX\ et \LaTeX\ seront systématiquement confondus par la suite.}.
+
+
+\section{Un fichier \LaTeX}
+
+Un fichier \LaTeX\ est un document lisible par n'importe quel éditeur de texte classique. Le texte et les commandes --- toute chaîne de caractères commençant par un \og \macro{} \fg{} --- qui y sont inclues restent lisibles, ceci en opposition avec de nombreux autres logiciels qui codent ces éléments. 
+
+Un fichier \LaTeX\ a pour extension \dextension{tex}\footnote{Dans toute la suite, un \og fichier d'extension tex \fg{} sera désigné comme \og fichier \dextension{tex} \fg{}.} et son nom ne doit pas contenir d'espace ou de lettre accentuée. Il est traditionnellement dénommé fichier source ou \terme{source}\footnote{Source est de plus en plus considéré comme un nom masculin dans ce cas précis.}, pour le distinguer du fichier présentant le résultat final.
+
+
+
+\subsection{La structure}
+
+Ce fichier est toujours constitué de deux parties : 
+\begin{itemize}
+\item le \terme{préambule}, situé en début de document. Il contient un ensemble de définitions génériques servant à présenter l'ensemble du document. Plus précisément, s'y trouvent réunis la définition du type de document, l'appel à des paquets spécifiques --- fichiers définissant des commandes étendant les fonctionnalités de \LaTeX\ --- mais aussi la (re)définition de commandes spécifiques au document. Placer du texte libre dans cette partie provoque une erreur de \LaTeX ; 
+\item le \terme{corps}. Il contient le texte qui sera affiché ainsi que des commandes modifiant la présentation de ce texte à l'endroit où elles sont placées ou sur la zone qu'elles encadrent. \\
+\end{itemize}
+
+Les deux parties sont séparées par la commande\footnote{L'usage de la fonte \og machine à écrire \fg{} est quasiment systématique dans les ouvrages d'informatique lorsque est évoqué un élément du langage de programmation, élément qui serait tapé tel quel à l'écran. Est ici ajouté de la couleur pour le plaisir de complexifier les définitions des commandes permettant cet affichage.} : \macro{begin\{document\}}. Le corps s'achève avec la commande \macro{end\{document\}}. Tout le texte placé au-delà de cette seconde instruction est purement et simplement ignoré par \LaTeX.
+
+
+\subsection{Un exemple}
+
+Voici un exemple simple d'un fichier \LaTeX\ : 
+
+\begin{codesimple}{Exemple simple}{exemplesimple}
+\documentclass[a4paper]{article}
+\usepackage{eurosym}
+\begin{document}
+Savais-tu que le signe de l'\emph{euro} se tape \euro ?
+\end{document}
+\end{codesimple}
+
+Ici, le préambule se limite à deux lignes. La première ligne définit le type du document : elle demande à \LaTeX\ de faire appel à des fichiers contenant des commandes et paramètres permettant de présenter le document. Ce point est détaillé au chapitre~\ref{classe}.
+
+La seconde ligne charge un paquet\footnote{Dans toute la suite, les paquets seront indiqués avec ce code visuel.}, \paquet{eurosym}, qui définit la commande \macro{euro}.
+
+Dans le corps, constitué des trois lignes suivantes, se trouve le texte à afficher. Ce texte est localement modifié par la commande \macro{emph} qui fait passer le texte qu'elle contient entre accolades en italique. De plus, la commande \macro{euro} va permettre l'affichage du symbole \euro.
+
+
+\section{La \og grammaire \fg{} de \LaTeX}
+\subsection{Les caractères actifs} \incise{15,53}{---}{14}
+
+Les règles du langage \LaTeX\ se centrent sur l'usage de caractères spécifiques dit \og caractères actifs \fg.
+
+\begin{table}[!ht]
+\begin{tablecouleur}
+\begin{tabular}{cm{10cm}}
+\rowcolor{bleu20}
+\color{white}\bf Caractères		& \multicolumn{1}{c}{\color{white}\bf Utilisation}
+\\
+\macro{}	& Il indique le début d'un nom de commande : \LaTeX\ exécute alors les tâches associées au nom de la commande. 
+\\ 
+\macron{\{} 	\macron{\}} & Toujours par couple, elles encadrent et isolent des ensembles spécifiques, d'où leur nom de \textbf{délimiteur}\index[con]{delimiteur@délimiteur}.%\terme avec texindy directement.\newcommand{\terme}[1]{\textbf{#1}\index[con]{#1}}
+\\ 
+\macron{\%} 	& Il indique que ce qui le suit est un commentaire. Jusqu'au prochain passage à la ligne, \LaTeX\ ignore ce qui est écrit et ne l'affiche pas.
+\\ 
+\macron{\$} \macron{\_} \macron{\^{}} & Ils participent à la rédaction de mathématiques. Voir page \pageref{mathématique}.
+\\ 
+\macron{\&}  & Il participe à la constitution des tableaux. Voir page \pageref{tableau}.
+\\ 
+\macron{\#}  & Il participe à la définition de nouvelles commandes. Voir page \pageref{definition}.
+\\ 
+espace & Plusieurs espaces consécutives valent une seule espace.
+\\ 
+retour à la ligne & Un retour à la ligne est considéré comme une espace. Deux retours à la ligne consécutifs ou plus comme un seul et unique changement de paragraphe.
+\\ 
+\macron{@} & Très particulier, il peut être activé pour devenir un caractère utilisable dans les noms de commandes en programmation avancée, ceci avec l'utilisation de \macro{makeatother} (activation) et de \macro{makeatletter} (désactivation).
+\\ 
+\end{tabular}
+\end{tablecouleur}
+\caption{Caractères actifs}\label{tablecaracteresactifs}
+\end{table}
+
+En programmation avancée, ces caractères peuvent être remplacés par d'autres ou redéfinis pour se voir attribuer d'autres rôles. Qui serait intéressé par ce point doit faire une recherche sur la notion de \terme{catcode}, ou code de catégorie (de caractère)\footnote{Par exemple : \liensimple{http://www.math.u-psud.fr/~bernardofpc/ens/CIES/Avance.pdf}.} profondément lié à la manière dont \LaTeX\ lit un document.
+
+L'affichage de tels caractères actifs dans le texte final (ne serait-ce par exemple que pour les citer dans le tableau ci-dessus) s'obtient par le recours à des commandes présentées dans la table \ref{tablecaracteres}, page~\pageref{tablecaracteres}. \label{monexemple}
+
+
+\subsection{Les groupes}
+
+Pour que \LaTeX\ puisse présenter un endroit spécifique d'un document, il lui faut savoir quel est l'état des différentes valeurs des paramètres de présentation : fonte à utiliser, format de la page et ainsi de suite. Pour cela est utilisée la notion de \terme{groupe}. Un groupe est au sens le plus large une zone de notre document. Un groupe peut être délimité de deux façons : 
+\begin{itemize}
+\item par des accolades ouvrantes et fermantes ;
+\item par des crochets ouvrants et fermants quand ils servent à indiquer un argument d'une commande ;
+\item par des commandes d'environnement, telles \macro{begin\{document\}} et \macro{end\{document\}}, présentées ci-après.  
+\end{itemize}
+
+Un groupe peut contenir d'autres groupes (des sous-groupes) et ainsi de suite. En terme d'état, chaque sous-groupe récupère l'état du groupe au moment où il est ouvert. Cet état initial peut ensuite être librement modifié dans le sous-groupe. Cependant, lorsqu'un sous-groupe s'achève et que \LaTeX\ revient dans le groupe, il reprend l'état qu'avait le groupe, indépendamment de tous les changements apportés par le sous-groupe. 
+
+L'exemple ci-dessous montre ce principe avec deux commandes opérant un changement de présentation du texte à partir du moment où elles apparaissent dans le texte : \macro{itshape} fait passer le texte en italique, \macro{upshape} le fait passer en caractères droits (dits romains).
+
+\begin{codedouble}{Exemple de groupe}{exemplegroupe}
+Voici un {exemple \itshape de {\upshape texte illustrant les} groupes} 
+sous \LaTeX.
+\end{codedouble}
+
+Ici, dans le groupe initial, \LaTeX\ rédige en caractères romains. Lorsqu'il passe dans le sous-groupe, il garde ce réglage jusqu'à rencontrer \macro{itshape} qui le fait passer à l'italique. Lorsqu'il passe dans le sous-sous-groupe, il reçoit immédiatement la consigne de passage en caractères droits. En l'absence d'autres réglages, ce format perdure jusqu'à la fin du sous-sous-groupe. Lorsque \LaTeX\ quitte cette zone, il revient au sous-groupe avec sa présentation italique. Le mot \og groupes \fg{} est donc en italique. De même, une fois qu'il quitte le sous-groupe, il revient au réglage qu'avait le groupe : l'écriture en romain.
+
+
+\subsection{Les différentes commandes}
+
+\LaTeX\ distingue tout d'abord lettres majuscules et minuscules\footnote{\LaTeX\ est dit \og sensible à la casse \fg{}.}: la commande \macro{Test} peut avoir une définition différente de la commande \macro{test} comme de la commande \macro{TesT}. 
+
+Les commandes sont parfois dotées d'arguments. Ceux-ci sont placés immédiatement après le nom de la commande, sans espace : ils sont le plus souvent introduits par des \macron{\{} lorsqu'ils sont obligatoires, par des \macron{[}\footnote{Les crochets ne sont pas considérés comme des caractères actifs, contrairement aux accolades.} lorsqu'ils sont facultatifs et conclus respectivement par des \macron{\}} et des \macron{]}. De fait, un argument est un groupe.
+
+Trois grands types de commandes coexistent :
+\begin{itemize}
+\item la commande simple avec arguments sous la forme usuelle \macro{macro\{{\it arg1}\}...\{{\it argN}\}}. Elle exécute normalement une action à l'endroit où elle se trouve dans le texte et agit sur ou avec ses arguments. Par exemple,  \macro{textbf\{{\it texte}\}} mettra le texte en argument en gras. Les arguments ont des tailles limitées à un paragraphe au plus.
+\item la commande \terme{bascule}, le plus souvent sans argument. Celle-ci modifie le comportement de \LaTeX\ jusqu'à la fin du groupe dans lequel elle se situe. Par exemple, \macro{bfseries} fait que le texte qui suit s'écrit désormais en gras. 
+\item la commande \terme{environnement} de la forme \macro{begin\{{\it environnement}\}} toujours suivie plus loin de la nécessaire fin\footnote{Sous peine d'obtenir une erreur de \LaTeX\ !} \macro{end\{{\it environnement}\}}. La zone délimitée par ces deux commandes, qui peut contenir de nombreux paragraphes, est alors modifiée. Ainsi, l'environnement \macron{center} va centrer tout le texte placé entre les deux commandes.
+\end{itemize}
+
+Dans la suite, ces différentes variantes seront respectivement appelées commandes, bascules et environnements.
+
+\subsection{Unités de mesure}\label{unite}
+
+Parmi les arguments qui peuvent être communiqués à des commandes \LaTeX\ se trouve des longueurs. Ces  commandes permettent le plus souvent de faire des réglages, par exemple insérer à la fin de cette phrase une espace de 2cm\hspace*{2cm}. 
+
+Les unités de longueur absolues connues par \LaTeX\ sont :
+
+\begin{table}[!ht]
+\begin{tablecouleur}
+\begin{tabular}{cccc}
+\rowcolor{bleu20}
+\color{white}\bf Unité		& \color{white}\bf  Nom		& \color{white}\bf Définition & \color{white}\bf	Mesure (en mm) \\ 
+cm				& centimètre							&	1 cm = 0,01 m	& 10 mm 		\\
+mm				& millimètre							&	1 mm = 0,1 cm	& 1 mm			\\
+in				& pouce (\emph{inch})					&	1 in = 2,54 cm 	& 25,4 mm		\\
+bp				& gros point (\emph{big point})			&	72 bp = 1 in 	& 0,3527778 mm	\\
+pt				& point                					&	72,27 pt = 1 in & 0,3514598 mm 	\\ 	
+pc				& pica 									&	1 pc = 12 pt 	& 4,2175176 mm	\\ 
+dd				& point didot							& 1157 dd = 1238 pt & 0,3760650 mm  \\
+cc				& cicéro								&	1 cc = 12 dd 	& 4,5127803 mm  \\
+sp				& point d'échelle (\emph{scaled point})	& 65536 sp = 1 pt	& 0,0000054 mm\\
+\end{tabular}
+\end{tablecouleur}
+\caption{Unités de longueur absolues} \label{unitesabsolues}
+\end{table}
+
+Par ailleurs, \LaTeX\ peut manipuler des longueurs relatives, autrement dit des longueurs qui dépendent de la taille de certains caractères de la police courante. Il existe pour cela deux unités :
+
+\begin{table}[!ht]
+\begin{tablecouleur}
+\begin{tabular}{cc}
+\rowcolor{bleu20}
+\color{white}\bf Unité		& \color{white}\bf  Nom					\\ 
+em							& cadratin (largeur de la lettre M)		\\ 	
+ex							& hauteur d'x							\\ 
+\end{tabular}
+\end{tablecouleur}
+\caption{Unités de longueur relatives} \label{unitesrelatives}
+\end{table}
+
+Pour être complet, \LaTeX\ admet également des longueurs élastiques\footnote{Elles ne sont qu'évoquées ici mais sont largement développées dans le cours avancé de Manuel \textsc{Pégourié-Gonnard} \cite{pego}. Ces définitions sont également vues dans l'annexe C en ligne de \cite{bito} : \liensimple{http://latex-pearson.org/ressources/2010/annexe-C.pdf}.} qui se présentent à titre d'exemple sous la forme suivante : \macron{1cm plus 1ex minus 2mm}. Dans cet exemple, la longueur est comprise entre 1cm$-$2mm et 1cm$+$1ex selon les contraintes présentes ; 1cm est la longueur en l'absence de contraintes.
+
+\section{La compilation}\label{compilation}\index[con]{compilation} \incise{19--30}{---}{7--12} 
+
+Pour obtenir le document mis en forme, il faut effectuer une \terme{compilation} du fichier \dextension{tex}, autrement dit le faire lire et retranscrire par \LaTeX\ en un document d'un autre format qui nous donnera l'affichage souhaité, généralement un fichier \dextension{dvi} ou un fichier \dextension{pdf}. 
+
+
+\subsection{La mécanique de la compilation}
+
+Lors de la compilation, \LaTeX\ analyse et transforme les différentes commandes en une suite de fonctions fondamentales qui lui dictent la manière de présenter les pages de texte. Au fur et à mesure, selon les règles usuelles et les modifications apportées parfois par les commandes, \LaTeX\ prépare des boîtes contenant des caractères puis des boîtes contenant des boîtes de caractères autrement dit des boîtes-mots, puis des boîtes-lignes puis des boîtes-paragraphes. \`A chaque étape, il prépare également les espaces entre les boîtes selon des règles typographiques\footnote{Entre autres, la règle de césure qui distingue \LaTeX\ d'autres logiciels.} ou des règles imposées par les commandes. 
+
+Cet empilement de boîtes finit par générer une page. Une fois une page générée, \LaTeX\ passe à la suivante et ne revient pas en arrière.
+
+De ce fait, \LaTeX\ ne peut créer directement des éléments demandant une vision de tout le document : une table des matières, un index ou un renvoi vers une page. Pour obtenir de tels éléments, il faudra compiler deux ou trois fois le document, \LaTeX\ réutilisant des informations stockées par la dernière compilation dans des fichiers annexes prévus pour ce type de fonctionnalités.
+
+
+\subsection{Les fichiers générés par la compilation}
+
+La compilation produit plusieurs fichiers, chacun ayant un rôle spécifique pour l'utilisateur et pour \LaTeX\ :
+\begin{itemize}
+\item le fichier \dextension{dvi}\footnote{DVI signifie \og DeVice-Independant \fg{} soit \og indépendant du type d'unité ou du périphérique \fg{}.}, un fichier qui restitue un document finalisé.
+\item le fichier \dextension{log}, ou \terme{journal}. Il contient des informations sur le travail effectué lors de la compilation.  
+\item le fichier \dextension{aux}, ou \og auxiliaire \fg{}. Il contient des informations de compilation que \LaTeX\ réutilise lors de la compilation suivante. Parmi celles-ci, se trouvent des informations sur les références dans le document, des numéros de pages, des éléments servant à la table des matière.
+\item et parfois d'autres fichiers en cas d'utilisation de commandes ou de paquets spécifiques. Par exemple, le paquet \paquet{minitoc} génère de nombreux fichiers \dextension{mtc} (suivis de chiffres).
+\end{itemize}
+
+
+\section{La gestion des erreurs}
+\incise{29--30}{---}{187--200}
+
+L'erreur est hélas humaine... et \LaTeX\ déteste les erreurs. Les erreurs interfèrent avec la compilation et génèrent souvent une restitution partielle du fichier \dextension{dvi}. \LaTeX\ peut en effet s'arrêter en cours de compilation si les erreurs sont trop importantes.
+
+Dans ces cas-là, il est recommandé de regarder le fichier journal. Ce fichier contient souvent l'information de la ligne où est survenue l'erreur et assez fréquemment sa raison : une commande inconnue, une accolade oubliée, des mathématiques mal tapées. Ce fichier est donc d'une aide précieuse, quoique rédigé en anglais. La plupart des éditeurs \LaTeX\ permettent d'ailleurs de visionner ce fichier lors de la compilation pour comprendre et corriger les erreurs.
+
+Pour sauver le commun des mortels de certaines erreurs assez complexes, l'annexe \ref{erreur} a été constituée sur ce sujet, page \pageref{erreur}.
+
+
+\section{L'impression} \incise{22}{---}{12--14}
+
+Le fichier \dextension{dvi}, s'il peut être visualisé, ne peut être imprimé directement. Il faut le convertir en un autre format et, pour cela, utiliser un programme extérieur à \LaTeX. De façon courante, il est converti à l'aide du programme \programme{dvips} en document postscript (dit fichier \dextension{ps}) lisible et imprimable. Ceci permettra d'utiliser certains paquets spécifiques présentés en section \ref{pstricks}. Qui plus est, un document \dextension{ps} peut être  converti en \dextension{pdf}. Un second programme de conversion est ici utilisé : \programme{ps2pdf}.
+
+\section{Des compilations alternatives}\label{compilations}
+
+La compilation décrite jusqu'ici de base sur la mécanique historique. Les variantes de \LaTeX\ ont revu cette mécanique et l'ont simplifié.
+
+Ainsi, il est possible d'utiliser le programme \programme{pdflatex} qui génère directement un fichier \dextension{pdf} à partir du fichier \dextension{tex}. S'il présente des incompatibilités avec certaines des fonctionnalités vues dans la suite de ce cours, essentiellement le paquet \paquet{pstricks}, ce programme autorise en contrepartie l'insertion des images \dextension{jpg}.
+
+Il est également possible de retenir pour la compilation les programme \programme{xetex} ou \programme{lualatex}. Ils permettent de la même manière de passer du fichier \dextension{tex} au fichier \dextension{pdf}. Toutefois, ces programmes demandent d'appliquer un encodage différent au fichier source et il implique de placer un préambule différent de celui utilisés normalement avec \LaTeX. Ces points sont présentés en page \pageref{xelatex}.
+
+La figure suivante résume l'ensemble de ces processus.
+
+\input{figures/texverspdf}

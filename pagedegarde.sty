@@ -1,0 +1,431 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{pagedegarde}[2015/05/02 v2.0 Mise en forme d'une page de garde memoire pour l'Institut des Actuaires)]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Option par defaut
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Les commandes finissant par ref sont des duplications des commandes les precedant.
+% Elles gerent les liens hypertextes si hyperref est charge.
+
+\DeclareOption{defaut}{
+  % Commandes generales de filiere
+  \newcommand{\filiere}{fili\`{e}re}  
+  \newcommand{\filiereref}{\filiere}  
+  \newcommand{\lafiliere}{la fili\`{e}re}
+  \newcommand{\lafiliereref}{\lafiliere}
+  \newcommand{\filieresigle}[1]{}  
+  \newcommand{\filieresigleref}[1]{} 
+  %  
+  % Commandes associees a l'EURIA
+  \newcommand{\EURIA}{EURIA\xspace}
+  \newcommand{\EURIAref}{\EURIA}
+  \newcommand{\Euria}{Euria\xspace}
+  \newcommand{\Euriaref}{\Euria}
+  \newcommand{\euria}{EURo Institut d'Actuariat\xspace}
+  \newcommand{\euriaref}{\euria}
+  \newcommand{\euriamail}{euria@univ-brest.fr\xspace}
+  \newcommand{\euriamailref}{\euriamail}
+  % Sigle de l'EURIA (melange texte et image)
+  \newcommand{\euriagarde}{{\sffamily\textbf{\huge{E}\Large URIA --- EURo Institut d'Actuariat}}}  
+  \newcommand{\euriagarderef}{\euriagarde}
+  \newlength{\largeureuria}
+  \settowidth{\largeureuria}{\euriagarde}
+  \newcommand{\euriasigletemp}{\includegraphics[width=\largeureuria]{pagedegarde/UBOligne.\extgarde}}
+  \newcommand{\euriasigle}[1]{\resizebox{!}{#1}{\parbox[b]{\largeureuria}{\euriagarde\\[0.3ex]\euriasigletemp}}}
+  \newcommand{\euriasigleref}[1]{\euriasigle{#1}}
+  % 
+  % Commandes associees a l'IA
+  \newcommand{\ia}{Institut des Actuaires\xspace}
+  \newcommand{\iaref}{\ia}
+  \newcommand{\iasigle}[1]{\affichesigle{IA}{#1}} 
+  \newcommand{\iasigleref}[1]{\iasigle{#1}}
+  % 
+  % Commandes associees à l'ISUP
+  \newcommand{\ISUP}{ISUP\xspace}
+  \newcommand{\ISUPref}{\ISUP}
+  \newcommand{\isupsigle}[1]{\affichesigle{ISUP}{#1}} 
+  \newcommand{\isupsigleref}[1]{\isupsigle{#1}}
+  %
+  % Commandes associees a Telecom Bretagne
+  \newcommand{\telbsigle}[1]{\affichesigle{TelecomB}{#1}} 
+  \newcommand{\telbsigleref}[1]{\telbsigle{#1}}
+  \newcommand{\telecombsigleref}[1]{}            % Pas d'affichage de Telecom Bretagne par défaut 
+  % 
+  % Commandes associees a l'UBO
+  \newcommand{\ubosigle}[1]{\affichesigle{UBOverti}{#1}}   
+  \newcommand{\ubosigleref}[1]{\ubosigle{#1}}
+  %
+  % Traitement de la confidentialite par defaut
+  \newcommand{\confidentialite}{non.}
+  \newcommand{\expiration}{}
+  \newcommand{\mentionconfi}{\textcolor{blue}{\textit{Les signataires s'engagent \`{a} 
+    respecter la confidentialit\'{e} indiqu\'{e}e.}}}
+  \newcommand{\texteexpiration}{\mdseries(apr\`{e}s expiration du d\'{e}lai 
+    de confidentialit\'{e})}
+  %
+  % Gestion d'hyperref par defaut : non charge.
+  \newcommand{\hyperrefgarde}{}                  % Pas de definition speciale hyperref
+  \newcommand{\hyperappel}{}                     % Pas d'appel d'hyperref  
+  %
+  % Traitement de la presentation par defaut
+  \newcommand{\paramgarde}[1]{#1}                % Affichage simple des parametres       
+  \newcommand{\fonctiongarde}[1]{}               % On affiche pas de fonctions de code (sauf avec draft)
+  \newcommand{\prenomnom}[2]{#1 \uppercase{#2}}  % Affichage d'un Prenom NOM
+  \newcommand{\piedgarde}{\blocgarde{}}          % Pied de page vide
+  \newcommand{\fingarde}{\thispagestyle{empty}\cleardoublepage} % Une page blanche apres la page
+  %
+  % Quelques longueurs 
+  \newlength{\hauteuriagarde}                    % Hauteur du sigle de l'IA 
+  \setlength{\hauteuriagarde}{2.75cm}                               
+  \newlength{\hauteurfilieregarde}               % Hauteur du sigle de la filiere
+  }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Options pour chaque filiere
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Gestion des memoires EURIA %%%
+\DeclareOption{euria}{
+  % On indique que la filiere est l'EURIA
+  \renewcommand{\filiere}{\EURIA}  
+  \renewcommand{\lafiliere}{l'\EURIA}
+  \renewcommand{\filiereref}{\EURIAref}  
+  \renewcommand{\lafiliereref}{l'\EURIAref}
+  \renewcommand{\filieresigle}[1]{\euriasigle{#1}}  
+  \renewcommand{\filieresigleref}[1]{\euriasigleref{#1}}  
+  % Tableau de coordonnees en bas de page
+  \newlength{\largeurcoordeuria}       % Largeur de colonne pour presentation
+  \setlength{\largeurcoordeuria}{4cm}
+  \renewcommand{\piedgarde}{%  
+    \blocgarde{\centering\scriptsize
+    \begin{tabular}{*{3}{|p{\largeurcoordeuria}}}
+    \EURIAref      & 6, avenue le Gorgeu  & \makebox[1em][l]{T}+33 (0)2 98 01 66 55  \\
+    EURo Institut  & CS 93837             & \makebox[1em][l]{F}+33 (0)2 98 01 66 57  \\
+    d'Actuariat    & 29238 Brest Cedex 3  & \euriamailref \\
+	\end{tabular}}}%
+  % Hauteur du sigle de l'EURIA  
+  \setlength{\hauteurfilieregarde}{0.9cm}
+}
+%%% Gestion des memoires Telecom Bretage %%%
+\DeclareOption{telecomb}{
+  \ExecuteOptions{euria}
+  \setlength{\hauteurfilieregarde}{0.9cm}
+  \renewcommand{\telecombsigleref}[1]{\telbsigleref{#1}}%
+}
+
+%%% Gestion des memoires ISUP %%%
+\DeclareOption{isup}{
+  % On indique que la filiere est l'ISUP
+  \renewcommand{\filiere}{\ISUP}  
+  \renewcommand{\lafiliere}{l'\ISUP}
+  \renewcommand{\filiereref}{\ISUPref}  
+  \renewcommand{\lafiliereref}{l'\ISUPref}
+  \renewcommand{\filieresigle}[1]{\isupsigle{#1}}  
+  \renewcommand{\filieresigleref}[1]{\isupsigleref{#1}}  
+  \renewcommand{\piedgarde}{\blocgarde{}}
+  % Hauteur du sigle de l'ISUP
+  \setlength{\hauteurfilieregarde}{\hauteuriagarde}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Options d'affichage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Gestion d'un mode "draft" %%%
+\DeclareOption{draft}{
+  % Pour l'affichage "draft"
+  \renewcommand{\paramgarde}[1]{\textcolor{grisgarde}{< #1 >}}%
+  % Pour afficher les fonctions 
+  \renewcommand{\fonctiongarde}[1]{\paramgarde{\textbackslash #1\{\}}}  
+  }
+
+%%% Gestion d'un mode "versoseul" permettant d'ecrire directement sur la page verso %%%
+\DeclareOption{versoseul}{
+  \renewcommand{\fingarde}{}
+  }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Options de confidentialite
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Gestion de la confidentialite pour un an %%%
+\DeclareOption{confiun}{
+  \renewcommand{\confidentialite}{oui, un an. \mentionconfi}
+  \renewcommand{\expiration}{\texteexpiration}  
+  }
+
+%%% Gestion de la confidentialite pour deux ans %%%
+\DeclareOption{confideux}{
+  \renewcommand{\confidentialite}{oui, deux ans. \mentionconfi}
+  \renewcommand{\expiration}{\texteexpiration}  
+  }
+
+%%% Gestion de la confidentialite pour trois ans %%%
+\DeclareOption{confitrois}{
+  \renewcommand{\confidentialite}{oui, trois ans. \mentionconfi}
+  \renewcommand{\expiration}{\texteexpiration}  
+  }
+  
+%%% Gestion de la confidentialite pour quatre ans %%%
+\DeclareOption{confiquatre}{
+  \renewcommand{\confidentialite}{oui, quatre ans. \mentionconfi}
+  \renewcommand{\expiration}{\texteexpiration}  
+  }
+  
+%%% Gestion de la confidentialite pour cinq ans %%%
+\DeclareOption{conficinq}{
+  \renewcommand{\confidentialite}{oui, cinq ans. \mentionconfi}
+  \renewcommand{\expiration}{\texteexpiration}  
+  }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Options pour les paquets
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Gestion d'hyperref pour les differents logos
+\DeclareOption{hyperref}{
+  % Commandes associees a l'EURIA
+  \renewcommand{\EURIAref}{\href{http://euria.univ-brest.fr/}{\EURIA}\xspace}
+  \renewcommand{\Euriaref}{\href{http://euria.univ-brest.fr/}{\Euria}\xspace}
+  \renewcommand{\euriaref}{\href{http://euria.univ-brest.fr/}{\euria}\xspace}
+  \renewcommand{\euriamailref}{\href{mailto:euria@univ-brest.fr}{\euriamail}\xspace}
+  \renewcommand{\euriagarderef}{\href{http://euria.univ-brest.fr/}{\euriagarde}\xspace}
+  \renewcommand{\euriasigleref}[1]{\href{http://euria.univ-brest.fr/}{\euriasigle{#1}}}
+  %  
+  % Commandes associees a l'IA
+  \renewcommand{\iaref}{\href{http://www.institutdesactuaires.fr/}{\ia}\xspace}
+  \renewcommand{\iasigleref}[1]{\href{http://www.institutdesactuaires.com/}{\iasigle{#1}}}
+  %  
+  % Commandes associees à l'ISUP
+  \renewcommand{\ISUPref}{\href{http://www.isup.upmc.fr/}{\ISUP}}
+  \renewcommand{\isupsigleref}[1]{\href{http://www.isup.upmc.fr/}{\isupsigle{#1}}}
+  %
+  % Commandes associees a Telecom Bretagne  
+  \renewcommand{\telbsigleref}[1]{\href{http://www.telecom-bretagne.eu/}{\telbsigle{#1}}}
+  % 
+  % Commandes associees a l'UBO
+  \renewcommand{\ubosigleref}[1]{\href{http://www.univ-brest.fr/}{\ubosigle{#1}}}
+  %  
+  % Preference hyperref pour la page de garde
+  \renewcommand{\hyperrefgarde}{\hypersetup{colorlinks=true,urlcolor=black}}
+  \renewcommand{\hyperappel}{\RequirePackage[colorlinks=true,urlcolor=black]{hyperref}}  
+  }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Execution des options    
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\ExecuteOptions{defaut}
+\ProcessOptions \relax
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Chargement des paquets  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{geometry}              % Format de page
+\RequirePackage{ifpdf}                 % Test pour les images
+\RequirePackage[dvipsnames]{xcolor}    % De la couleur
+\RequirePackage{graphicx}              % Gestion des images
+\RequirePackage{xspace}                % Espacement
+\hyperappel                            % hyperref, si besoin
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Declaration de fonctions  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Un niveau de gris pour le mode draft %%%
+\definecolor{grisgarde}{gray}{0.5}
+
+%%% Parametres par defaut (avec alors le nom de la macro) %%%
+\newcommand{\DateGarde}{\fonctiongarde{dategarde}}
+\newcommand{\TitreGarde}{\fonctiongarde{titregarde}}
+\newcommand{\AuteurGarde}{\fonctiongarde{auteurgarde\{\}}}
+\newcommand{\JuryIAGarde}{\fonctiongarde{juryiagarde\{\}}}
+\newcommand{\JuryAGarde}{\fonctiongarde{juryagarde\{\}}}
+\newcommand{\JuryBGarde}{\fonctiongarde{jurybgarde\{\}}}
+\newcommand{\JuryCGarde}{\fonctiongarde{jurycgarde\{\}}}
+\newcommand{\JuryDGarde}{\fonctiongarde{jurydgarde\{\}}}
+\newcommand{\JuryEGarde}{\fonctiongarde{juryegarde\{\}}}
+\newcommand{\JuryFGarde}{\fonctiongarde{juryfgarde\{\}}}
+\newcommand{\DirecteurGarde}{\fonctiongarde{directeurgarde\{\}}}
+\newcommand{\InviteGarde}{\fonctiongarde{invitegarde\{\}}}
+\newcommand{\EntrepriseGarde}{\fonctiongarde{entreprisegarde}}
+
+%%% Parametres remplissant la page de garde %%%
+\newcommand{\dategarde}[1]{\renewcommand{\DateGarde}{\paramgarde{#1}}}
+\newcommand{\titregarde}[1]{\renewcommand{\TitreGarde}{\paramgarde{#1}}}
+\newcommand{\auteurgarde}[2]{\renewcommand{\AuteurGarde}{\paramgarde{\prenomnom{#1}{#2}}}}
+\newcommand{\juryiagarde}[2]{\renewcommand{\JuryIAGarde}{\paramgarde{\prenomnom{#1}{#2}}}}
+\newcommand{\juryagarde}[2]{\renewcommand{\JuryAGarde}{\paramgarde{\prenomnom{#1}{#2}}}}
+\newcommand{\jurybgarde}[2]{\renewcommand{\JuryBGarde}{\paramgarde{\prenomnom{#1}{#2}}}}
+\newcommand{\jurycgarde}[2]{\renewcommand{\JuryCGarde}{\paramgarde{\prenomnom{#1}{#2}}}}
+\newcommand{\jurydgarde}[2]{\renewcommand{\JuryDGarde}{\paramgarde{\prenomnom{#1}{#2}}}}
+\newcommand{\juryegarde}[2]{\renewcommand{\JuryEGarde}{\paramgarde{\prenomnom{#1}{#2}}}}
+\newcommand{\juryfgarde}[2]{\renewcommand{\JuryFGarde}{\paramgarde{\prenomnom{#1}{#2}}}}
+\newcommand{\directeurgarde}[2]{\renewcommand{\DirecteurGarde}{\paramgarde{\prenomnom{#1}{#2}}}}
+\newcommand{\invitegarde}[2]{\renewcommand{\InviteGarde}{\paramgarde{\prenomnom{#1}{#2}}}}
+\newcommand{\entreprisegarde}[1]{\renewcommand{\EntrepriseGarde}{\paramgarde{#1}}}
+
+%%% Definitions de quelques fonctions d'affichage "elaborees" %%%
+% Blocs de texte
+\newcommand{\blocgarde}[1]{\begin{minipage}[c][][c]{\textwidth}#1\end{minipage}}
+\newcommand{\sousblocgarde}[1]{\begin{minipage}[t][][t]{0.45\textwidth}#1\end{minipage}}
+
+% Alignement propre pour le nom de l'auteur et le titre 
+\newenvironment{listegarde}[1] 
+  {\begin{list}{}%
+    {\renewcommand\makelabel[1]{\textsf{##1 :}\hfil}%
+     \settowidth\labelwidth{\makelabel{#1}}%
+     \setlength\leftmargin{\labelwidth}
+     \addtolength\leftmargin{\labelsep}}}
+    {\end{list}}
+
+%%% Gestion des sigles et de leur format %%%
+\ifpdf % Selection des formats selon la chaine de compilation
+  \newcommand{\extgarde}{png}
+\else
+  \newcommand{\extgarde}{eps}
+\fi
+
+% fonction d'affichage des sigles (toujours fixes en hauteur)
+\newcommand{\affichesigle}[2]{\includegraphics[height=#2]{pagedegarde/#1.\extgarde}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% Dimensions de la page
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newlength{\hauteurgarde}    
+\setlength{\hauteurgarde}{26.7cm} % Hauteur de la page
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% Le code de la page de garde
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\pagedegarde}{
+\begin{titlepage}
+
+%%% Dimensionnement de la page (par geometry) %%%
+\newgeometry{textwidth=18cm, hoffset=0.9cm, left=0cm, voffset=1.5cm, top=0cm,bottom=1.5cm}
+\setlength{\hsize}{20cm}      % Evite les "Overfull box" abusifs
+\setlength{\fboxsep}{0pt}     % Pas d'espace dans les fbox
+
+%%% Style et fonte de la page %%%
+\hyperrefgarde
+\pagestyle{empty}
+\large\sffamily
+
+%%% La page
+% Utilisation d'une minipage pour gerer la hauteur de page
+\begin{minipage}[c][\hauteurgarde][c]{\textwidth}
+%%% Bloc des images en en-tete %%%
+\blocgarde{%
+\iasigleref{\hauteuriagarde}
+\hfill
+\filieresigleref{\hauteurfilieregarde}
+\telecombsigleref{\hauteuriagarde}
+}
+\vfill\vfill
+
+%%% Bloc du titre %%%
+\blocgarde{\centering\bfseries\Large
+M\'{e}moire pr\'{e}sent\'{e} le \DateGarde \\[0.4ex]
+pour l'obtention du dipl\^{o}me \\[0.4ex]
+de Statisticien Mention Actuariat \\[0.4ex]
+et l'admission \`{a} l'\iaref}
+\vfill\vfill
+
+%%% Bloc de l'auteur et du titre du memoire %%%
+\blocgarde{\sloppy
+\begin{listegarde}{Titre}
+\item[Par] \AuteurGarde 
+\item[Titre] \TitreGarde
+\end{listegarde}}
+\vfill\vfill 
+
+%%% Bloc de la confidentialite %%%
+\blocgarde{
+Confidentialit\'{e} : \paramgarde{\confidentialite}
+}
+\vfill
+
+%%% Bloc du Jury IA et de l'entreprise %%%
+\blocgarde{\normalsize
+\sousblocgarde{
+\textit{\textbf{Membre pr\'{e}sent du jury de l'Institut\\
+des Actuaires}}\\
+\JuryIAGarde \\
+Signature : 
+}
+\hfill
+\sousblocgarde{
+\textit{\textbf{Entreprise}}\\
+\EntrepriseGarde \\
+Signature :
+}}
+\vfill
+
+%%% Bloc du Jury de la filiere et de l'invite %%%
+\blocgarde{\normalsize%
+\sousblocgarde{%
+\textbf{\textit{Membres pr\'{e}sents du jury de \lafiliereref}}\\
+\JuryAGarde\\
+\JuryBGarde\\
+\JuryCGarde\\
+\JuryDGarde\\
+\JuryEGarde\\
+\JuryFGarde\\
+}%
+\hfill%
+\sousblocgarde{
+\textbf{\textit{Directeur de m\'{e}moire en entreprise}}\\
+\DirecteurGarde\\
+Signature :\\ \\
+\textit{\textbf{Invit\'{e}}}\\%
+\InviteGarde\\%
+Signature :%
+}}%
+\vfill\vfill
+
+%%% Bloc de texte sur l'autorisation de diffusion %%%
+\blocgarde{\centering\itshape\bfseries
+Autorisation de publication et de mise en ligne sur un site de diffusion\\
+de documents actuariels\\
+\expiration
+}
+\vfill
+
+%%% Deux sous-blocs de signatures pour diffusion %%%
+\blocgarde{\normalsize%
+\sousblocgarde{\centering%
+Signature du responsable entreprise\\%
+\fbox{\parbox[b][1cm]{0.995\textwidth}{\hfill}}%
+}%
+\hfill% 
+\sousblocgarde{\centering%
+Signature du candidat\\%
+\fbox{\parbox[b][1cm]{0.995\textwidth}{\hfill}}%
+}}%
+\vfill
+
+%%% Bloc de la bibliotheque et du secretariat %%%
+\blocgarde{\normalsize
+\sousblocgarde{
+Biblioth\`{e}que :
+}
+\hfill % centrage des deux sous-bloc de notre blocgarde
+\sousblocgarde{
+Secr\'{e}tariat :
+}}
+\vfill\vfill
+
+\piedgarde
+\end{minipage}
+\end{titlepage}
+\restoregeometry
+
+%%% La page arrière de la page de garde selon les options %%%
+\fingarde
+}

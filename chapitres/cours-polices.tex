@@ -1,0 +1,44 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Chapitre Polices de caractère
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Les polices de caractères avec \XeLaTeXtitre}
+\index[con]{polices de caractères} \label{fontes} \label{xelatex}
+
+La méthode de gestion d'autres polices de caractères présentée page \pageref{carac} est limitée dans ces possibilités. Il en existe une autre, plus complexe mais \emph{très} efficace et qui passe par l'utilisation de variantes récentes de \TeX : \XeTeX\ (et \XeLaTeX) qui rend plus intuitive l'utilisation de polices de caractères en donnant accès direct à l'ensemble des fontes utilisées par Windows ou MacOS.
+
+\section{Modifications associées à \XeLaTeXtitre}
+
+Pour utiliser \XeLaTeX, il faut vérifier que le préambule est bien cohérent avec la version présentée en page \pageref{xelualatex}. La déclaration d'un jeu particulier de polices de caractères se fait ensuite par la commande suivante.
+
+\begin{codesimple}{Création d'une famille de polices de caractères}{creationpolice}
+\newfontfamily\§oc£¤mapolice §fc[
+ BoldFont = §oc policegrasse.ttf §fc,
+ ItalicFont = §oc policeitalique.ttf §fc,
+ BoldItalicFont = §oc policeitaliquegrasse.ttf §fc
+ ]{§oc policenormale.ttf §fc}
+\end{codesimple}
+
+La commande est donnée dans une version détaillée permettant de bénéficier de certaines fonctionnalités courantes. \XeLaTeX\ peut attendre d'une police de caractères qu'elle présente quatre versions : une normale, une variante grasse, une variante italique et une variante italique grasse. Certaines polices de caractères présentent naturellement ces quatre variantes, d'autres pas. Aussi la commande peut donc être parfois moins détaillée. 
+
+Les noms indiqués en italique correspondent aux noms des fichiers de polices de caractères nous intéressant et présents dans le répertoire usuel du système d'exploitation\footnote{Il s'agit de \vue{C:\ba Windows\ba Fonts} pour Windows.}: ce peut être des fichiers \dextension{ttf} ou \dextension{otf}.
+
+Pour utiliser ces polices dans le document, il suffit d'utiliser la nouvelle bascule mise à disposition par la commande, ici \macro{mapolice}. 
+
+Dans le cas où il faut modifier les polices de caractères utilisées par défaut par \LaTeX, il est fait usage d'une autre  commande à la syntaxe similaire.
+
+\begin{codesimple}{Mise en valeur par défaut d'une famille de polices de caractères}{policedefaut}
+\setmainfont[Path=fontes/,
+ BoldFont = §oc policegrasse.ttf §fc,
+ ItalicFont = §oc policeitalique.ttf §fc,
+ BoldItalicFont = §oc policeitaliquegrasse.ttf §fc
+ ]{§oc policenormale.ttf §fc}
+\end{codesimple}
+
+La commande est ici présentée avec l'option \macron{Path} qui permet d'indiquer un chemin où trouver les fichiers des polices de caractères. Cette commande gère la fonte principale et ses variantes. Si une variante sans serif existe, elle peut être également déclarée avec \macro{setsansfont} avec les mêmes options.
+
+\section{Pour aller plus loin}
+
+Il est ici recommandé de consulter la documentation de \paquet{fontspec} pour mieux appréhender les possibilités de ce paquet. Un point doit être cependant conserver à l'esprit : la manipulation de polices de caractère devrait être limitée pour des documents longs car ceci peut involontairement conduire à des documents relativement peu lisibles et souvent contraires à certains usages typographiques.
+
+Plus largement, le logiciel \programme{FontForge}\footnote{\liensimple{http://fontforge.github.io/en-US/}.}, libre, permet d'éditer des polices de caractères, ne serait-ce par exemple que pour créer de façon quasi-automatique des petites capitales sur des polices de caractères existantes.

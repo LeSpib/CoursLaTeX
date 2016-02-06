@@ -1,0 +1,641 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Chapitre Mathématiques
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Les mathématiques} \index[con]{mathématiques} \label{mathématique}
+
+\LaTeX\ est très réputé pour sa mise en page des mathématiques. Si le rédacteur doit bien faire attention au sens mathématique de ce qu'il écrit, le nombre de grands principes à suivre pour présenter des mathématiques reste assez limité. 
+
+\section{Les modes mathématiques}
+
+\subsection{Principes}
+Les mathématiques font appel à des règles de composition différentes de celles du texte classique : par exemple, les espacements horizontaux et verticaux sont gérés différemment, les variables sont composées en italique. \LaTeX\ applique cet ensemble de règles lors qu'il est placé en \terme{mode mathématique}, celui-ci se décomposant en deux variantes : 
+\begin{itemize}
+\item le mode en ligne permet d'écrire des mathématiques directement dans des paragraphes de texte. Ce mode est obtenu en plaçant un symbole \macron{\$} de chaque côté du texte mathématique. Ce mode sert le plus souvent à évoquer les variables ou courts extraits de formules dans le texte.
+\item le mode séparé permet d'écrire une formule isolée du reste du texte : elle se retrouve centrée et séparée verticalement du texte. Pour obtenir ce mode, il faut introduire la formule par \macro{[} et la conclure par \macro{]}. L'environnement \macron{equation} permet également de l'obtenir et ajoute par défaut une numérotation de l'équation.
+\end{itemize}
+
+\begin{codedouble}{Modes mathématiques}{modemath}
+Soit deux réels $x$ et $y$ tels que $x>2$ et $y>2$ alors \[ x+y>4 \]
+\begin{equation}
+x+y < x.y 
+\end{equation}
+\end{codedouble}
+
+\subsection{Différents environnements pour équation}
+
+Il existe plusieurs environnement similaires à \macron{equation} pour présenter différentes équations.
+
+\begin{table}[!ht]
+\begin{tablecouleur}
+\begin{tabular}{cc}
+\rowcolor{bleu20}
+\color{white}\bf Style 				& \color{white}\bf 	Environnement		\\ 
+Une équation sans retour à la ligne	& \macron{equation}						\\				
+Plusieurs équations à la suite		& \macron{gather}						\\ 
+Une équation sur plusieurs lignes	& \macron{multline}						\\ 
+Plusieurs équations alignées		& \macron{align}						\\ 
+\end{tabular}
+\end{tablecouleur}
+\caption{Différents styles de présentation d'équation}
+\end{table}
+
+Dans ces différents environnements, pour passer d'une ligne à une autre, il faut utiliser la commande \macro{\ba}. Dans le cas particulier de \macron{align}, l'alignement vertical des équations se fait par rapport à des marqueurs indiqués par le caractère  \macron{\&}. Dans l'exemple ci-dessous, l'alignement se fera visuellement sur le signe $=$.
+
+\begin{codedouble}{Equations et alignements}{equationsalignees}
+Ceci conduit aux équations suivantes :
+\begin{gather} 
+f(x) = (1-x)(1+z)                   \\   
+g(x) = 14-2x-z+xz                   \\
+h(x) = f(x)+g(x)      \label{eq1}
+\end{gather}
+Ce qui permet de déduire une expression simple de $h$ en repartant de \ref{eq1} :
+\begin{align} 
+h(x) &= (1-x)(1+z)+14-2x-z+xz    \nonumber    \\   
+h(x) &= 1-x+z-xz+14-2x-z+xz      \nonumber    \\
+h(x) &= 15 - 3x
+\end{align}
+\end{codedouble}
+
+L'espacement du code est une fois encore libre, ce qui permet de mieux faire ressortir la structure souhaitée, comme l'illustre cet exemple.
+
+\subsection{Numérotation des équations}
+
+Ces différents environnements mathématiques disposent tous d'une version étoilée (comme par exemple \macron{gather*}) qui supprime la numérotation des équations. Il est également possible de supprimer la numérotation d'une équation en plaçant les commandes \macro{notag} ou \macro{nonumber} sur la ligne ou les lignes où la numérotation doit être retranchée, comme cela est fait dans l'exemple précédent. 
+
+Les numéros d'équation peuvent être réutilisés avec \macro{label}, \macro{ref} et \macro{pageref}, comme vu en page~\pageref{référence}. La commande \macro{label} doit être placée sur la ligne de l'équation numérotée souhaitée.
+
+
+\section{Les symboles mathématiques}
+
+Les symboles mathématiques s'obtiennent le plus souvent par des commandes qui ne fonctionnent qu'en mode mathématique. Sous réserve de charger les paquets \paquet{mathtools} et \paquet{amssymb}, \LaTeX\ dispose d'un très grand nombre de ces commandes pour lequel il existe un document de référence exhaustif\cite{paki}\footnote{Une autre source, plus originale, existe : \href{http://detexify.kirelabs.org/classify.html}{detexify$^2$}. Dessiner un symbole permet de trouver son code \LaTeX.}. Ce document a permis par exemple de trouver les symboles \macro{llbracket} et \macro{rrbracket} obtenus avec le paquet \paquet{stmaryrd} et utilisés dans la sous-section \ref{parentheses}. Les listes présentées ici n'ont vocation qu'à donner une bonne base.
+
+\subsection{Opérateurs}
+
+\LaTeX\ rédige les mathématiques en italique. Traditionnellement, de nombreux opérateurs sont cependant rédigés en caractères romains; aussi, quelques commandes donnent accès à cette présentation. En complément, certaines de ces commandes autorisent des mises en forme spécifiques (voir page~\pageref{exposants}).
+\begin{table}[H]
+\begin{tablecouleur}
+\begin{tabular}{m{1.25cm}<{\centering}m{2.75cm}<{\centering}}
+\rowcolor{bleu20}
+\color{white}\bf Symbole	& \color{white}\bf Commande			\\ 
+$\cos$						& \macro{cos}						\\
+$\arccos$					& \macro{arccos}					\\
+$\cosh$						& \macro{cosh}						\\
+$\exp$ ou $e$ 				& \macro{exp} ou \macron{e}	        \\ 
+$\ln$						& \macro{ln}						\\ 
+$\log$						& \macro{log}				        \\ 
+$\lg$						& \macro{lg}				        \\ 
+$\Pr$ 						& \macro{Pr}				        \\ 
+\end{tabular}
+\end{tablecouleur}%
+%\hspace{0.5ex}
+\begin{tablecouleur}
+\begin{tabular}{m{1.25cm}<{\centering}m{2.75cm}<{\centering}}
+\rowcolor{bleu20}
+\color{white}\bf Symbole	& \color{white}\bf Commande		    \\
+$\sin$						& \macro{sin}						\\
+$\arcsin$					& \macro{arcsin}					\\
+$\sinh$						& \macro{sinh}						\\
+$\min$						& \macro{min}						\\
+$\max$						& \macro{max}						\\
+$\inf$						& \macro{inf}						\\
+$\sup$						& \macro{sup}						\\
+$\det$						& \macro{det}						\\
+\end{tabular}
+\end{tablecouleur}%
+%\hspace{0.5ex}
+\begin{tablecouleur}
+\begin{tabular}{m{1.25cm}<{\centering}m{2.75cm}<{\centering}}
+\rowcolor{bleu20}
+\color{white}\bf Symbole	& \color{white}\bf Commande			\\	
+$\tan$						& \macro{tan}						\\
+$\arctan$					& \macro{arctan}					\\
+$\tanh$						& \macro{tanh}						\\
+$\cot$						& \macro{cot}						\\
+$\coth$						& \macro{coth}						\\
+$\lim$						& \macro{lim}						\\
+$\liminf$					& \macro{liminf}					\\
+$\limsup$					& \macro{limsup}					\\
+
+\end{tabular}
+\end{tablecouleur}%
+\caption{Opérateurs} \label{mathoperateurs}
+\end{table}
+
+
+
+\begin{table}[H]
+\begin{tablecouleur}
+\begin{tabular}{m{1.25cm}<{\centering}m{2.75cm}<{\centering}}
+\rowcolor{bleu20}
+\color{white}\bf Symbole	& \color{white}\bf Commande			\\ 
+$\leq$						& \macro{leq}				        \\ 
+$\leqslant$					& \macro{leqslant}					\\
+$\ll$						& \macro{ll}						\\
+$\lll$						& \macro{lll}						\\
+$\lesssim$					& \macro{lesssim}					\\
+\end{tabular}
+\end{tablecouleur}%
+%\hspace{0.5ex}
+\begin{tablecouleur}
+\begin{tabular}{m{1.25cm}<{\centering}m{2.75cm}<{\centering}}
+\rowcolor{bleu20}
+\color{white}\bf Symbole	& \color{white}\bf Commande		    \\
+$\geq$						& \macro{geq}				        \\ 
+$\geqslant$					& \macro{geqslant}					\\
+$\gg$						& \macro{gg}						\\
+$\ggg$						& \macro{ggg}						\\
+$\gtrsim$					& \macro{gtrsim}					\\
+\end{tabular}
+\end{tablecouleur}%
+%\hspace{0.5ex}
+\begin{tablecouleur}
+\begin{tabular}{m{1.25cm}<{\centering}m{2.75cm}<{\centering}}
+\rowcolor{bleu20}
+\color{white}\bf Symbole	& \color{white}\bf Commande			\\	
+$\neq$						& \macro{neq}						\\
+$\sim$						& \macro{sim}						\\
+$\simeq$					& \macro{simeq}						\\
+$\approx$					& \macro{approx}					\\
+$\equiv$					& \macro{equiv}						\\
+\end{tabular}
+\end{tablecouleur}%
+\caption{\'{E}galités et inégalités} \label{mathinegegs}
+\end{table}
+
+\begin{table}[H]
+\begin{tablecouleur}
+\begin{tabular}{m{1.25cm}<{\centering}m{2.75cm}<{\centering}}
+\rowcolor{bleu20}
+\color{white}\bf Symbole	& \color{white}\bf Commande			\\ 
+$\forall$					& \macro{forall}					\\
+$\exists$					& \macro{exists}					\\
+$\nexists$					& \macro{nexists}					\\
+$\in$						& \macro{in}						\\
+$\notin$					& \macro{notin}						\\
+$\neg$						& \macro{neg}						\\
+$\nabla$					& \macro{nabla}						\\
+\end{tabular}
+\end{tablecouleur}%
+%\hspace{0.5ex}
+\begin{tablecouleur}
+\begin{tabular}{m{1.25cm}<{\centering}m{2.75cm}<{\centering}}
+\rowcolor{bleu20}
+\color{white}\bf Symbole	& \color{white}\bf Commande		    \\
+$\aleph$					& \macro{aleph}						\\
+$\infty$					& \macro{infty}						\\
+$\emptyset$					& \macro{emptyset}					\\
+$\varnothing$				& \macro{varnothing}				\\
+$\setminus$					& \macro{setminus}					\\
+$\circ$						& \macro{circ}						\\
+$\partial$					& \macro{partial}					\\
+\end{tabular}
+\end{tablecouleur}%
+%\hspace{0.5ex}
+\begin{tablecouleur}
+\begin{tabular}{m{1.25cm}<{\centering}m{2.75cm}<{\centering}}
+\rowcolor{bleu20}
+\color{white}\bf Symbole	& \color{white}\bf Commande			\\	
+$\cup$						& \macro{cup}						\\
+$\cap$						& \macro{cap}						\\
+$\subset$					& \macro{subset}					\\
+$\supset$					& \macro{supset}					\\
+$\vee$						& \macro{vee}						\\
+$\wedge$					& \macro{wedge}						\\
+$\times$					& \macro{times}						\\
+\end{tabular}
+\end{tablecouleur}%
+\caption{Notations ensemblistes et fonctionnelles} \label{mathensembles}
+\end{table}
+
+\subsection{Lettres}
+
+Les lettres grecques s'obtiennent par des commandes portant leur nom : \macro{alpha} donnera ainsi $\alpha$. Les majuscules\footnote{Tout du moins celles qui sont différentes de nos lettres majuscules classiques. En effet, l'alpha majuscule s'écrit par exemple à l'identique de notre A majuscule.} s'obtiennent en mettant une majuscule en première lettre : \macro{Omega} donnera donc $\Omega$. Par ailleurs, quelques variantes graphiques existent pour certains caractères. La table suivante présente l'ensemble de ces lettres.
+
+\begin{table}[H]
+\begin{tablecouleur}
+\begin{tabular}{m{1.25cm}<{\centering}m{2.75cm}<{\centering}}
+\rowcolor{bleu20}
+\color{white}\bf Symbole	& \color{white}\bf Commande			\\ 
+$\alpha$					& \macro{alpha}						\\
+$\beta$						& \macro{beta}						\\
+$\gamma$					& \macro{gamma}						\\
+$\delta$					& \macro{delta}						\\
+$\epsilon$					& \macro{epsilon}					\\
+$\varepsilon$				& \macro{varepsilon}				\\
+$\zeta$						& \macro{zeta}						\\
+$\eta$						& \macro{eta}						\\
+$\theta$					& \macro{theta}						\\
+$\vartheta$					& \macro{vartheta}					\\
+$\iota$						& \macro{iota}						\\
+$\kappa$					& \macro{kappa}						\\
+$\varkappa$					& \macro{varkappa}					\\
+$\lambda$					& \macro{lambda}					\\
+\end{tabular}
+\end{tablecouleur}%
+%\hspace{0.5ex}
+\begin{tablecouleur}
+\begin{tabular}{m{1.25cm}<{\centering}m{2.75cm}<{\centering}}
+\rowcolor{bleu20}
+\color{white}\bf Symbole	& \color{white}\bf Commande		    \\
+$\mu$						& \macro{mu}						\\
+$\nu$						& \macro{nu}						\\
+$\xi$						& \macro{xi}						\\
+$\pi$						& \macro{pi}						\\
+$\varpi$					& \macro{varpi}						\\
+$\rho$						& \macro{rho}						\\
+$\varrho$					& \macro{varrho}					\\
+$\sigma$					& \macro{sigma}						\\
+$\varsigma$					& \macro{varsigma}					\\
+$\tau$						& \macro{tau}						\\
+$\upsilon$					& \macro{upsilon}					\\
+$\phi$						& \macro{phi}						\\
+$\varphi$					& \macro{varphi}					\\
+$\chi$						& \macro{chi}						\\
+\end{tabular}
+\end{tablecouleur}%
+%\hspace{0.5ex}
+\begin{tablecouleur}
+\begin{tabular}{m{1.25cm}<{\centering}m{2.75cm}<{\centering}}
+\rowcolor{bleu20}
+\color{white}\bf Symbole	& \color{white}\bf Commande			\\	
+$\psi$						& \macro{psi}						\\
+$\omega$					& \macro{omega}						\\
+$\digamma$					& \macro{digamma}					\\
+$\Gamma$					& \macro{Gamma}						\\
+$\Delta$					& \macro{Delta}						\\
+$\Theta$					& \macro{Theta}						\\
+$\Lambda$					& \macro{Lambda}					\\
+$\Xi$						& \macro{Xi}						\\
+$\Pi$						& \macro{Pi}						\\
+$\Sigma$					& \macro{Sigma}						\\
+$\Upsilon$					& \macro{Upsilon}					\\
+$\Phi$						& \macro{Phi}						\\
+$\Psi$						& \macro{Psi}						\\
+$\Omega$					& \macro{Omega}						\\
+\end{tabular}
+\end{tablecouleur}%
+\caption{Lettres grecques} \label{mathgrecques}
+\end{table}
+
+\LaTeX\ propose également quelques polices de caractères dédiées spécifiquement aux mathématiques :
+\begin{itemize}
+\item \macro{mathbb\{{\it majuscule}\}}. Ainsi, \macro{mathbb\{N\}} donne $\mathbb{N}$.
+\item \macro{mathcal\{{\it majuscule}\}}. Ici, \macro{mathbb\{L\}} donne $\mathcal{L}$.
+\item \macro{mathfrak\{{\it mot}\}} compose le mot en style gothique, tel \macro{mathfrak\{Maths\}} donnant $\mathfrak{Maths}$.
+\end{itemize}
+
+\subsection{Flèches}
+
+Les symboles de flèches sont très nombreux mais peuvent se retrouver assez facilement sur la base des règles suivantes :
+\begin{itemize}
+\item la grande majorité des noms de ces symboles contient le terme \macron{arrow}. Des exceptions courantes sont citées dans le tableau ;
+\item le sens de la flèche est donné par le terme \macron{left} ou \macron{right}. Le terme \macron{leftright} donne une flèche à double sens ;
+\item le préfixe \macron{long} donne une flèche plus longue ; 
+\item une majuscule en début de nom donne un trait doublé ;
+\item les noms pour les flèches parallèles se finissent par \macron{s}.
+\end{itemize}
+
+\begin{table}[H]
+\begin{tablecouleur}
+\begin{tabular}{m{1.25cm}<{\centering}m{2.75cm}<{\centering}}
+\rowcolor{bleu20}
+\color{white}\bf Symbole	& \color{white}\bf Commande			\\ 
+$\to$						& \macro{to}						\\
+$\mapsto$					& \macro{mapsto}					\\
+$\longmapsto$				& \macro{longmapsto}				\\
+$\iff$						& \macro{iff}						\\
+\end{tabular}
+\end{tablecouleur}%
+%
+\begin{tablecouleur}
+\begin{tabular}{m{1.25cm}<{\centering}m{2.75cm}<{\centering}}
+\rowcolor{bleu20}
+\color{white}\bf Symbole	& \color{white}\bf Commande		    \\
+$\rightarrow$				& \macro{rightarrow}				\\
+$\longrightarrow$			& \macro{longrightarrow}			\\
+$\Rightarrow$				& \macro{Rightarrow}				\\
+$\leftrightarrow$			& \macro{leftrightarrow}			\\
+\end{tabular}
+\end{tablecouleur}%
+%
+\begin{tablecouleur}
+\begin{tabular}{m{1.25cm}<{\centering}m{2.75cm}<{\centering}}
+\rowcolor{bleu20}
+\color{white}\bf Symbole	& \color{white}\bf Commande			\\	
+$\leftrightarrows$			& \macro{leftrightarrows}			\\
+$\dashrightarrow$			& \macro{dashrightarrow}			\\
+$\circlearrowright$			& \macro{circlearrowright}			\\
+$\curvearrowright$			& \macro{curvearrowright}			\\
+\end{tabular}
+\end{tablecouleur}%
+\caption{Flèches} \label{mathfleches}
+\end{table}
+
+\subsection{Accents}
+
+Quelques commandes permettent de compléter les symboles usuels avec des notations mathématiques courantes :
+
+\begin{table}[H]
+\begin{tablecouleur}
+\renewcommand{\arraystretch}{1.5}%
+\begin{tabular}{m{1.25cm}<{\centering}m{2.75cm}<{\centering}}
+\rowcolor{bleu20}
+\color{white}\bf Symbole	& \color{white}\bf Commande			\\ 
+$\dot{a}$					& \macro{dot\{a\}}					\\
+$\ddot{a}$					& \macro{ddot\{a\}}					\\
+$\dddot{a}$					& \macro{dddot\{a\}}				\\
+\end{tabular}
+\end{tablecouleur}%
+%
+\begin{tablecouleur}
+\renewcommand{\arraystretch}{1.5}%
+\begin{tabular}{m{1.25cm}<{\centering}m{2.75cm}<{\centering}}
+\rowcolor{bleu20}
+\color{white}\bf Symbole	& \color{white}\bf Commande		    \\
+$\vec{a}$					& \macro{vec\{a\}}					\\
+$\bar{a}$					& \macro{bar\{a\}}					\\
+$\mathring{a}$				& \macro{mathring\{a\}}				\\
+\end{tabular}
+\end{tablecouleur}%
+%
+\begin{tablecouleur}
+\renewcommand{\arraystretch}{1.5}%
+\begin{tabular}{m{1.25cm}<{\centering}m{2.75cm}<{\centering}}
+\rowcolor{bleu20}
+\color{white}\bf Symbole	& \color{white}\bf Commande			\\
+$\overline{abcd}$			& \macro{overline\{abcd\}}			\\
+$\underline{abcd}$			& \macro{underline\{abcd\}}			\\	
+$\widehat{abcd}$			& \macro{widehat\{abcd\}}			\\
+\end{tabular}
+\end{tablecouleur}%
+\caption{Flèches} \label{mathaccents}
+\end{table}
+
+La commande \macro{vec} peut être remplacée par \macro{overrightarrow} pour des termes longs. Cette commande connait d'ailleurs des variantes en remplaçant \macron{over} par \macron{under} ou \macron{right} par \macron{left}.
+
+\subsection{Notations graphiques}
+
+Quelques notations mathématiques se présentent sous forme géométrique. Elles se retrouvent souvent retenues pour d'autres usages, de la présentation le plus souvent. Comme vu précédemment, les commandes présentant le terme \macron{left} disposent du symétrique \macron{right}.
+
+\begin{table}[H]
+\begin{tablecouleur}
+\begin{tabular}{m{1.25cm}<{\centering}m{2.75cm}<{\centering}}
+\rowcolor{bleu20}
+\color{white}\bf Symbole	& \color{white}\bf Commande			\\
+$\bullet$					& \macro{bullet}				    \\ 
+$\circ$						& \macro{circ}					    \\ 
+$\cdot$						& \macro{cdot}					    \\ 
+$\bigcirc$					& \macro{bigcirc}					\\ 
+$\blacksquare$				& \macro{blacksquare}			    \\ 
+$\square$					& \macro{square}				    \\ 
+$\blacklozenge$				& \macro{blacklozenge}				\\ 
+$\lozenge$					& \macro{lozenge}					\\
+\end{tabular}
+\end{tablecouleur}%
+%
+\begin{tablecouleur}
+\begin{tabular}{m{1.25cm}<{\centering}m{2.75cm}<{\centering}}
+\rowcolor{bleu20}
+\color{white}\bf Symbole	& \color{white}\bf Commande		    \\
+$\blacktriangle$			& \macro{blacktriangle}				\\
+$\vartriangle$				& \macro{vartriangle}				\\
+$\blacktriangleleft$		& \macro{blacktriangleleft}			\\
+$\vartriangleleft$			& \macro{vartriangleleft}			\\
+$\blacktriangledown$		& \macro{blacktriangledown}			\\
+$\triangledown$				& \macro{triangledown}				\\
+$\bigstar$					& \macro{bigstar}					\\
+$\star$						& \macro{star}						\\
+\end{tabular}
+\end{tablecouleur}%
+%
+\begin{tablecouleur}
+\begin{tabular}{m{1.25cm}<{\centering}m{2.75cm}<{\centering}}
+\rowcolor{bleu20}
+\color{white}\bf Symbole	& \color{white}\bf Commande			\\
+$\triangle$					& \macro{triangle}					\\
+$\bigtriangleup$			& \macro{bigtriangleup}				\\
+$\bigtriangledown$			& \macro{bigtriangledown}			\\
+$\triangleleft$				& \macro{triangleleft}				\\
+$\heartsuit$				& \macro{heartsuit}					\\
+$\diamondsuit$				& \macro{diamondsuit}				\\
+$\clubsuit$					& \macro{clubsuit}					\\
+$\spadesuit$				& \macro{spadesuit}					\\
+\end{tabular}
+\end{tablecouleur}%
+\caption{Notations graphiques} \label{mathnotationsgraphiques}
+\end{table}
+
+
+
+
+
+\section{Les exposants et indices}
+\label{exposants}
+
+La mise en indice s'obtient par l'utilisation du caractère \og \macron{\_} \fg. Ainsi, \macron{2\_n} donnera $2_n$. Dès que l'indice contient plus d'un caractère, il faut l'encadrer avec des accolades pour définir l'indice comme un groupe. La mise en exposant se fait de manière identique avec le caractère \og \macron{\^{}} \fg. Et ces deux règles peuvent se combiner.
+
+Cette mise en indice et en exposant peut donner d'autres résultats lorsqu'elle est appliquée sur certaines commandes. Il en va ainsi sur les commandes comme \macro{lim}, de même que sur des symboles dits \og grands opérateurs \fg. 
+
+\begin{table}[H]
+\begin{tablecouleur}
+\begin{tabular}{m{1.25cm}<{\centering}m{2.75cm}<{\centering}}
+\rowcolor{bleu20}
+\color{white}\bf Symbole	& \color{white}\bf Commande			\\ 
+$\sum$						& \macro{sum}						\\
+$\prod$						& \macro{prod}						\\
+$\coprod$					& \macro{coprod}					\\
+$\oint$						& \macro{oint}						\\
+\end{tabular}
+\end{tablecouleur}%
+%
+\begin{tablecouleur}
+\begin{tabular}{m{1.25cm}<{\centering}m{2.75cm}<{\centering}}
+\rowcolor{bleu20}
+\color{white}\bf Symbole	& \color{white}\bf Commande		    \\
+$\int$						& \macro{int}						\\
+$\iint$						& \macro{iint}						\\
+$\iiint$					& \macro{iiint}						\\
+$\iiiint$					& \macro{iiiint}					\\
+\end{tabular}
+\end{tablecouleur}%
+%
+\begin{tablecouleur}
+\begin{tabular}{m{1.25cm}<{\centering}m{2.75cm}<{\centering}}
+\rowcolor{bleu20}
+\color{white}\bf Symbole	& \color{white}\bf Commande			\\	
+$\bigcup$					& \macro{bigcup}					\\
+$\bigcap$					& \macro{bigcap}					\\
+$\bigwedge$					& \macro{bigwedge}					\\
+$\bigvee$					& \macro{bigvee}					\\
+\end{tabular}
+\end{tablecouleur}%
+\caption{Grands opérateurs} \label{mathgrandsoperateurs}
+\end{table}
+
+Pour ces symboles et fonctions, en mode en ligne, les éléments mis en indice et exposant sont placés après le symbole. En mode séparé, les éléments se retrouvent au-dessous et au-dessus du symbole. Le comportement obtenu en mode séparé peut être forcé en insérant la commande \macro{limits} entre le symbole et les éléments mis en indice et en exposant. L'inverse s'obtient avec la commande \macro{nolimits}.
+
+\begin{codedouble}{Mises en indice et en exposant}{indiceexposant}
+Il convient de distinguer $ x_yz \neq x_{yz}$ et $x^yz \neq x^{yz} $. De plus
+l'expression $A_{i_n} = \sum_{k=1}^{n} a_i^k $ est visuellement différente de
+$A_{i_n} = \sum\limits_{k=1}^{n} a_i^k $ mais cette dernière change la taille de 
+l'interligne, ce qui peut être assez peu esthétique au sein d'un paragraphe ayant un
+interligne par ailleurs régulier.
+\[ A_{i} = \lim_{n\to +\infty} \sum_{k=1}^{n} a_i^k \]
+\end{codedouble}
+
+
+\section{Les délimiteurs}
+\label{mathdelimiteurs}
+
+Les signes d'accolades, de crochets, de parenthèses et quelques autres moins courants cités ci-dessous peuvent être librement redimensionnés afin de rendre plus lisibles les équations. 
+
+\begin{table}[H]
+\begin{tablecouleur}
+\begin{tabular}{m{1.25cm}<{\centering}m{2.75cm}<{\centering}}
+\rowcolor{bleu20}
+\color{white}\bf Symboles	& \color{white}\bf Commande			\\ 
+$(\  )$						& \macron{(} \macron{)}				\\
+$[\ ]$						& \macron{[} \macron{]}				\\
+$\{\  \}$					& \macro{\{} \macro{\}}				\\
+\end{tabular}
+\end{tablecouleur}%
+%
+\begin{tablecouleur}
+\begin{tabular}{m{1.25cm}<{\centering}m{2.75cm}<{\centering}}
+\rowcolor{bleu20}
+\color{white}\bf Symboles	& \color{white}\bf Commande		    \\
+$\lceil\  \rceil$			& \macro{lceil} \macro{rceil}		\\
+$\lfloor\  \rfloor$			& \macro{lfloor} \macro{rfloor}		\\
+$\langle\  \rangle$			& \macro{langle} \macro{rangle}		\\
+\end{tabular}
+\end{tablecouleur}%
+%
+\begin{tablecouleur}
+\begin{tabular}{m{1.25cm}<{\centering}m{2.75cm}<{\centering}}
+\rowcolor{bleu20}
+\color{white}\bf Symboles	& \color{white}\bf Commande			\\	
+$\lvert\  \rvert$			& \macro{lvert} \macro{rvert}		\\
+$\lVert\  \rVert$			& \macro{lVert} \macro{rVert}		\\
+ 							& 									\\
+\end{tabular}
+\end{tablecouleur}%
+\caption{Délimiteurs} \label{tabmathdelimiteurs}
+\end{table}
+
+Pour cela, il suffit de faire précéder le signe à redimensionner de l'une des quatre commandes suivantes, par ordre croissant de taille : \macro{big}, \macro{bigg}, \macro{Big}, \macro{Bigg}.
+
+\begin{codedouble}{Délimiteurs redimensionnés}{parentheses}
+Soit $\mathfrak{F}$ un flux financier tel que :
+\[ \mathfrak{F} = \Big\{ \big(F_j,t_j\big) \Big| j \in \llbracket 0..n \rrbracket, 
+0 \leqslant t_1 < t_2\dots < t_n, \quad \forall j \quad F_j \geqslant 0 \Big\} \]
+\end{codedouble}
+
+Un ajustement de la taille de ces couples de symboles peut être fait automatiquement par \LaTeX, ce qui est tout particulièrement utile dans le cas des matrices. Il faut utiliser alors deux  commandes : \macro{left} et \macro{right} suivies des symboles à redimensionner automatiquement. Ces deux  commandes ne peuvent qu'intervenir en couple. Pour le cas où il faudrait redimensionner un unique symbole, il faut que son symbole jumeau soit alors un point, ce dernier valant ici pour un symbole vide. % L'exemple vu en \ref{bernoulli} illustre cette application.
+
+\section{Racines et fractions}
+
+Les racines s'obtiennent avec \macro{sqrt\{{\it texte}\}} et les racines d'ordre \macron{n} en ajoutant l'argument facultatif \macron{[n]}.
+
+Les fractions s'obtiennent avec \macro{frac\{{\it numérateur}\}\{{\it dénominateur}\}}. 
+
+\begin{codedouble}{Racines et fractions}{racines}
+Tracer le tableau de variation de la fonction f telle que :
+\[ f(x) = \sqrt[3]{\frac{1-x^2}{\sqrt{2}(1-x)^2}} \]
+\end{codedouble}
+
+\section{Les textes et espaces}
+
+Avec \LaTeX, le texte mathématique est composé en italique, sans accents. Pour pouvoir insérer du texte classique dans une formule en mode séparé, il convient d'utiliser la commande \macro{mathrm\{{\it texte}\}} : elle composera le texte en romain sans tenir compte des accents et espaces. Il existe également \macro{mathit\{{\it texte}\}}, \macro{mathbf\{{\it texte}\}}, \macro{mathtt\{{\it texte}\}} et \macro{mathsf\{{\it texte}\}} à l'image de ce qui a été vu dans la table \ref{tablestyletexte} en page \pageref{tablestyletexte}. Cependant, pour avoir espaces et accents, seule la commande \macro{text\{{\it texte}\}} est utilisable. Un exemple est donné dans le code~\ref{mathtableau}, page~\pageref{mathtableau}.
+
+L'espacement peut également être modifié à l'aide des quelques commandes suivantes.
+
+
+\begin{table}[H]
+\begin{tablecouleur}
+\begin{tabular}{m{2cm}<{\centering}m{2cm}<{\centering}}
+\rowcolor{bleu20}
+\color{white}\bf Espace				& \color{white}\bf Commande			\\
+$\blacksquare\,\blacksquare$		& \macro{,}						    \\ 
+$\blacksquare\;\blacksquare$		& \macro{;}						    \\ 
+$\blacksquare\enskip\blacksquare$	& \macro{enskip}				    \\ 
+$\blacksquare\quad\blacksquare$		& \macro{quad}						\\ 
+$\blacksquare\qquad\blacksquare$	& \macro{qquad}					    \\ 
+\end{tabular}
+\end{tablecouleur}%
+\caption{Espacements mathématiques}
+\end{table}
+
+\section{Les matrices}
+\label{matrice}
+
+Quelques environnements permettent de présenter des matrices. Ces environnements, à la différence des environnements comme \macron{equation} vus précédemment, ne génèrent pas le mode mathématique. Ils doivent donc être placés en mode mathématique par d'autres commandes usuelles. Par contre, les environnements de matrice partagent les mêmes principes d'écriture déjà rencontrés dans ce document : 
+\begin{itemize}
+\item pour passer d'une cellule à une autre (sur une ligne) d'une matrice, il faut utiliser le caractère \macron{\&} ;
+\item pour passer d'une ligne à une autre, il faut utiliser \macro{\ba}.
+\end{itemize}
+
+\begin{table}[!ht]
+\begin{tablecouleur}
+\begin{tabular}{cc}
+\rowcolor{bleu20}
+\color{white}\bf Style 					& \color{white}\bf 	Environnement		\\ 
+Sans séparateurs						& \macron{matrix} 						\\ 
+Avec parenthèses						& \macron{pmatrix} 						\\ 
+Avec accolades							& \macron{Bmatrix} 						\\ 
+Avec crochets							& \macron{bmatrix} 						\\ 
+Avec filets verticaux					& \macron{vmatrix} 						\\ 
+Avec doubles filets verticaux			& \macron{Vmatrix} 						\\ 
+\end{tabular}
+\end{tablecouleur}
+\caption{Différents styles de présentation de matrice}
+\end{table}
+
+Il existe par ailleurs pour les matrices quelques symboles dédiés, indiqués dans l'exemple\footnote{Source : \href{http://fr.wikipedia.org/}{Wikipédia}, où il est possible de récupérer directement le code \LaTeX\ des mathématiques en affichant les propriétés des images présentant les équations.}.
+
+\begin{codedouble}{Exemple de matrice}{mathmatriceexemple}
+Le déterminant, noté $\det$, est défini pour une matrice comme : \begin{equation} 
+\det\left(\begin{bmatrix} 
+a_{1;1} & \cdots & a_{1;n}  \\ 
+\vdots  & \ddots & \vdots   \\ 
+a_{n;1} & \cdots & a_{n;n}  \end{bmatrix}
+\right) = \begin{vmatrix} 
+a_{1;1} & \cdots & a_{1;n}  \\ 
+\vdots  & \ddots & \vdots   \\ 
+a_{n;1} & \cdots & a_{n;n}  \end{vmatrix} 
+= \sum_{\sigma \in \mathfrak{S}_n} \varepsilon(\sigma) \prod_{i=1}^n a_{\sigma(i),i}
+\end{equation}
+\end{codedouble}
+
+Enfin et plus largement, les mathématiques peuvent aussi se servir de tableaux, comme présenté en page~\pageref{tableau}, pour obtenir certaines présentations.
+
+\begin{codedouble}{Utilisation d'un tableau}{mathtableau}
+La variable aléatoire $X$ suit une loi de Bernoulli de paramètre $p$ si et si seulement 
+elle vérifie les égalités suivantes :
+\[ \left\{ \begin{array}{ccc}
+X=0 & \text{avec la probabilité} & p \\
+X=1 & \text{avec la probabilité} & (1-p)
+\end{array} \right. \]
+Dans ce cas, on notera $X \sim \mathcal{B}e(p)$.
+\end{codedouble}
+
+\section{Un élément d'actuariat}
+
+Un paquet, \paquet{lifecon}, permet d'utiliser des commutations actuarielles, tout particulièrement la notation des temporaires \og $\lcroof{exemple}$ \fg avec la commande \macro{lcroof}. Ce paquet n'est pas présent sur les serveurs de paquets \LaTeX. Pour l'utiliser, il suffit de placer le fichier \vue{lifecon.sty} dans le même répertoire que le fichier \dextension{tex} que vous compilez\footnote{Des solutions automatisées mais elles demandent la bonne connaissance de la mécanique d'installation de \LaTeX.}. 
+
+Un autre intérêt de ce paquet réside dans sa documentation\footnote{Voir \liensimple{http://maths.dur.ac.uk/stats/courses/AMII/LifeConSymbolsGuide.pdf}.} qui précise comment obtenir la plupart des commutations actuarielles classiques.
+
+En voici deux exemples appliqués :
+
+\begin{codedouble}{Formules de mathématiques des assurances}{mathdassurance}
+La formule générale d'un capital différé de $n$ pour un groupe $G=(xyz\dots m)$ au 
+premier décès est :
+\begin{align*}
+{}_{n}E_{xyz\cdots m} &= v^n \: {}_{n}p_{xyz\cdots m} \\
+                      &= v^n \: {}_{n}p_x \: {}_{n}p_y \cdots {}_{n}p_m 
+\end{align*}
+La formule de l'annuité temporaire de $n$ années pour un groupe au dernier décès à 
+deux têtes est :
+\[ a_{\overline{xy}:\lcroof{n}} = a_{x:\lcroof{n}} + a_{y:\lcroof{n}} 
+   - a_{xy:\lcroof{n}} \]
+\end{codedouble}

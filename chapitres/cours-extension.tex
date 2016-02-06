@@ -1,0 +1,114 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Chapitre Extension maison
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Un fichier d'extension}
+
+Un paquet ou extension est un fichier d'extension \dextension{sty} regroupant des ensembles de définitions permettant de modifier et d'élargir les traitements qu'effectue \LaTeX. Ce chapitre décrit la structure d'un tel fichier.
+
+\section{Déclarations}
+
+Afin d'être traité correctement par \LaTeX\ et par les différentes mécaniques associées à la distribution, ce fichier contient quelques commandes de description du paquet, placées en début de fichier :
+
+\begin{codesimple}{Déclaration d'un paquet}{codextensionmin}
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{§textit£nompaquet¤}[§textit£aaaa/mm/jj version et autres infos¤]
+\end{codesimple}
+
+Le format de la date (\emph{aaaa/mm/jj}) est normalisé mais le reste de la description est libre.
+
+\section{Options}
+
+\subsection{Déclaration des options}
+
+L'appel d'un paquet peut se faire avec des options, comme vu en \ref{toto}, page~\pageref{toto}. Chacune des options est en fait un code présent dans le fichier du paquet. Ce \emph{code} est rattaché au terme \emph{nomoption}, le nom de l'option, et est à déclarer par la commande suivante :
+
+\begin{codesimple}{Déclaration et définition d'une option}{codextensionoption}
+\DeclareOption{§textit£nomoption¤}{§textit£code¤}
+\end{codesimple}
+
+\subsection{Traitement des options}
+
+Une des options ainsi déclarée peut être considéré comme l'option par défaut. Dans ce cas, après avoir déclaré les différentes options, la commande suivante permet d'exécuter systématiquement le code des options listées (séparées par des virgules). 
+
+\begin{codesimple}{Exécution d'options listées}{codextensionexecute}
+\ExecuteOptions{§textit£liste d'options¤}
+\end{codesimple}
+
+Pour traiter le choix d'options fait par l'utilisateur et exécuter les codes associés, il faut alors placer la commande suivante.
+
+\begin{codesimple}{Exécution des options appelées par l'utilisateur}{codextensionprocess}
+\ProcessOptions \relax
+\end{codesimple}
+
+\subsection{Transmission d'options}
+
+Dans le code contenu dans une commande \macro{DeclareOption}, il est possible d'indiquer des options à transmettre à un paquet appelé par la suite dans l'extension. 
+
+\begin{codesimple}{Transmission d'options}{codextensionpass}
+\PassOptionsToPackage{§textit£liste d'options¤}{§textit£paquet¤}
+\end{codesimple}
+
+\section{Appel d'autres paquets}
+
+Certaines définitions ou fonctionnalités demandent à charger d'autres paquets. Pour cela, il ne faut pas utiliser la commande \macro{usepackage} mais une commande spécifique aux fichiers d'extension : 
+
+\begin{codesimple}{Appel de paquet}{codextensionpaquet}
+\RequirePackage[§textit£options¤]{§textit£paquet¤}
+\end{codesimple}
+
+
+\section{Codes particuliers}
+
+Certains éléments d'un paquet peuvent demander des exécutions à des moments particuliers. Quelques commandes sont associés à trois moments de la compilation : à la fin de l'exécution du code du paquet, au début du corps du document ou à fin du document. Elles stockent le code pour exécution au moment qu'elles indiquent.
+
+\begin{codesimple}{Stockage de code pour exécution à des moments spécifiques}{codextensionat}
+\AtEndOfPackage{§textit£code¤}
+\AtBeginDocument{§textit£code¤}
+\AtEndDocument{§textit£code¤}
+\end{codesimple}
+
+Ces commandes peuvent être utilisées à plusieurs reprises : les codes qu'elles contiennent s'empilent alors en vue de l'exécution au moment associé.
+
+Par ailleurs, la commande \macro{AtBeginDocument} est considérée comme appartenant au préambule du document et non au corps. Elle ne peut donc contenir de texte.
+
+\section{Exemple}
+
+Voici un exemple de code d'un paquet \macron{demo}.
+
+\begin{codesimple}{Exemple}{codextensionexemple}
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{demo}[1902/01/17 V1.0 Quelques chargements]
+
+% Déclaration des options
+\DeclareOption{defaut}{%
+\newcommand{\signature}{\textit{Signature}}%
+}
+
+\DeclareOption{perso}{%
+\newcommand{\signatureab}{Ambrose \textsc{Bierce}}%
+\PassOptionsToPackage{dvipsnames}{xcolor}%
+}
+
+% Traitement des options
+\ExecutesOption{defaut}
+\ProcessOptions \relax
+
+% Appels de paquets et définitions communes
+\RequirePackage{xcolor}
+\RequirePackage{xspace}
+\newcommand{\MonLaTeX}{\LaTeX\xspace}
+\end{codesimple}
+
+Ce paquet dispose de deux options : \macron{defaut} et \macron{perso}. La première option est exécutée par défaut avec la commande \macro{ExecutesOption} et crée une commande \macro{signature}. La seconde option n'est exécutée que si le paquet \macron{demo} est appelé avec l'option \macron{perso}. Est alors définie une commande \macro{signatureab}. De plus, il est demandé de passer une option complémentaire au paquet \paquet{xcolor} lorsque ce dernier sera appelé : \macron{dvipsnames}. 
+
+Une fois les options traitées, ce paquet appelle le paquet \paquet{xcolor} et le paquet \paquet{xspace}. L'option \macron{perso} aura ici modifié le premier appel en lui ajoutant l'option \macron{dvipsnames}.
+
+Enfin, une fonction \macro{MonLaTeX} est définie.
+
+
+\section{Pour aller plus loin}
+
+Il est également possible de créer des classes de document (fichiers \dextension{cls} sur des principes très similaires. Point non signalé ci-dessus, il est également possible d'inclure des textes d'erreur à afficher si une erreur survient. Ces deux éléments sont décrits dans cette documentation en anglais : \liensimple{http://www.latex-project.org/guides/clsguide.pdf}.
+
+Il est également possible de faire un travail plus complet en créant des fichiers qui génèrent à la fois le code du paquet (ou de la classe), la documentation générale et la documention du code. La méthode est présentée dans un document en français : \liensimple{http://yvon-henel.fr/texnicien/docs/dtxtut-fr/dtxtut-fr.pdf}.

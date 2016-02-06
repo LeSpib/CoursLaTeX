@@ -1,0 +1,222 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Chapitre Page de garde
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{La page de garde} \label{pagedegarde}
+\section{Définition et exemple}
+
+L'extension \paquet{pagedegarde} permet d'inclure dans un document \LaTeX{} la page de garde \og officielle \fg de l'\ia déclinée avec les spécificités de chaque filière, telle qu'elle apparaît ci-après sur un exemple pour l'ISUP.
+
+Voici un exemple de code permettant de la générer. Les appels d'extensions usuelles de début de document n'y sont pas indiquées.\\
+
+\begin{codesimple}{Exemple de génération de la page de garde}{exemplepagedegarde}
+\documentclass[a4paper,11pt,twoside]{article}
+\usepackage[frenchb]{babel} 
+\usepackage[T1]{fontenc}
+\usepackage[latin1]{inputenc} 
+\usepackage{lmodern}
+
+\usepackage[confiun,hyperref,isup]{pagedegarde}
+
+\dategarde{22 février 1963}
+\auteurgarde{Jean}{Dieudonné}
+\titregarde{Tentative de définition systématique d'une §oc (...) §fc}
+\juryiagarde{Nicolas}{Bourbaki}
+\juryagarde{Carl Friedrich}{Gauss}
+\jurybgarde{David}{Hilbert}
+\directeurgarde{Pierre-Simon}{de Laplace}
+\invitegarde{Jean Baptiste Joseph}{Fourier}
+
+\begin{document}
+\pagedegarde
+§oc  Le reste du document... §fc 
+\end{document}
+\end{codesimple}
+
+
+Ce code est fourni dans le fichier \macron{testdegarde.tex} qui accompagne cette documentation, le fichier d'extension \macron{pagedegarde.sty} et les images dans leur répertoire dédié (répertoire dont le nom ne doit pas être modifié).
+
+% Insertion de la page "pagedegarde"
+\newpage
+\setcounter{pagetempo}{\value{page}} % Stockage du numéro de page
+\pagedegarde                         % Affichage de la page 
+\setcounter{page}{\value{pagetempo}} % Récupération de l'ancien numéro de page
+\addtocounter{page}{1}               % Et enfin ajout d'un au numéro.
+% Fin de l'insertion
+
+
+\section{Appel de l'extension}
+
+L'extension \paquet{pagedegarde} est munie de plusieurs options permettant d'effectuer des réglages de la présentation de la page de garde. L'appel avec option se fait sous la forme suivante : 
+\begin{center}
+\macro{usepackage[\textit{option1},\textit{option2},...]\{pagedegarde\}}
+\end{center}
+
+Il est recommandé de charger cette extension plutôt en fin de préambule du document. En effet, elle charge par défaut les extensions suivantes : \paquet{ifpdf}, \paquet{xcolor} (avec son option \macron{dvipsnames}), \paquet{graphicx}, \paquet{xspace} et \paquet{geometry}. Elle peut également, par le biais des options, charger l'extension \paquet{hyperref}, cette dernière devant normalement être la dernière chargée.
+
+\subsection{L'option de filière}
+
+Par défaut, le document est considéré comme un mémoire sans filière : seul le logo de l'IA apparaît et il est évoqué le terme de \og filière \fg{}. Un choix d'option doit être effectué pour modifier les affichages par défaut.
+
+Trois filières sont définies: 
+\begin{itemize}
+\item l'EURIA avec l'option \macron{euria} ;
+\item l'EURIA en lien avec Télécom Bretagne avec l'option \macron{telecomb} ;
+\item l'ISUP avec l'option \macron{isup}.
+\end{itemize}
+
+\subsection{L'option de brouillon}
+
+Par défaut, le document est présenté en mode finalisé. Un mode brouillon est cependant disponible par le biais de l'option \macron{draft}. Il permet d'observer les différents champs paramétrables en gris. Si ces champs n'ont pas valeur, \paquet{pagedegarde} affiche alors la commande permettant de remplir ce champ à l'endroit où il sera affiché.
+
+
+\subsection{Les options de confidentialité}
+
+Par défaut, le document est considéré comme non confidentiel. Pour spécifier une durée de confidentialité, cinq options sont disponibles selon la durée de confidentialité : 
+\begin{itemize}
+\item \macron{confiun} : un an ;
+\item \macron{confideux} : deux ans ;
+\item \macron{confitrois} : trois ans ;
+\item \macron{confiquatre} : quatre ans ;
+\item \macron{conficinq} : cinq ans.
+\end{itemize}
+
+
+\subsection{L'option de page verso uniquement}
+
+Par défaut, le verso de la page de garde reste totalement vide, présentation usuelle pour un document en recto-verso. Ce comportement peut être modifié en spécifiant l'option \macron{versoseul}. La page suivant immédiatement la page de garde est alors accessible.
+
+
+\subsection{L'option de liens hypertextes}
+
+L'option \macron{hyperref} charge l'extension \paquet{hyperref} gérant les liens hypertextes dans les documents PDF. Sur la page de garde, les sigles ainsi que les noms des filères et autres organismes renvoient alors vers les sites internet associés.
+
+L'utilisation de cette option sélectionne certains réglages de l'extension \paquet{hyperref} et ceci peut influer sur la présentation de l'ensemble du document. Il faut donc ici spécifier après le chargement de l'extension \paquet{pagedegarde} les options nécessaires à l'extension \paquet{hyperref} pour présenter le reste du mémoire. Ceci s'obtient avec la  commande \macro{hypersetup\{{\it options}\}}, les \emph{options} étant celles qui se retrouvent pour l'appel du paquet \paquet{hyperref}.
+
+\section{Paramètres}
+
+Les champs paramétrables de la page de garde sont alimentés par différentes  commandes. La liste en est la suivante :
+
+
+\begin{table}[H]
+\centering
+\begin{tablecouleur}
+\begin{tabular}{cc}
+\rowcolor{bleu20}
+\color{white}\bf Commande	
+& \color{white}\bf Affichage					    			 	\\ 
+\macro{dategarde\{{\it date}\}}
+& Date de la présentation du mémoire	
+\\
+\macro{auteurgarde\{{\it prénom}\}\{{\it nom}\}}		
+& Identité de l'auteur du mémoire
+\\
+\macro{titregarde\{{\it titre}\}}						
+& Titre du mémoire
+\\
+\macro{juryiagarde\{{\it prénom}\}\{{\it nom}\}}
+& Identité du jury IA
+\\
+\macro{juryagarde\{{\it prénom}\}\{{\it nom}\}}
+& Identité du 1\ier jury filière
+\\
+\macro{jurybgarde\{{\it prénom}\}\{{\it nom}\}}	
+& Identité du 2\ieme jury filière
+\\
+\macro{jurycgarde\{{\it prénom}\}\{{\it nom}\}}
+& Identité du 3\ieme jury filière
+\\
+\macro{jurydgarde\{{\it prénom}\}\{{\it nom}\}}
+& Identité du 4\ieme jury filière
+\\
+\macro{juryegarde\{{\it prénom}\}\{{\it nom}\}}
+& Identité du 5\ieme jury filière
+\\
+\macro{juryfgarde\{{\it prénom}\}\{{\it nom}\}}
+& Identité du 6\ieme jury filière
+\\
+\macro{directeurgarde\{{\it prénom}\}\{{\it nom}\}}
+& Identité du directeur de mémoire
+\\
+\macro{invitegarde\{{\it prénom}\}\{{\it nom}\}}
+& Identité de l'invité
+\\
+\macro{entreprisegarde\{{\it entreprise}\}}
+& Entreprise associée au mémoire
+\end{tabular}
+\end{tablecouleur}
+\caption{Les paramètres de \pseudopaquet{pagedegarde}}
+\end{table}
+
+\section{Affichage}
+
+L'affichage de la page de garde est obtenu en plaçant la commande \macro{pagedegarde} à l'endroit souhaité dans le corps du document.  Aussi, cette page pourrait donc être placée n'importe où dans le document.
+
+Dans l'exemple de code présenté au début de ce document, la position de la commande correspond à la position la plus naturelle : elle produit la page de garde en toute première page.
+
+
+\section{Commandes complémentaires} \label{fonctionscomp}
+
+L'extension \paquet{pagedegarde} crée quelques commandes spécifiques aux organismes cités dans la page. Ces commandes sont ainsi toutes réutilisables.
+
+
+\subsection{Commandes de texte}
+
+Cinq commandes écrivant du texte sont mises à disposition :
+
+\begin{table}[H]
+\centering
+\begin{tablecouleur}
+\begin{tabular}{cc}
+\rowcolor{bleu20}
+\color{white}\bf Commande	& \color{white}\bf Affichage	\\ 
+\macro{EURIA} 				& \EURIA  						\\
+\macro{Euria}				& \Euria						\\
+\macro{euria}				& \euria						\\
+\macro{euriamail}			& \euriamail					\\
+\macro{ia}					& \ia							\\
+\macro{ISUP}				& \ISUP							\\
+\end{tabular}
+\end{tablecouleur}
+\caption{Commandes complémentaires de texte de \pseudopaquet{pagedegarde}}
+\end{table}
+
+\subsection{Commandes de sigle}
+
+Quelques commandes sont mises à disposition pour afficher des sigles hors de la page de garde. Tous les sigles sont conditionnés à l'affichage par une dimension.
+
+\begin{table}[H]
+\centering
+\begin{tablecouleur}
+\begin{tabular}{cc}
+\rowcolor{bleu20}
+\color{white}\bf Commande					& \color{white}\bf Affichage	\\ 
+\macro{euriasigle\{{\it dimension}\}}		& Sigle de l'EURIA				\\
+\macro{iasigle\{{\it dimension}\}} 			& Sigle de l'IA					\\
+\macro{isupsigle\{{\it dimension}\}} 		& Sigle de l'ISUP				\\
+\macro{telbsigle\{{\it dimension}\}}		& Sigle de Télécom Bretagne		\\
+\macro{ubosigle\{{\it dimension}\}}			& Sigle de l'UBO				\\
+\end{tabular}
+\end{tablecouleur}
+\caption{Commandes complémentaires de sigle de \pseudopaquet{pagedegarde}}
+\end{table}
+
+Voici les différents sigles :
+\begin{figure}[H]
+\centering
+\euriasigle{1cm} \\[1em]
+\iasigle{2.5cm} \quad \isupsigle{2.5cm} \quad \telbsigle{2.5cm} \quad \ubosigle{2.5cm}
+\caption{Sigles}
+\end{figure} 
+
+Le sigle de l'EURIA est composé d'un texte et d'une image. Le texte peut donc être affiché dans des polices de caractères différentes, la ligne colorée s'ajustant à la longueur du texte.
+
+\subsection{Commandes avec lien hypertexte}
+
+Si l'option \macron{hyperref} de \paquet{pagedegarde} est sélectionnée, il suffit de rajouter le suffixe \macron{ref} aux commandes vues dans cette section \ref{fonctionscomp} pour obtenir des commandes générant un lien hypertexte dans le document PDF. Par exemple :
+\begin{itemize}
+\item \macro{EURIA} devient \macro{EURIAref};
+\item \macro{ubosigle\{{\it dimension}\}} devient \macro{ubosigleref\{{\it dimension}\}} et ainsi de suite. \\
+\end{itemize}
+
+En l'absence de cette option, ces commandes deviennent strictement équivalentes aux commandes sans le suffixe \macron{ref}.

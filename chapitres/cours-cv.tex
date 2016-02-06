@@ -1,0 +1,113 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Chapitre CV
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Un CV sous \LaTeX}
+\label{moderncv}
+Pour obtenir un CV de qualité, le paquet qui sort actuellement du lot est \paquet{moderncv} de Xavier \textsc{Danaux}. Ce paquet est documenté par des exemples et le cours ci-dessous reprend ce point pour permettre à tout à chacun d'y trouver de quoi faire. Le seul point non détaillé ici est la possibilité de faire le courrier avec le CV, le courrier étant proposé dans un format anglais.
+
+
+\section{Une nouvelle classe}
+
+Le paquet \paquet{moderncv} définit tout d'abord une nouvelle classe de document nommée \macron{moderncv}. Cette dernière réagit de façon similaire aux options que sont \macron{10pt}, \macron{11pt}, \macron{12pt}, \macron{landscape}, \macron{a4paper}, \macron{a5paper} pour les plus courantes. Elle ajoute les deux options \macron{roman} et \macron{sans} qui permettent de rédiger respectivement en fonte romaine et en fonte linéale.
+
+
+\section{Différents thèmes}
+
+Ce paquet propose différents thèmes. Pour sélectionner son thème, il faut recourir à la commande \macro{moderncvtheme[{\it couleur}]\{{\it nom du thème}\}}. 
+Le thème est à choisir parmi les valeurs suivantes : \macron{banking}, \macron{casual}, \macron{classic} et \macron{oldstyle}.
+
+La \emph{couleur} est à choisir par défaut parmi les valeurs : \macron{black}, \macron{blue}, \macron{green}, \macron{grey}, \macron{orange}, \macron{purple} et \macron{red}.
+
+Les couleurs peuvent éventuellement être redéfinies directement avec le bloc de commandes suivantes. Le bloc ci-dessous reprend le code pour obtenir l'option \macron{blue} indiquée ci-dessus\footnote{Ce bloc correspond à ce que font les différents appels d'options et qui se retrouvent dans les fichiers \macron{moderncvcolor....sty}.}.
+
+\begin{codesimple}{Définition de couleur pour le CV}{defcoulcv}
+\definecolor{color0}{rgb}{0,0,0}           % noir
+\definecolor{color1}{rgb}{0.22,0.45,0.70}  % bleu clair
+\definecolor{color2}{rgb}{0.45,0.45,0.45}  % gris
+\end{codesimple}
+
+
+La couleur \macron{color0} joue sur le texte, \macron{color1} sur les règles et les titres de section et \macron{color2} sur les coordonnées, l'encadrement de la photo et le nom.
+
+
+\section{Paramètres personnels}
+
+Différentes  commandes placées dans le préambule du document sont créées pour stocker les coordonnées obligatoires de l'auteur du CV :
+\begin{itemize}
+\item \macro{firstname\{{\it prénom}\}} définit le \emph{prénom} ; 
+\item \macro{familyname\{{\it nom}\}} définit le \emph{nom}.
+\end{itemize}
+
+Des commandes optionnelles sont également disponibles :
+\begin{itemize}
+\item \macro{title\{{\it titre}\}} définit le \emph{titre} du CV ;
+\item \macro{address\{{\it adresse}\}\{{\it code postal, ville}\}} définit l'adresse en deux champs ;
+\item \macro{phone\{{\it numéro}\}} définit le \emph{numéro} de téléphone fixe ;
+\item \macro{mobile\{{\it numéro}\}} définit le \emph{numéro} de téléphone mobile ;
+\item \macro{fax\{{\it numéro}\}} définit le \emph{numéro} de fax ;
+\item \macro{email\{{\it mail}\}} définit l'adresse \emph{mail} ;
+\item \macro{homepage\{{\it page web}\}} définit l'adresse d'une \emph{page web} ;
+\item \macro{extrainfo\{{\it infos}\}} définit des \emph{données} complémentaires ;
+\item \macro{quote\{{\it citation}\}} définit une citation ; 
+\item \macro{photo[{\it dimension}][{\it marge}]\{{\it image}\}} définit une photo de hauteur \emph{dimension} avec une marge d'épaisseur \emph{marge}. Il doit s'agir du nom de l'\emph{image}, \dextension{eps} ou \dextension{jpg} selon la chaîne de compilation retenue, sans indiquer l'extension. 
+\end{itemize}
+
+
+\section{Découpage du CV}
+
+La partie en-tête (prénom, nom) et la partie pied de page sont générées automatiquement avec la commande \macro{makecvtitle} placée dans le corps du document. Le découpage du CV reste par contre à la main du rédacteur. La découpe du CV en différents thématiques se fait par les commandes \macro{section\{\}} et \macro{subsection\{\}}. Les différentes lignes du CV peuvent être formatées spécifiquement de quatre façons :
+\begin{itemize}
+\item \macro{cvitem\{{\it texte court}\}\{{\it texte long}\}}\footnote{Elle est aussi nommée \macro{cvline}.} met l'argument \emph{court} en valeur (gras ou en colonne), l'argument long étant mis à côté pour donner des détails ; 
+\item \macro{cvdoubleitem\{{\it court}\}\{{\it long}\}\{{\it court}\}\{{\it long}\}}\footnote{Elle est aussi nommée \macro{cvcomputer}.} reprend l'idée de \macro{cvline} mais en traitant deux entrées en même temps par un jeu de double colonne ;
+\item \macro{cvitemwithcomment\{{\it court}\}\{{\it long}\}\{{\it droite}\}}\footnote{Elle est aussi nommée \macro{cvlanguage}.} rajoute un élément placé sur la même ligne à \emph{droite} des deux premiers ;
+\item \macro{cventry\{{\it dates}\}\{{\it court}\}\{{\it société}\}\{{\it ville}\}\{{\it pays}\}\{{\it long}\}} structure encore plus l'information. Elle est à réserver pour le détail des expériences ou des formations. \\
+\end{itemize}
+
+En parallèle, des commandes d'énumération sont proposées par ce paquet :
+\begin{itemize}
+\item \macro{cvlistitem\{{\it donnée}\}} ;
+\item \macro{cvlistdoubleitem\{{\it donnée 1}\}\{{\it donnée 2}\}} propose la même énumération mais sur deux colonnes.
+\end{itemize}
+
+
+\section{Commandes complémentaires}
+
+L'observation de plusieurs exemples d'utilisation de \paquet{moderncv} montre qu'il est souvent fait appel aux deux commandes suivantes dans le préambule du document pour affiner la présentation du CV :
+\begin{itemize}
+\item \macro{usepackage[scale=0.8]\{geometry\}} afin de régler les dimensions du CV par rapport à la feuille de papier par l'appel de \paquet{geometry} ;
+\item \macro{nopagenumbers\{\}} qui empêche la numérotation des pages du CV.
+\end{itemize}
+
+
+\section{Exemple}
+
+\begin{codesimple}{Exemple de CV}{exemplecv}
+\documentclass[10pt,a4paper]{moderncv}
+\moderncvtheme[blue]{oldstyle}
+\usepackage[scale=0.8]{geometry}
+\firstname{Garfield}
+\familyname{Lechat}
+\title{Chat domestique}
+\address{8 rue Lasagne}{Cheshire}
+\photo[64pt]{garfield}
+
+\begin{document} 
+\makecvtitle
+
+\section{Expériences}
+\cventry{2010}{Testeur de matelas}{Dodo}{Le Mans}{France}{}
+\cventry{2008--2009}{Coinceur de bulle}{Sommeil blanc}{Poitiers}{France}{}
+
+\end{document}
+\end{codesimple}
+
+
+\section{Pour aller plus loin}
+
+Parmi les autres modèles de CV qui peuvent être trouvés sur l'Internet, citons ici :
+\begin{itemize}
+\item celui d'Olivier \textsc{Bichler}\footnote{\liensimple{http://olivier.bichler.free.fr/www/?page=content/index&blog_content_articleId=26}.} utilisant une classe permettant de faire un CV avec contenu optionnel ;
+\item celui d'Adrien \textsc{Friggeri}\footnote{\liensimple{https://github.com/afriggeri/CV}.}, très graphique, utilisant une classe se basant en particulier sur les fonctionnalités de \XeLaTeX\ et \paquet{tikz}.
+\item le site \emph{\LaTeX\ templates}\cite{temp} propose également de nombreuses autres maquettes toutes aussi intéressantes\footnote{\liensimple{http://www.latextemplates.com/cat/curricula-vitae}.}.
+\end{itemize}

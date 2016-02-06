@@ -1,0 +1,738 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  Chapitre Texte
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Le texte} %\incise{44--67}{---}{17--33}
+
+\LaTeX\ effectue automatiquement de très nombreux réglages sur le texte. Le principal mais aussi le moins visible pour les personnes peu familières des règles typographiques est le respect des règles d'espacement, que ce soit entre mots et signes de ponctuation ou entre mots eux-mêmes. \LaTeX\ peut ainsi recourir à la césure pour que les espacements entre les mots soient de taille à peu près régulière tout au long du texte. En cela il est considéré comme un traitement de texte. 
+
+Toutefois, de nombreuses choses restent à la main de l'utilisateur afin de faire ressortir la logique du texte. Elles sont évoquées dans ce chapitre.
+
+\section{Les caractères}\label{carac}
+
+\subsection{La police de caractère}
+
+\LaTeX\ compose les textes par défaut en \terme{police de caractère} \emph{Computer Modern}. Changer ce comportement peut être relativement complexe car il faut alors définir à \LaTeX\ de multiples réglages pour qu'il puisse correctement gérer les polices de caractères souhaitées et parfois même créer des fichiers spécifiques.
+
+Aussi, plutôt que de rentrer dans le détail de l'utilisation de différentes polices\footnote{Voir par exemple \liensimple{http://zoonek.free.fr/LaTeX/Fontes/fontes.html} de Vincent \textsc{Zoonekynd}.}, il est présenté ici une méthode plus limitée mais simple d'utilisation : utiliser des paquets chargeant les polices\footnote{Voir \liensimple{http://benoit.rivet.free.fr/tex/tex_polices_exemples.htm} de Benoit \textsc{Rivet}, \liensimple{http://www.cuk.ch/articles/4237} de Franck \textsc{Pastor}\cite{past} ou bien encore \liensimple{http://web.eecs.utk.edu/~mgates3/docs/latex-fonts.pdf}.}. Certains paquets permettent de charger des polices pour le texte et les maths :
+\begin{itemize}
+\item \paquet{mathptmx} pour \emph{Times} ;
+\item \paquet{fourier} pour \emph{Utopia}. \\
+\end{itemize}
+
+D'autres paquets doivent être accompagnés de paquets secondaires pour charger des polices mathématiques adaptées :
+\begin{itemize}
+\item \paquet{palatino} et \paquet{euler} (maths) pour \emph{Palatino} ;
+\item \paquet{bookman}, \paquet{kmath} (maths) et \paquet{kerkis} (maths) pour \emph{Bookman} ;
+\item \paquet{newcent} et \paquet{fouriernc} (maths) pour \emph{New Century Schoolbook}. \\
+\end{itemize}
+
+D'autres enfin ne livrent qu'une police de caractères textuelle :
+\begin{itemize}
+\item \paquet{chancery} pour \emph{Zapf Chancery} ;
+\item \paquet{charter} pour \emph{Charter} ;
+\item \paquet{concrete} pour \emph{Concrete}\footnote{Autre police de caractères faite par Donald E. \textsc{Knuth}.}.
+\end{itemize}
+
+
+\subsection{Le style des caractères} %\incise{45--50}{}{31--32}
+
+La notion de style des caractères est un peu trop vague pour être utilisable en typographie. Ainsi, sous \LaTeX, au sein d'une police de caractère, une fonte de caractères est définie par son encodage, sa \terme{famille}, sa \terme{forme}, sa \terme{série}\footnote{Les noms des commandes vues ici indiquent d'ailleurs ce qu'elles modifient parmi ces trois éléments : \emph{..family}, \emph{..shape} ou \emph{..series}.} et sa taille. En considérant pour simplifier la question de l'encodage traitée par notre préambule de document, quatre paramètres peuvent donc être manipulés à loisir. Les trois premiers se définissent ainsi :
+\begin{itemize}
+\item famille : elle distingue les fontes présentant ou pas des \terme{empattements} ainsi que des fontes présentant une \terme{chasse fixe} ou pas. En typographie classique, chacune de ces familles serait une police de caractère à part entière ;
+\item forme : elle distingue les fontes droites, italiques, penchées, italiques droites mais aussi les fontes à petites capitales ;
+\item série : épaisseur (ou graisse) et étroitesse de la fonte.
+\end{itemize}
+
+\subsubsection{La famille, la forme et la série} 
+
+Par défaut, \LaTeX\ utilise la police de caractère \og \emph{Computer Modern} \fg et nous place dans la famille romaine, forme droite et graisse moyenne. 
+
+Plusieurs commandes\footnote{Les bascules à deux caractères présentées dans cette table sont considérées comme désuètes car moins flexibles que les autres bascules citées ici : elles ne permettent pas d'obtenir un texte en italique gras par exemple.} permettent de modifier ces paramètres et sont listées dans la table suivante. 
+
+\begin{table}[!ht] \label{tabstyles}
+\begin{tablecouleur}
+\begin{tabular}{ccccc}
+\rowcolor{bleu20}
+\color{white}\bf Sélection 				&  \color{white}\bf Commande			& \color{white}\bf Environnement 		& \color{white}\bf Bascule & \color{white}\bf Bascule historique
+\\ 
+\textrm{Famille romaine}			& \macro{textrm\{{\it texte}\}} 	& \macron{rmfamily} &	\macro{rmfamily} & \macro{rm}
+\\ 
+\textsf{Famille sans empattement}	& \macro{textsf\{{\it texte}\}} 	& \macron{sffamily} & \macro{sffamily} & \macro{sf}
+\\ 
+\texttt{Famille à chasse fixe}		& \macro{texttt\{{\it texte}\}} 	& \macron{ttfamily} & \macro{ttfamily} & \macro{tt}
+\\ 
+\textup{Forme droite}				& \macro{textup\{{\it texte}\}} 	& \macron{upshape} & \macro{upshape} & 
+\\ 
+\textsl{Forme penchée}				& \macro{textsl\{{\it texte}\}} 	& \macron{slshape} & \macro{slshape} & \macro{sl}
+\\ 
+\textit{Forme italique}				& \macro{textit\{{\it texte}\}} 	& \macron{itshape} & \macro{itshape} & \macro{it}
+\\ 
+\textsc{Forme petites capitales}	& \macro{textsc\{{\it texte}\}} 	& \macron{scshape} & \macro{scshape} & \macro{sc}
+\\ 
+\textmd{Série moyenne}				& \macro{textmd\{{\it texte}\}} 	& \macron{mdseries} &  \macro{mdseries} & 
+\\ 
+\textbf{Série grasse}				& \macro{textbf\{{\it texte}\}} 	& \macron{bfseries} & \macro{bfseries} & \macro{bf}
+\\ 
+\end{tabular}
+\end{tablecouleur}
+\caption{Différents styles de caractère}\label{tablestyletexte}
+\end{table}
+
+Certaines combinaisons peuvent ne pas être disponibles selon la police de caractère utilisée pour un texte. Ainsi, pour la \emph{Computer Modern}, les petites capitales n'existent pas en italique.
+
+La commande \macro{emph\{{\it texte}\}} permet de gérer un cas particulier d'italique. L'italique sert normalement à attirer l'attention dans un texte composé en romain. Toutefois, dans un passage en italique, pour attirer l'attention, il faut revenir au romain, \og  italique de l'italique \fg{}. La  commande \macro{emph} gère ce comportement spécifique à la différence de \macro{textit}, ce qui explique qu'elle soit plus couramment employée.
+
+\subsubsection{La taille des caractères} %\incise{44--45}{}{30--31}
+
+Relativement au corps fixé lors de la définition de la classe, la taille du texte peut être modifiée par différentes  commandes citées dans le tableau suivant de la plus petite à la plus grande : \macro{tiny} donne ainsi des caractères plus petits que \macro{scriptsize}.
+
+\begin{table}[!ht]
+\begin{tablecouleur}
+\begin{tabular}{cc}
+\rowcolor{bleu20}
+\color{white}\bf Caractères 	& \color{white}\bf Commandes	 
+\\ 
+Petits		& \macro{tiny} \macro{scriptsize} \macro{footnotesize} \macro{small}  
+\\ 
+Moyens		& \macro{normalsize}
+\\ 
+Grands		& \macro{large} \macro{Large} \macro{LARGE} \macro{huge} \macro{Huge} 
+\\ 
+\end{tabular}
+\end{tablecouleur}
+\caption{Différentes tailles de caractères}
+\end{table}
+
+\begin{codedouble}{Tailles de caractères}{taillecaracteres}
+\tiny Ceci \scriptsize est \footnotesize un \small petit \normalsize exemple \large de
+\Large ce \LARGE qui \huge est \Huge faisable.
+\end{codedouble}
+
+
+
+
+\subsection{Les caractères spéciaux} %\incise{50--54}{}{25--30}
+
+Si la plupart des caractères s'obtiennent directement par les touches du clavier, quelques uns, plus rares, peuvent être obtenus par des commandes, tout particulièrement les voyelles accentuées majuscules. Le tableau \ref{tablecaracteres} ainsi que le tableau \ref{tablecaracteresactifs} des caractères actifs résument les principales commandes pour un texte en français. 
+
+
+\begin{table}[H]
+\begin{tablecouleur}
+\begin{tabular}{m{3cm}<{\centering}m{3cm}<{\centering}}
+\rowcolor{bleu20}
+\color{white}\bf Caractère				& \color{white}\bf Commande					\\ 
+Accent aigu : é							& \macro{'\{{\it lettre}\}}                 \\ 	
+Accent circonflexe : ê 					& \macro{\^{}\{{\it lettre}\}}              \\ 
+Cédille	: ç								& \macro{c\{{\it lettre}\}}					\\
+Esperluette : \& 						& \macro{\&}								\\
+Contre-oblique : \ba					& \macro{textbackslash}						\\
+Accolage ouvrante : \{ 					& \macro{\{}								\\
+Tiret bas : \_  						& \macro{\_}								\\
+Trait d'union	: -						& \macron{-}								\\
+Tiret cadratin : ---					& \macron{-{}-{}-}							\\
+Pied-de-mouche : \P						& \macro{P}									\\
+Obèle : \dag							& \macro{dag}								\\
+Copyright : \textcopyright				& \macro{textcopyright}						\\
+Marque : \textregistered				& \macro{textregistered}					\\
+\end{tabular}
+\end{tablecouleur}
+\hspace{1ex}
+\begin{tablecouleur}
+\begin{tabular}{m{3cm}<{\centering}m{3cm}<{\centering}}
+\rowcolor{bleu20}
+\color{white}\bf Caractère				& \color{white}\bf Commande					\\		
+Accent grave : è						& \macro{`\{{\it lettre}\}}                 \\ 
+Tréma : ë								& \macro{¨\{{\it lettre}\}}					\\		
+E dans l'o : \OE, \oe					& \macro{OE}, \macro{oe} 					\\ 
+Pourcentage : \% 						& \macro{\%}								\\
+Dièse : \#  							& \macro{\#}								\\
+Accolage fermante : \} 					& \macro{\}}								\\
+Dollar : \$  							& \macro{\$}								\\
+Intervalle numérique : --				& \macron{-{}-} 							\\ 
+Signe moins : $-$						& \macron{\$-\$}							\\
+Paragraphe : \S							& \macro{S}									\\
+Double obèle : \ddag					& \macro{ddag}								\\
+\emph{Trade-mark} : \texttrademark		& \macro{texttrademark}						\\
+Espace apparente : {\fontecnr\textvisiblespace}			& \macro{textvisiblespace}	\\
+\end{tabular}
+\end{tablecouleur}
+\caption{Caractères particuliers} \label{tablecaracteres}
+\end{table}
+
+L'accent aigu est celui obtenu avec la touche 4 du clavier, l'accent grave, celui avec la touche 7. Sans lettre dans leur argument, les accents apparaissent seuls. Par ailleurs, comme vu précédemment, le symbole de l'euro s'obtient en chargeant le paquet \paquet{eurosym}.
+
+Dans le cas particulier du placement d'un accent sur la lettre \og i \fg, il faut utiliser en lieu et place du \og i \fg la commande \macro{i} qui permet d'afficher un i sans point, laissant la place pour l'accent souhaité. 
+
+Il faut noter ici que la langue française demande à ce que les majuscules soient accentuées\footnote{Sans cela, il est par exemple impossible de dire si \og LES RETRAITES \fg désigne les retraites ou les retraités.}.
+
+Le chargement du paquet \paquet{babel} avec l'option \macron{frenchb} met à disposition quelques  commandes d'usage courant.
+
+\begin{table}[H]
+\begin{tablecouleur}
+\begin{tabular}{m{3cm}<{\centering}m{3cm}<{\centering}}
+\rowcolor{bleu20}
+\color{white}\bf Caractère				& \color{white}\bf Commande					\\ 
+Guillemets ouvrants : \og				& \macro{og}             					\\ 	
+\no										& \macro{no}          						\\ 
+\nos									& \macro{nos}								\\
+1\ier									& \macron{1\macro{ier}}						\\
+1\iere									& \macron{1\macro{iere}}					\\
+2\ieme									& \macron{2\macro{ieme}}					\\
+\primo 									& \macro{primo}								\\
+\tertio									& \macro{tertio} 							\\
+10\degre								& \macron{10\macro{degre}}					\\
+\end{tabular}
+\end{tablecouleur}
+\hspace{1ex}
+\begin{tablecouleur}
+\begin{tabular}{m{3cm}<{\centering}m{3cm}<{\centering}}
+\rowcolor{bleu20}
+\color{white}\bf Caractère				& \color{white}\bf Commande					\\
+Guillemets fermants : \fg				& \macro{fg}	      				        \\
+\No										& \macro{No}								\\
+\Nos									& \macro{Nos} 								\\
+1\iers									& \macron{1\macro{iers}}					\\
+1\ieres									& \macron{1\macro{ieres}}					\\
+2\iemes									& \macron{2\macro{iemes}}					\\
+\secundo								& \macro{secundo} 							\\
+\quarto									& \macro{quarto}							\\
+M\up{me} 								& \macron{M\macro{up\{me\}}}				\\
+\end{tabular}
+\caption{Caractères particuliers issus de \pseudopaquet{babel}} \label{tablecaracteresbabel}
+\end{tablecouleur}
+\end{table}
+
+Pour éviter une erreur courante, \og Monsieur \fg s'abrège en \og M. \fg.
+ 
+Enfin, parmi d'autres, le paquet \paquet{textcomp} met à disposition quelques caractères spéciaux parfois utiles.
+
+\begin{table}[H]
+\begin{tablecouleur}
+\begin{tabular}{m{3cm}<{\centering}m{3cm}<{\centering}}
+\rowcolor{bleu20}
+\color{white}\bf Caractère				& \color{white}\bf Commande					\\ 
+\textperthousand						& \macro{textperthousand}       			\\
+\fontecnr\textopenbullet				& \macro{textopenbullet} 					\\
+\end{tabular}
+\end{tablecouleur}
+\hspace{1ex}
+\begin{tablecouleur}
+\begin{tabular}{m{3cm}<{\centering}m{3cm}<{\centering}}
+\rowcolor{bleu20}
+\color{white}\bf Caractère				& \color{white}\bf Commande					\\
+\fontecnr\textreferencemark				& \macro{textreferencemark}       			\\ 
+\textbullet								& \macro{textbullet}						\\
+\end{tabular}
+\end{tablecouleur}
+\caption{Caractères particuliers issus de \pseudopaquet{textcomp}} \label{tablecaracterestextcomp}
+\end{table}
+
+Le paquet \paquet{pifont} permet d'accéder à la police de caractère \emph{Zapf Dingbats} dont chaque caractère est un \terme{dingbat} (ou \terme{casseau}), autrement dit un dessin accessible comme un caractère. La table des caractères est la suivante :
+
+\begin{table}[H]
+\symboles[31]{}{12}{20}%\par
+%\symboles[151]{}{6}{20}
+\caption{Table de caractère associée à \pseudopaquet{pifont}}
+\end{table}
+
+Quelques commandes permettent, sur la base du numéro associé à chaque caractère dans cette table, d'utiliser ces caractères. \macro{ding} pour un caractère isolé, \macro{dingfill} pour un remplissage par un caractère, \macro{dingline} pour une ligne de caractère avec marges gauche et droite.
+
+\begin{codedouble}{Commandes issues de \pseudopaquet{pifont}}{commandespifont}
+Une feuille : \ding{166}. Puis \dingfill{217} pour remplir la ligne affichée. 
+Et une ligne seule : \dingline{73}
+\end{codedouble}
+
+Avec \paquet{pifont}, deux environnements de liste sont également disponibles et mentionnés page \pageref{listepifont}.
+
+
+\subsection{Pour aller plus loin}
+
+La gestion des polices de caractères est grandement simplifiée avec \XeTeX. Ce sujet est présenté au chapitre~\ref{fontes}, page~\pageref{fontes}.
+
+\section{Autour des caractères}
+
+\subsection{Les espaces} %\incise{54--60}{}{32--33}
+
+\LaTeX\ ne prend pas en compte les espaces ou retours à la ligne multiples présents dans le fichier \dextension{tex}. Des commandes sont en effet dédiées à ce point\footnote{La logique voudrait qu'elles soient utilisées en phase de finalisation du document, un saut de page pouvant par exemple devenir inutile ou mal placé si le document évolue toujours.} et en voici quelques unes réparties entre espaces horizontales et espaces verticaux\footnote{Espace est féminin lorsque ce mot désigne un blanc entre deux mots.}.
+
+\subsubsection{Les espaces horizontales}
+
+\begin{table}[!ht]
+\begin{tablecouleur}
+\begin{tabular}{cc}
+\rowcolor{bleu20}
+\color{white}\bf Espace				& \color{white}\bf Commande 							\\ 
+Espace simple						& \macro{\textvisiblespace} (une espace) 				\\ 
+Indentation							& \macro{indent}										\\ 
+Suppression d'indentation			& \macro{noindent}										\\
+Espace horizontale fixée 			& \macro{hspace\{dimension\}}							\\
+Espace horizontale fixée impérative	& \macro{hspace*\{dimension\}}							\\
+Ressort horizontal					& \macro{hfill}											\\
+Correction d'italique				& \macro{/}												\\ 
+\end{tabular}
+\end{tablecouleur}
+\caption{Espacements horizontaux}
+\end{table}
+
+L'\terme{indentation} est l'espace horizontale qui, en français, commence la première ligne d'un paragraphe. Il est proposé par défaut mais peut être retranché en plaçant la commande \macro{noindent} en début de paragraphe, de même qu'il peut être forcé avec \macro{indent}.
+
+La commande \macro{hspace} présente deux variantes. La version non étoilée est considérée comme une espace qui est ignorée si elle est présente en début de ligne ou en fin de ligne dans un paragraphe. La version étoilée est par contre impérative.
+
+Le ressort horizontal est un espace qui prend toute la place disponible. Plusieurs ressorts placés sur la même ligne auront chacun la même dimension, comme l'illustre l'exemple suivant.
+
+La correction d'italique est une espace fine permettant d'éviter que le passage de caractères italiques à romains ne fassent se croiser des caractères hauts. Elle est indiquée ici car, si elle est gérée automatiquement par les commandes \macro{textit} ou \macro{emph}, elle ne l'est pas par les bascules associées.
+
+\begin{codedouble}{Espaces horizontales}{espaceshorizontales}
+Ceci est un exemple\hspace{4cm}à ne pas\ \ \ suivre : 1\hfill 2\hfill\hfill 3. 
+
+Par contre, cet exemple ({\itshape bref}) montre une correction d'italique nécessaire, 
+le f touchant la parenthèse fermante. Corrigé, cela donne ({\itshape bref\/}).
+\end{codedouble}
+
+
+
+\subsubsection{Les espaces verticaux}
+
+\begin{table}[!ht]
+\begin{tablecouleur}
+\begin{tabular}{cc}
+\rowcolor{bleu20}
+\color{white}\bf Espace				& \color{white}\bf Commande 							\\ 
+Saut de ligne						& \macro{\macro{}}, \macro{newline} ou \macro{par}		\\ 
+Saut de page						& \macro{newpage}										\\ 
+Espace vertical fixé 				& \macro{vspace\{dimension\}}							\\
+Espace vertical fixé impératif		& \macro{vspace*\{dimension\}}							\\
+Ressort								& \macro{vfill}											\\
+Espace vertical petit relatif   	& \macro{smallskip}										\\
+Espace vertical moyen relatif		& \macro{medskip}										\\
+Espace vertical grand relatif		& \macro{bigskip}										\\
+\end{tabular}
+\end{tablecouleur}
+\caption{Espacements horizontaux}
+\end{table}
+
+Les sauts de ligne (ou retours à la ligne) et sauts de page ont ici leur définition courante\footnote{\macro{par} est d'ailleurs fréquemment mis en fin de paragraphe par défaut quand bien même des lignes blanches seraient placées dans le source.}. La commande \macro{\macro{}} peut même avoir un paramètre optionnel spécifiant la taille de l'espace vertical qu'elle introduit, par exemple \macro{\macro{}[2cm]}. Cette commande a une variante étoilée qui rend l'espace impératif.
+
+La commande \macro{vspace} fonctionne à l'image de \macro{hspace} à ceci près qu'elle est ignorée si elle est placée en haut ou en bas de page. De même, \macro{vfill} a le même principe que \macro{hfill} vue plus haut. Son usage dans du texte reste cependant un peu plus délicat car elle peut repousser des éléments en page suivante pour respecter au mieux les règles de présentation d'une page. Ces trois commandes se cantonnent souvent à des présentations spécifiques comme la page de titre ou des pages intercalaires (telle la page contenant la citation en début de document).
+
+Pour le traitement du texte, quelques espaces verticaux relatifs existent. Ils sont relatifs dans le sens où ils dépendent de la taille des caractères du texte, \macro{medskip} ayant ici la hauteur d'une ligne normale.
+
+
+\subsection{La césure}
+\label{cesure}
+La césure peut faire l'objet de quelques réglages pour compenser des manques de \LaTeX. En mettant l'option \macron{draft} dans la classe du document, \LaTeX\ indique dans le document final des blocs noirs à la fin des lignes où le texte déborde\footnote{Le fichier \dextension{log} indique également ce problème avec l'avertissement \og overfull \macro{}hbox \fg.}. Ceci demande alors une intervention manuelle.
+
+Pour aider \LaTeX, la décomposition possible des mots peut être donnée avec la commande \macro{-} placée directement dans les mots.
+
+\begin{codedouble}{Césure dans le texte}{cesuretexte}
+À n'en pas douter, le major Alexandre Van Otenberg agissait de manière schtroumpfement 
+peu fanfaronne.
+
+À n'en pas douter, le major Alexandre Van Otenberg agissait de manière 
+schtroumpfe\-ment peu fanfaronne.
+\end{codedouble}
+
+Un réglage de césure peut s'opérer dans tout le document en plaçant la commande suivante dans le préambule :
+
+\begin{codesimple}{Césure en préambule}{cesurepreambule}
+\hyphenation{schtroump-fe-ment}
+\end{codesimple}
+
+L'espace insécable \macron{\~{}} permet d'obtenir l'effet inverse : \LaTeX\ ne pourra pas couper la ligne sur cette espace. Ceci permet d'empêcher par exemple de séparer un nom d'un prénom, un nombre de son unité, le mot \og page \fg du numéro qui le suit.
+
+\subsection{Le soulignement}
+
+Les pratiques typographiques considère que le soulignement ne devrait être utilisé que si l'italique n'est pas disponible sur son traitement de texte. Ce qui suit devrait donc être utilisé de façon \uline{assez exceptionnelle}.
+
+La  commande de soulignement par défaut est \macro{underline\{\textit{texte}\}}. Elle permet de traiter quel\-ques mots et gère mal le changement de ligne au sein des paragraphes. 
+
+Le paquet \paquet{ulem} simplifie cette approche. Il est recommandé de l'appeler de la manière suivante :
+
+\begin{codesimple}{Appel pour le soulignement}{appelsoulignement}
+\usepackage[normalem]{ulem}
+\end{codesimple}
+
+Par défaut, ce paquet transforme \macro{emph} en une commande de soulignement. Pour garder un comportement plus standard de \LaTeX, l'option \macron{normalem} restitue à la \macro{emph} sa fonction d'origine. Par ailleurs, ce paquet met à disposition la commande \macro{uline} bien plus efficace pour traiter les paragraphes, de même que quelques variantes un peu plus exotiques.
+
+\begin{table}[H] \label{tabsoulignement}
+\begin{tablecouleur}
+\renewcommand{\arraystretch}{1.5}%
+\begin{tabular}{cc}
+\rowcolor{bleu20}
+\color{white}\bf Soulignement			& \color{white}\bf Commande				\\ 
+\uline{Simple}							& \macro{uline\{{\it texte}\}} 			\\ 
+\uuline{Double}							& \macro{uuline\{{\it texte}\}} 		\\ 
+\uwave{Ondulé}							& \macro{uwave\{{\it texte}\}} 			\\ 
+\dashuline{Par tiret}					& \macro{dashuline\{{\it texte}\}} 		\\ 
+\dotuline{Pointillé}					& \macro{dotuline\{{\it texte}\}} 		\\
+\sout{Barré}							& \macro{sout\{{\it texte}\}} 			\\ 
+\xout{Haché}							& \macro{xout\{{\it texte}\}} 			\\ 
+\end{tabular}
+\renewcommand{\arraystretch}{1}%
+\end{tablecouleur}
+\caption{Différents soulignements}\label{soulignement}
+\end{table}
+
+\subsection{L'encadrement} \label{boitestexte}
+
+Deux commandes de base permettent de traiter l'encadrement de quelques mots. La première est \macro{fbox\{{\it texte}\}} qui encadre le texte qui lui est soumis. La seconde permet de gérer la \emph{dimension} horizontale de la boîte et l'alignement du \emph{texte} qu'elle contient :
+
+\begin{codesimple}{Une boîte encadrée}{framebox}
+\framebox[§oc£¤dimension§fc][§oc£¤alignement§fc]{§oc£¤texte§fc}}
+\end{codesimple}
+
+L'\emph{alignement} est à choisir parmi trois valeurs : \macron{l} pour aligner à gauche, \macron{r} pour aligner à droite et \macron{s} pour étirer les espaces pour remplir toute la boîte.
+
+Si les boîtes à traiter dépassent la simple ligne, il faut utiliser des commandes gérant des boîtes-paragraphes pour gérer les changements de ligne. La commande \macro{parbox} est pensée en ce sens :
+
+\begin{codesimple}{Une boîte de texte encadrée}{parbox}
+\parbox{§oc£¤dimension§fc}{§oc£¤texte§fc}
+\end{codesimple}
+
+La dimension permet de fixer la largement de la boîte, le texte retournant alors à la ligne automatiquement.
+
+\begin{codedouble}{Quelques encadrements}{frameboxfbox}
+Voici un \fbox{cadre} idéal pour faire \framebox[3cm][l]{un exemple de} 
+\framebox[4cm][s]{nos grands travaux}. 
+\fbox{\parbox{5cm}{Et voici un cadre plus étroit pour traiter des autres sujets.}}
+\end{codedouble}
+
+
+\subsubsection{Pour aller plus loin}
+
+Deux paquets, \paquet{framed} et \paquet{fancybox}, permettent d'obtenir d'autres styles d'encadrement, qu'ils soient à bords arrondis, ombrés ou doublés.
+
+Par ailleurs, \LaTeX\ est construit pour gérer des boîtes puisque tout son travail revient à les positionner sur la page. D'autres commandes permettent donc de gérer plus avant boîtes et encadrements tel l'environnement \macron{minipage} ou la commande \macro{savebox}.
+
+
+\section{La couleur} \index[con]{couleur}
+
+La couleur s'obtient avec le paquet \paquet{xcolor}\footnote{En faisant attention à l'ordre de chargement d'autres paquets tels \paquet{hyperref}. La documentation de \paquet{xcolor} précise ce point.}. Certains paquets chargent d'ailleurs automatiquement ce paquet, tel \paquet{pstricks}. 
+
+
+\subsection{La définition des couleurs} \incise{436--440}{---}{225--227} % doc en anglais.
+
+La définition de couleurs personnalisées se fait par l'utilisation de l'une des deux commandes suivantes à placer dans le préambule :
+
+\begin{codesimple}{Définition de couleur}{defcouleur}
+\definecolor{§oc£¤couleur§fc}{§oc£¤système§fc}{§oc£¤composition§fc}
+\colorlet{§oc£¤couleur§fc}{§oc£¤formule§fc}
+\end{codesimple}
+
+Le nom de la \emph{couleur} est libre avec pour seule restriction l'absence d'espace dans le nom choisi. Le \emph{système} est, lui, un des systèmes de codage de la couleur possibles. Le tableau ci-dessous précise pour chaque système la façon d'écrire la \emph{composition} d'une couleur selon les composantes du système. Une valeur faible sur une composante marque l'absence de cette composante, une valeur maximale sa présence. En RGB, le noir se code ainsi \macron{0,0,0}.
+
+\begin{table}[H] \label{tabmodelescouleur}
+\begin{tablecouleur}
+\renewcommand{\arraystretch}{1.5}%
+\begin{tabular}{cccc}
+\rowcolor{bleu20}
+\color{white}\bf Système	& \color{white}\bf Composantes				
+& \color{white}\bf Composition	& \color{white}\bf Exemple 	\\ 
+\macron{rgb}				& Rouge, Vert, Bleu	(décimal)		
+& [0..1],[0..1],[0..1]			& \macron{0.82,0.6,0.101} 	\\ 
+\macron{RGB}				& Rouge, Vert, Bleu	(entier)		
+& [0..255],[0..255],[0..255]	& \macron{209,153,26} 	\\ 
+\macron{HTML}				& Rouge, Vert, Bleu	(hexadécimal)	
+& [00..FF][00..FF][00..FF]	& \macron{D1991A} 	\\ 
+\macron{cmyk}				& Cyan, Magenta, Jaune, Noir (décimal)		
+& [0..1],[0..1],[0..1],[0..1] 	& \macron{0,0.268,0.876,0.18} 	\\ 
+\end{tabular}
+\renewcommand{\arraystretch}{1}%
+\end{tablecouleur}
+\caption{Systèmes de couleur courants}\label{systemecourants}
+\end{table}
+
+
+La commande \macro{colorlet} permet de définir une couleur par une \emph{formule} utilisant d'autres couleurs déjà existantes. La \emph{formule} est une alternance de noms de couleur et de nombres (des pourcentages) compris entre 1 et 100 et séparés par des \og \string! \fg tel, par exemple, \macron{blue!40}, \macron{blue!40!green} ou bien encore \macron{blue!40!green!75!grey}. La première se comprend comme un mélange de 40\% de bleu et de 60\% de blanc, la seconde comme un mélange de 40\% de bleu et 60\% de vert, et la dernière comme la composition de la couleur obtenue avec la seconde expression à 75\% et le gris à 25\%.
+
+Voici donc deux définitions en pratique :
+
+\begin{codesimple}{Quelques couleurs}{couleurs}
+\definecolor{vert}{cmyk}{0.56,0,1,0.27}
+\colorlet{vertclair}{vert!60}
+\end{codesimple}
+
+\subsection{L'utilisation de couleurs prédéfinies}
+
+Le chargement du paquet \paquet{xcolor} provoque en fait le chargement de 19 couleurs prédéfinies dont la liste est présentée ci-dessous. 
+
+\begin{figure}[H]
+\raggedright
+\begin{multicols}{3}
+\democouleurdroit{teal}
+\democouleurdroit{green}
+\democouleurdroit{lime}
+\democouleurdroit{yellow}
+\democouleurdroit{orange}
+\democouleurdroit{brown}
+\democouleurdroit{olive}
+\democouleurdroit{pink}
+\democouleurdroit{red}
+\democouleurdroit{purple}
+\democouleurdroit{magenta}
+\democouleurdroit{violet}
+\democouleurdroit{blue}
+\democouleurdroit{cyan}
+\democouleurdroit{black}
+\democouleurdroit{darkgray}
+\democouleurdroit{gray}
+\democouleurdroit{lightgray}
+\democouleurdroit{white}
+\end{multicols}
+\caption{Couleurs de base}
+\end{figure}
+
+Le paquet \paquet{xcolor} propose par ailleurs d'élargir cette palette avec 68 couleurs prédéfinies dès qu'il est chargé avec l'option suivante :
+\begin{center}
+\macro{usepackage[dvipsnames]\{xcolor\}} 
+\end{center}
+
+\begin{figure}[H]
+\raggedright
+\begin{multicols}{3}
+\democouleurdroit{CadetBlue}
+\democouleurdroit{TealBlue}
+\democouleurdroit{BlueGreen}
+\democouleurdroit{JungleGreen}
+\democouleurdroit{Emerald}
+\democouleurdroit{PineGreen}
+\democouleurdroit{SeaGreen}
+\democouleurdroit{OliveGreen}
+\democouleurdroit{Green}
+\democouleurdroit{ForestGreen}
+\democouleurdroit{LimeGreen}
+\democouleurdroit{SpringGreen}
+\democouleurdroit{YellowGreen}
+\democouleurdroit{GreenYellow}
+\democouleurdroit{Yellow}
+\democouleurdroit{Dandelion}
+\democouleurdroit{Goldenrod}
+\democouleurdroit{Orange}
+\democouleurdroit{Peach}
+\democouleurdroit{Salmon}
+\democouleurdroit{Melon}
+\democouleurdroit{Apricot}
+\democouleurdroit{Tan}
+\democouleurdroit{YellowOrange}
+\democouleurdroit{BurntOrange}
+\democouleurdroit{RedOrange}
+\democouleurdroit{OrangeRed}
+\democouleurdroit{Bittersweet}
+\democouleurdroit{RawSienna}
+\democouleurdroit{Sepia}
+\democouleurdroit{Maroon}
+\democouleurdroit{Brown}
+\democouleurdroit{Mahogany}
+\democouleurdroit{BrickRed}
+\democouleurdroit{Red}
+\democouleurdroit{WildStrawberry}
+\democouleurdroit{RubineRed}
+\democouleurdroit{Magenta}
+\democouleurdroit{Fuchsia}
+\democouleurdroit{Mulberry}
+\democouleurdroit{RedViolet}
+\democouleurdroit{Purple}
+\democouleurdroit{DarkOrchid}
+\democouleurdroit{BlueViolet}
+\democouleurdroit{RoyalPurple}
+\democouleurdroit{Periwinkle}
+\democouleurdroit{VioletRed}
+\democouleurdroit{Rhodamine}
+\democouleurdroit{CarnationPink}
+\democouleurdroit{Orchid}
+\democouleurdroit{Violet}
+\democouleurdroit{Plum}
+\democouleurdroit{Thistle}
+\democouleurdroit{Lavender}
+\democouleurdroit{SkyBlue}
+\democouleurdroit{Aquamarine}
+\democouleurdroit{Cyan}
+\democouleurdroit{Turquoise}
+\democouleurdroit{ProcessBlue}
+\democouleurdroit{Cerulean}
+\democouleurdroit{CornflowerBlue}
+\democouleurdroit{RoyalBlue}
+\democouleurdroit{Blue}
+\democouleurdroit{NavyBlue}
+\democouleurdroit{MidnightBlue}
+\democouleurdroit{Black}
+\democouleurdroit{Gray}
+\democouleurdroit{White}
+\end{multicols}
+\caption{Couleurs issues de l'option \macron{dvipsnames}}
+\end{figure}
+
+Mais il peut être chargé 151 couleurs nommées en changeant l'option \macron{dvipsnames} en \macron{svgnames} et 317 couleurs nommées en chargeant l'option \macron{x11names}. Dans ce dernier cas, les couleurs sont par lot de 4 variantes en luminosité d'une même teinte. Les noms de ces différentes couleurs sont présentées dans la documentation de \paquet{xcolor}.
+
+
+\subsection{L'appel des couleurs}
+\subsubsection{Cas du texte}
+
+Pour colorer une petite partie de texte avec une \emph{couleur} (en donnant ici le nom tel que défini plus haut), il suffit d'utiliser la commande :
+
+\begin{codesimple}{Texte en couleur}{couleurtexte}
+\textcolor{§oc£¤couleur§fc}{§oc£¤texte§fc}
+\end{codesimple}
+
+Pour colorer des zones de texte plus grandes qu'un paragraphe, il convient d'utiliser une bascule qui, visuellement, redéfinit la couleur du pinceau utilisée par \LaTeX\ :
+\begin{codesimple}{Bascule de couleur}{couleurbascule}
+\color{§oc£¤couleur§fc}
+\end{codesimple}
+Et, pour revenir à la normale, il faut utiliser \macro{color\{black\}}.
+
+
+\subsubsection{Cas des boîtes}
+
+Deux commandes permettent de colorer du texte et les boîtes associées à ce texte.
+
+\begin{codesimple}{Boîtes en couleur}{couleurboite}
+\colorbox{§oc£¤couleur fond§fc}{§oc£¤texte§fc}
+\fcolorbox{§oc£¤couleur du bord§fc}{§oc£¤couleur du fond§fc}{§oc£¤texte§fc}
+\end{codesimple}
+
+La première place le texte dans une boîte dont le fond est d'une \emph{couleur} donnée, sans bordure. La seconde ajoute la notion de bordure de la boîte. Elle gère la \emph{couleur du bord} en plus de la \emph{couleur du fond}.
+
+
+\subsubsection{Cas des autres éléments}
+
+Les couleurs peuvent s'appliquer aussi dans les tableaux (page \pageref{tableaucouleur}), dans les liens hypertexte (page \pageref{hyperrefcouleur}) dans les figures tracées avec \LaTeX\ (page \pageref{dessincouleur} et suivantes) mais aussi en fond de page avec la bascule :
+
+\begin{codesimple}{Page en couleur}{couleurpage}
+\pagecolor{§oc£¤couleur§fc}
+\end{codesimple}
+
+
+\section{L'agencement du texte}
+\subsection{L'alignement} %\incise{60--85}{}{17--21}
+
+Quelques environnements permettent de placer le texte : alignement à droite\footnote{En typographie, il s'agit d'un \og fer à droite \fg.}, centrage ou alignement à gauche. D'autres environnements permettent d'obtenir des effets un peu plus spécifiques : présenter une citation ou présenter du code informatique \og brut \fg. Dans ce dernier cas, \LaTeX\ ne réagit plus aux caractères spéciaux et restitue exactement le texte (espaces multiples et retours à la ligne inclus) tant qu'il ne rencontre pas la fin de l'environnement \macron{verbatim}.
+
+\begin{table}[!ht]
+\begin{tablecouleur}
+\begin{tabular}{cc}
+\rowcolor{bleu20}
+\color{white}\bf Style 			& \color{white}\bf 	Environnement		\\ 
+Alignement à gauche				& \macron{flushleft}					\\ 
+Centrage						& \macron{center} 						\\ 
+Alignement à droite				& \macron{flushright} 					\\ 
+Citation						& \macron{quotation} 					\\ 
+Code informatique				& \macron{verbatim} 					\\ 
+\end{tabular}
+\end{tablecouleur}
+\caption{Différents styles de présentation}
+\end{table}
+
+
+\subsection{Les listes} %\incise{65--67}{}{21--24}
+
+Les principaux environnements pour faire des listes sont donnés dans la table suivante.
+
+\begin{table}[H]
+\begin{tablecouleur}
+\begin{tabular}{cc}
+\rowcolor{bleu20}
+\color{white}\bf Style 			& \color{white}\bf Environnement 		\\ 
+liste avec tiret				& \macron{itemize}						\\ 
+liste avec numéro				& \macron{enumerate} 					\\ 
+liste avec mots					& \macron{description} 					\\ 
+\end{tabular}
+\end{tablecouleur}
+\caption{Différents styles de liste}
+\end{table}
+
+Dans les deux premiers cas, chaque élément de la liste est introduit par la commande \macro{item}, sans argument. Cette commande va, selon le type de liste demandé, se comporter différemment et afficher un symbole différent. Ceci implique que, sous \LaTeX, il n'y a jamais besoin de taper le tiret ou les numéros de liste.
+
+\begin{codedouble}{Une liste simple}{listesimple}
+Il y a trois types de mathématiciens :
+\begin{itemize}
+\item les bons ;
+\item les mauvais.
+\end{itemize}
+\end{codedouble}
+
+La commande \macro{item} peut recevoir un argument optionnel permettant de remplacer le symbole usuel par un autre. Par exemple, \macro{item[+]} va afficher le symbole \og + \fg. L'environnement \macron{description} a besoin de cette forme particulière pour fonctionner, mettant en gras le terme mis entre crochets. L'exemple ci-dessous illustre ces différents cas ainsi que la possibilité d'insérer une liste dans une autre.
+
+\begin{codedouble}{Une liste revisitée}{listerevue}
+Quelques grandes classes de polices de caractères :
+\begin{description}
+\item[les classiques] comme la \textit{Garamond};
+\item[les modernes] comme 
+\begin{itemize}
+\item[$\blacktriangleright$] la \textit{Futura} ;
+\item[$\blacktriangleright$] la \textit{Bodoni} ;
+\end{itemize}
+\item[les calligraphiques] comme l'\textit{Optima}.
+\end{description}
+\end{codedouble}
+
+\label{listepifont}
+Le paquet \paquet{pifont} ajoute deux autres environnements de liste où le symbole d'énumération, précisé par son code numérique en argument, est tiré de la table de caractère. L'environnement \macron{dingautolist} change de caractère à chaque \macro{item}, en suivant l'ordre de la table.
+
+\begin{codedouble}{Listes issues de \pseudopaquet{pifont}}{codelistepifont}
+Visuellement, il y a plusieurs types d'énumération :
+\begin{dinglist}{70}
+\item les classiques ;
+\item les fantaisistes. 
+\end{dinglist}
+Dans le second cas, il faudra faire attention :
+\begin{dingautolist}{202}
+\item au public à qui s'adresse le document ;
+\item à la réelle nécessité d'une énumération fantaisiste.
+\end{dingautolist}
+\end{codedouble}
+
+\subsection{Les notes} \index[con]{notes} \incise{86--91}{112--131}{42--43}
+
+\subsubsection{Les  commandes usuelles}
+
+Les notes de bas de page sont obtenues par la  commande \macro{footnote\{{\it note}\}} placée à l'endroit du fichier \dextension{tex} où doit figurer le renvoi\footnote{Voici une note de bas de page avec un renvoi noté \thefootnote.} de la note, la disposition de la \textit{note} étant ensuite gérée par \LaTeX (sous un filet en bas de page, en renvoyant au besoin une part de la note sur la page suivante).
+
+Plus rares, les notes marginales sont générées par la  commande \macro{marginpar\{{\it note}\}}. Un exemple en est donné par le petit bloc \og \ding{252}\sffamily Réfs \rmfamily \fg apparaissant à droite de ce texte. Les marges étant généralement peu spacieuses, il est recommandé de composer ces notes en changeant la taille des caractères, comme vu précédemment.
+
+\subsubsection{Pour aller plus loin}
+
+Le paquet \paquet{todonotes} permet de positionner dans un texte des annotations en couleur pour marquer des ajouts ou modifications à placer dans le document. Une liste de ces annotations est également affichable.
+
+Dans le même ordre d'idée, le programme \programme{latexdiff}\footnote{La documentation se trouve à l'adresse \liensimple{https://www.ctan.org/tex-archive/support/latexdiff/doc}. Elle contient en particulier un exemple d'utilisation.} permet d'obtenir l'affichage en format \dextension{pdf} des modifications entre deux versions d'un document \LaTeX.
+
+\section{Les hyperliens}
+
+Le paquet \paquet{hyperref} prend en charge les fonctionnalités liées au document \dextension{pdf} final, principalement les liens hypertextes. Le chargement se fait avec la  commande suivante : \begin{codesimple}{Appel du paquet \pseudopaquet{hyperref}}{appelhyperref}
+\usepackage[§oc£¤options§fc]{hyperref}
+\end{codesimple}
+
+Le chargement de ce paquet doit être fait avec un peu plus de prudence car il redéfinit des commandes courantes. Il convient donc de le placer en dernier dans l'ordre de chargement des paquets. Par ailleurs, si ce paquet est ajouté après une première compilation, il faut supprimer les fichiers \dextension{lof}, \dextension{lot}, \dextension{toc} et \dextension{mtc}\footnote{Ces dernières sont dues au paquet \paquet{minitoc}.}, ces derniers pouvant créer une erreur.
+
+\`{A} tout moment dans le document, certaines options\footnote{La liste des options modifiables n'a apparemment jamais été dressée.} peuvent être modifiées en retenant une syntaxe similaire avec la bascule \macro{hypersetup\{{\it options}\}}.
+
+Les différentes \emph{options}, séparées par des virgules, sont sous la forme \macron{\it option=valeur}. Voici quel\-ques options courantes et leur signification :
+\begin{itemize} \label{hyperrefcouleur} \index[con]{couleur}
+\item \macron{colorlinks=true} : les liens apparaissent colorés. Si la valeur est \macron{false}, les liens sont alors encadrés en couleur.
+\item \macron{breaklinks=true} : les liens longs peuvent être sur plusieurs lignes sans que le lien dysfonctionne.
+\item \macron{hidelinks} (option sans valeur) : les liens ne sont ni encadrés, ni colorés.
+\item \macron{linkcolor={\it couleur}} affecte la {\it couleur} aux liens internes au document. De la même manière, les options \macron{filecolor}, \macron{urlcolor} et \macron{citecolor} modifient respectivement la couleur des liens vers un fichier, des liens vers un lien web et des liens allant vers la bibliographie.
+\item \macron{linkbordercolor={\it couleur}} affecte la {\it couleur} au cadre pour les liens internes au document. Il existe bien sûr les options \macron{filebordercolor}, \macron{citebordercolor} et \macron{urlbordercolor}. \\
+\end{itemize}
+
+Voici l'exemple de ce polycopié. Le paquet \paquet{hyperref} est chargé sans option mais la déclaration des options est faite à la suite :
+\begin{codesimple}{Exemple de paramétrages}{hyperrefexemple}
+\hypersetup{urlcolor=orange3,linkcolor=orange3,citecolor=orange3,breaklinks}
+\end{codesimple}
+
+Des options\footnote{Elles sont décrites par exemple à l'adresse  \liensimple{http://en.wikibooks.org/wiki/LaTeX/Hyperlinks}.} permettent aussi d'affiner le comportement des lecteurs de fichier \dextension{pdf}. Ainsi, l'option \macron{bookmarks=true} permet d'afficher la table des signets lors de l'ouverture du fichier \dextension{pdf} :
+
+Par ailleurs, pour créer un lien hypertexte comme ceux des notes en page ici, il existe la commande \macro{href\{{\it adresse du lien}\}\{{\it texte affiché}\}}.
+
+
+
+\section{Pour aller plus loin}
+
+Certains paquets génèrent des éléments de présentation de texte répondant à des besoins spécifiques :
+\begin{itemize}
+\item \paquet{multicol} permet de gérer localement des affichages sur un nombre de colonnes fixé. Un exemple en est donné en page~\pageref{multicol} ;
+\item \paquet{listings} permet de mettre en forme du code informatique sur un très large panel de langages ;
+\item \paquet{algorithm2e} permet de mettre en forme des algorithmes ;
+\item \paquet{lettrine} permet de gérer une lettrine en début de paragraphe ;
+\item \paquet{xwatermark} permet de gérer des filigranes  --- des textes ou images placés en arrière plan (tel \og Confidentiel \fg ou bien encore \og Brouillon \fg).
+\end{itemize}
