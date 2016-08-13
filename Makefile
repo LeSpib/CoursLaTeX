@@ -21,5 +21,7 @@ clean:
 		$(doc).cod \
 		$(doc).pdx \
 		$(doc).mtc* \
+		$(doc).cnd \
+		$(doc).pnd \
     $(doc).toc \
 		./chapitres/*.aux
