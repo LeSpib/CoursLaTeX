@@ -25,7 +25,7 @@
 %   Ajouter des erreurs au fur et à mesure
 
 % Pistes :
-%   Ajouter LyX ? Présenter LuaLaTeX ? 
+%   Ajouter LyX ? Présenter LuaLaTeX ?
 %   Présenter knitr (évolution de Sweave) ?
 
 
@@ -49,7 +49,7 @@
 %    - styleindex.ist  : style des index ;
 
 %%% Avec XeLaTeX + makeindex -> Attention à l'ordre des mots accentués en index.
-% Ainsi \index{délimiteur} doit être mis à \index{delimiteur@délimiteur} 
+% Ainsi \index{délimiteur} doit être mis à \index{delimiteur@délimiteur}
 % (ce qui est fait ici mais doit donc être contrôlé si l'usage persiste.
 
 % xelatex -synctex=1 -interaction=nonstopmode %.tex|bibtex %|makeindex -s styleindex.ist %.idx|makeindex -s styleindex.ist -o %.pnd %.pdx|makeindex -s styleindex.ist -o %.cnd %.cdx|xelatex -synctex=1 -interaction=nonstopmode %.tex|"C:/Program Files/Adobe/Reader 11.0/Reader/AcroRd32.exe" %.pdf
@@ -70,6 +70,10 @@
 \usepackage{fonctionscours}
 \entetecours % Pour le format des en-têtes
 
+% prerequis pythontex
+\usepackage{fontspec}
+\defaultfontfeatures{Ligatures=TeX}
+\usepackage{pythontex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%  Informations générales
@@ -104,12 +108,12 @@
     \node at (current page.south west)
         {%
         \begin{tikzpicture}[remember picture, overlay]
-            \node[inner sep=0cm] at (11,15) {\includegraphics[height=35cm]{images/engrenage2.jpg}}; 
+            \node[inner sep=0cm] at (11,15) {\includegraphics[height=35cm]{images/engrenage2.jpg}};
             \fill[bleu5](0,4.4) rectangle (10.7,5.4);
             \fill[bleu5](20.3,4.4) rectangle (21,5.4);
-            \node at (15.5,4.5) {\resizebox{9cm}{!}{\fontfamily{lmr}\selectfont\Huge\LaTeX}};  
-            \node at (15.5,2.1) {\resizebox{5cm}{!}{\bfseries LE P'TIT COURS}}; 
-            \node at (15.5,1.2) {\resizebox{2.5cm}{!}{\bfseries Y. Tanguy}}; 
+            \node at (15.5,4.5) {\resizebox{9cm}{!}{\fontfamily{lmr}\selectfont\Huge\LaTeX}};
+            \node at (15.5,2.1) {\resizebox{5cm}{!}{\bfseries LE P'TIT COURS}};
+            \node at (15.5,1.2) {\resizebox{2.5cm}{!}{\bfseries Y. Tanguy}};
         \end{tikzpicture}
         };
 \end{tikzpicture}
@@ -137,8 +141,8 @@
 \tableofcontents                       % Affichage de la table des matières
 \listoftables
 \listoffigures
-\cleardoublepage                       % Permet de bien gérer la numérotation à placer 
-                                       % en face du \listof dans la table des matières. 
+\cleardoublepage                       % Permet de bien gérer la numérotation à placer
+                                       % en face du \listof dans la table des matières.
 \addcontentsline{toc}{chapter}{Liste d'exemples de code}
 \listof{code}{Liste d'exemples de code}
 
@@ -147,7 +151,7 @@
 %%%%%  Coeur du document
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\mainmatter                            % Numérotation spécifique des pages (chiffres arabes depuis 1) 
+\mainmatter                            % Numérotation spécifique des pages (chiffres arabes depuis 1)
 \part{Notions fondamentales}
 \include{chapitres/cours-histoire}
 \include{chapitres/cours-fonctionnement}
@@ -184,8 +188,8 @@
 %%%%%  Index
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\printindex[paq]                                     
-\printindex[con]              
+\printindex[paq]
+\printindex[con]
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

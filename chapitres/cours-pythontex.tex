@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%  Chapitre PythonTeX 
+%%%%%  Chapitre PythonTeX
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \chapter{Python\TeX}
@@ -8,6 +8,13 @@
 
 \alerte{\`{A} compléter}
 
+Le langage Python est un langage interprété (pas besoin de compilation) généraliste. Son principal avantage est la lisibilité du code ainsi que la multitude d'exemples disponibles en ligne en matière de traitement de données, notamment.
+
+Pour installer Python et un ensemble de modules très complet, il suffit d'utiliser la distribution anaconda : celle-ci comporte la plupart des modules nécessaires au calcul scientifique et au traitement de données.
+
+Le package Python\TeX permet d'utiliser des résultats de programmes python et de les insérer au sein d'un document \LaTeX.
+
+L'intérêt d'une telle technique réside dans la création de documents dont les résultats peuvent être mis à jour automatiquement.
 
 \section{Calcul scientifique}
 
@@ -17,7 +24,17 @@
 \section{Exemples d'utilisation}
 
 \alerte{\`{A} compléter}
+Did you know that $2^{65} = \py{2**65}$ ?
 
+\begin{pycode}
+print(r"\begin{tabular}{c|c}")
+print(r"$m$ & $2^m$ \\ \hline")
+print(r"%d & %d \\" % (1, 2**1))
+print(r"%d & %d \\" % (2, 2**2))
+print(r"%d & %d \\" % (3, 2**3))
+print(r"%d & %d \\" % (4, 2**4))
+print(r"\end{tabular}")
+\end{pycode}
 
 \section{Pour aller plus loin}
 
