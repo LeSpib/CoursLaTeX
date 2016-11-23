@@ -18,21 +18,21 @@ Un document en français devrait toujours contenir au moins les commandes suivan
 \documentclass[§oc£¤options§fc]{§oc£¤classe§fc}
 \usepackage[frenchb]{babel}
 \usepackage[T1]{fontenc}
-\usepackage[latin1]{inputenc}
+\usepackage[utf8]{inputenc}
 \usepackage{lmodern}  
 \begin{document} 
 
 \end{document}
 \end{codesimple}
 
-Le chargement des paquets \paquet{fontenc} et \paquet{inputenc} font appel à la notion d'encodage. Nous nous contenterons d'indiquer que l'appel du paquet \paquet{fontenc} avec l'option \vue{T1} permet à \LaTeX\ d'afficher des lettres accentuées, non chargées par défaut. L'appel du paquet \paquet{inputenc} indique à \LaTeX\ l'encodage de notre texte, que ce soit \macron{latin1}, \macron{utf8} ou \macron{applemac}.
+Le chargement des paquets \paquet{fontenc} et \paquet{inputenc} font appel à la notion d'encodage. Nous nous contenterons d'indiquer que l'appel du paquet \paquet{fontenc} avec l'option \vue{T1} permet à \LaTeX\ d'afficher des lettres accentuées, non chargées par défaut. L'appel du paquet \paquet{inputenc} indique à \LaTeX\ l'encodage de notre fichier de texte : \macron{latin1}, \macron{utf8} ou \macron{applemac}.
 
 \subsection{Cas avec \XeLaTeXtitre et \LuaLaTeXtitre} \label{xelualatex}
 
 Par rapport au cas précédent, plusieurs modifications sont nécessaires : 
 \begin{itemize}
 \item modifier dans l'éditeur de fichier \dextension{tex} le paramétrage du programme\footnote{Pour \programme{Texmaker}. Il faut aller dans le menu \vue{Options} puis \vue{Configurer Texmaker}. Dans la ligne \vue{LaTeX}, il faut remplacer le terme \macron{latex} par \macron{xelatex} ou\macron{lualatex}.} servant à compiler les fichiers \dextension{tex}. Il est à noter que, par défaut, \XeLaTeX\ génère directement des fichiers \dextension{pdf} à la manière de \programme{pdflatex} ;
-\item mettre son fichier en encodage UTF8 afin qu'il soit compilable ;
+\item mettre son fichier obligatoirement en encodage UTF8 afin qu'il soit compilable ;
 \item retrancher les paquets et fonctionnalités incompatibles. Ainsi, \paquet{inputenc} et \paquet{fontenc} ne doivent pas être utilisés avec \XeLaTeX\ et \LuaLaTeX: ils sont à remplacer par \paquet{fontspec} qui gère les polices de caractères. \\
 \end{itemize}
 
